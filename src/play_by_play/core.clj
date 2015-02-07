@@ -1,10 +1,10 @@
 (ns play-by-play.core
+  (:require [play-by-play.real-world :as rw])
   (:gen-class))
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
-  (println "Hello, World!"))
+  (apply println rw/scores))
 
 (def score
   [0, 0])
