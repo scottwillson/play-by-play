@@ -11,5 +11,11 @@
   (testing "full slate of games"
     (is (= 1260 (count season)))))
 
-  (testing "max scores"
+  (testing "realistic average score"
+    (let [average-score (average (flatten season))]
+      (is (and
+        (> average-score 95)
+        (< average-score 99)))))
+
+  (testing "realistic game scores"
     (is (every? #(realistic-game-score? %) season))))
