@@ -3,9 +3,6 @@
             [incanter.stats :as stats])
   (:gen-class))
 
-(defn average [coll]
-  (float (/ (reduce + coll) (count coll))))
-
 (defn -main
   [& args]
   (do
@@ -16,8 +13,8 @@
       "maximum"
       (apply max rw/scores))
     (println
-      "average"
-      (average rw/scores))))
+      "mean"
+      (stats/mean rw/scores))))
 
 (def score
   (stats/sample rw/scores))
