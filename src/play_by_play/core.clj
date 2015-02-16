@@ -1,5 +1,6 @@
 (ns play-by-play.core
-  (:require [play-by-play.real-world :as rw])
+  (:require [play-by-play.real-world :as rw]
+            [incanter.stats :as stats])
   (:gen-class))
 
 (defn average [coll]
@@ -19,7 +20,7 @@
       (average rw/scores))))
 
 (def score
-  [95, 98])
+  (stats/sample rw/scores))
 
 (def season
   (repeat (* 30 42)
