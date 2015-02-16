@@ -4,9 +4,10 @@
          '[clojure.java.io :as io])
 
 (def games
-  (with-open [in-file (io/reader "data/scores.csv")]
-    (doall
-      (csv/read-csv in-file))))
+  (delay
+    (with-open [in-file (io/reader "data/scores.csv")]
+      (doall
+        (csv/read-csv in-file)))))
 
 
 (defn parse-int [str]
@@ -14,11 +15,11 @@
 
 (def home-scores
   (map
-    #(parse-int (nth % 5)) (rest games)))
+    #(parse-int (nth % 5)) (rest @games)))
 
 (def visitor-scores
   (map
-    #(parse-int (nth % 3)) (rest games)))
+    #(parse-int (nth % 3)) (rest @games)))
 
 (def scores
   (concat home-scores visitor-scores))
