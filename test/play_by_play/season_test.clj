@@ -1,7 +1,11 @@
-(ns play-by-play.core-test
+(ns play-by-play.season-test
   (:require [clojure.test :refer :all]
+            [incanter.stats :as stats]
             [play-by-play.assertions :refer :all]
-            [play-by-play.core :refer :all]))
+            [play-by-play.season :refer :all]))
+
+(defn unique-teams [season]
+  (map home-team season))
 
 (deftest test-score
   (testing "game score"
@@ -11,8 +15,11 @@
   (testing "full slate of games"
     (is (= 1260 (count season)))))
 
+  (testing "all teams play games")
+    (is (= 30 (unique-teams season)))
+
   (testing "realistic average score"
-    (let [average-score (average (flatten season))]
+    (let [average-score (stats/mean (flatten season))]
       (is (and
         (> average-score 95)
         (< average-score 99)))))
