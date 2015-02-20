@@ -15,10 +15,3 @@
     (println
       "mean"
       (stats/mean rw/scores))))
-
-(def score
-  (stats/sample rw/scores))
-
-(def season
-  (repeat (* 30 42)
-    score))
