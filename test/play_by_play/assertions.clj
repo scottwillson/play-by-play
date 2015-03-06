@@ -6,9 +6,7 @@
     (> score 50)
     (< score 160)))
 
-(defn realistic-game-score? [score]
-  (let [[v h] score]
-    (is
-      (and (realistic-score? v)
-           (realistic-score? h)))))
-
+(defn realistic-game-score? [game]
+  (is
+    (and (realistic-score? (:home-score game))
+         (realistic-score? (:visitor-score game)))))

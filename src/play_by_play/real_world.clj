@@ -23,3 +23,7 @@
 
 (def scores
   (concat home-scores visitor-scores))
+
+(def teams
+  (map
+    #(nth % 4) (rest @games)))

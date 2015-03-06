@@ -5,24 +5,31 @@
             [play-by-play.season :refer :all]))
 
 (defn unique-teams [season]
-  (map home-team season))
+  (set
+    (map :home-team season)))
 
 (deftest test-score
-  (testing "game score"
-    (is (realistic-game-score? score)))
+  (testing "realistic score"
+    (is (realistic-score? (score)))))
 
 (deftest test-season
   (testing "full slate of games"
-    (is (= 1260 (count season)))))
+    (is (= 1260 (count season))))
 
-  (testing "all teams play games")
-    (is (= 30 (unique-teams season)))
+  (testing "all teams play games"
+    (is (= 30
+      (count (unique-teams season)))))
 
   (testing "realistic average score"
-    (let [average-score (stats/mean (flatten season))]
+    (let [average-score (stats/mean (map :home-score season))]
       (is (and
-        (> average-score 95)
-        (< average-score 99)))))
+        (>= average-score 95)
+        (<= average-score 99)))))
 
   (testing "realistic game scores"
     (is (every? #(realistic-game-score? %) season))))
+
+(deftest test-team
+  (testing "team returns a team name"
+    (is (> (count (team))
+      10))))

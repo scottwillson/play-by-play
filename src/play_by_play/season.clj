@@ -3,9 +3,17 @@
             [incanter.stats :as stats])
   (:gen-class))
 
-(def score
-  (stats/sample rw/scores))
+(defn score []
+  (stats/sample rw/scores :size 1))
+
+(defn team []
+  (stats/sample rw/teams :size 1))
+
+(defn game []
+  { :home-team     (team)
+    :visitor-team  (team)
+    :home-score    (score)
+    :visitor-score (score) })
 
 (def season
-  (repeat (* 30 42)
-    score))
+  (repeatedly (* 30 42) game))
