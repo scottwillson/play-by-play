@@ -6,7 +6,9 @@
 
 (defn unique-teams [season]
   (set
-    (map :home-team season)))
+    (flatten [
+      (map :home-team season)
+      (map :visitor-team season)])))
 
 (deftest test-score
   (testing "realistic score"
@@ -20,8 +22,14 @@
     (is (= 30
       (count (unique-teams season)))))
 
-  (testing "realistic average score"
+  (testing "realistic average home score"
     (let [average-score (stats/mean (map :home-score season))]
+      (is (and
+        (>= average-score 95)
+        (<= average-score 99)))))
+
+  (testing "realistic average visitor score"
+    (let [average-score (stats/mean (map :visitor-score season))]
       (is (and
         (>= average-score 95)
         (<= average-score 99)))))
