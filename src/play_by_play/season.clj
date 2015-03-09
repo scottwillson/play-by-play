@@ -16,7 +16,7 @@
     :visitor-score (score) })
 
 (def day
-  [])
+  (repeatedly 2 game))
 
 (def season
   (repeatedly (* 30 42) game))
