@@ -21,16 +21,16 @@
 
 (defn print-season
   []
-  (println "season"))
+  (println season))
 
-(defn day
+(defn print-day
   []
-  (println "day"))
+  (println day))
 
 (defn -main
   [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args [])]
     (case (first arguments)
       "season" (print-season)
-      "day"    (day)
+      "day"    (print-day)
                (real-world-stats))))
