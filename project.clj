@@ -6,7 +6,14 @@
   :dependencies [[org.clojure/clojure "1.6.0"]
                  [org.clojure/tools.cli "0.3.1"]
                  [org.clojure/data.csv "0.1.2"]
-                 [incanter "1.5.6"]]
+                 [incanter "1.5.6"]
+                 [ring "1.3.2"]]
   :main ^:skip-aot play-by-play.core
   :target-path "target/%s"
-  :profiles {:uberjar {:aot :all}})
+  :profiles
+    {:uberjar {:aot :all}
+     :dev     {:dependencies [[org.mortbay.jetty/jetty "6.1.26"]
+                              [clj-webdriver "0.6.1"]]}}
+  :test-selectors {:default (complement :browser)
+                   :browser :browser
+                   :all     (constantly true)})
