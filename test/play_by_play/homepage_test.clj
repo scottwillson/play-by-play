@@ -7,7 +7,7 @@
 
 (deftest ^:browser home-page
   (testing "view"
-    (to "http://0.0.0.0:3333/")
+    (to "http://0.0.0.0:3000/")
     (is (-> ".container" visible?))))
 
 (defn ^:browser start-app-server [f]
