@@ -12,7 +12,8 @@
   :target-path "target/%s"
   :profiles
     {:uberjar {:aot :all}
-     :dev     {:dependencies [[org.mortbay.jetty/jetty "6.1.26"]
+     :dev     {:dependencies [[ring-mock "0.1.5"]
+                              [org.mortbay.jetty/jetty "6.1.26"]
                               [clj-webdriver "0.6.1"]]}}
   :test-selectors {:default (complement :browser)
                    :browser :browser
