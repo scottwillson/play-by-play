@@ -22,6 +22,6 @@ var GameScores = React.createClass({
 
 
 React.render(
-  <GameScores data={data} />,
+  <GameScores url="//0.0.0.0:3333/?date=2014-01-01" />,
   document.getElementById('game-scores')
 );
