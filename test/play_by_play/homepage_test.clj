@@ -20,7 +20,7 @@
         (.stop server))
       (recur server))))
 
-(defn start-web-server [f]
+(defn ^:browser start-web-server [f]
   (do
     (let [process (-> (ProcessBuilder. ["node" "node/app.js"])
                       (.start))]
