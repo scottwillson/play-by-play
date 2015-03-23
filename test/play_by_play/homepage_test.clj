@@ -13,7 +13,7 @@
       (= "New Orleans" (text ".home .team-name"))))))
 
 (defn ^:browser start-app-server [f]
-  (loop [server (jetty/run-jetty 'handler/app {:port 3333, :join? false})]
+  (loop [server (jetty/run-jetty 'handler/app {:port 3000, :join? false})]
     (if (.isStarted server)
       (do
         (f)

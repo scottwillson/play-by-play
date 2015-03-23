@@ -40,4 +40,4 @@
 (deftest test-team
   (testing "team returns a team name"
     (is (> (count (team))
-      10))))
+      5))))

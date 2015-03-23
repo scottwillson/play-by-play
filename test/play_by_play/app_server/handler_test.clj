@@ -4,7 +4,12 @@
             [play-by-play.app-server.handler :refer :all]))
 
 (deftest test-app
-  (testing "main route"
+  (testing "index HTML"
     (let [response (app (request :get "/"))]
+      (is (= (:status response) 200))
+      (is (re-find #"Final" (slurp (:body response))))))
+
+  (testing "index JSON"
+    (let [response (app (request :get "/index.json"))]
       (is (= (:status response) 200))
       (is (= "[]" (:body response))))))
