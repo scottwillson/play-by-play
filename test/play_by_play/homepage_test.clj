@@ -7,10 +7,10 @@
 
 (deftest ^:browser home-page
   (testing "view"
-    (to "http://0.0.0.0:3000?date=2014-10-28")
+    (to "http://localhost:3000?date=2014-10-28")
     (is (and
       (exists? ".container")
-      (= "New Orleans" (text ".home .team-name"))))))
+      (= "New Orleans" (text ".game-score .team-name"))))))
 
 (defn ^:browser start-app-server [f]
   (loop [server (jetty/run-jetty 'handler/app {:port 3000, :join? false})]
