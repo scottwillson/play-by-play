@@ -1,12 +1,26 @@
 var GameScore = React.createClass({
   render: function() {
     return (
-      <div className="game-score">
-        <h2 className="team-name">
-          {this.props.team}
-        </h2>
-        {this.props.score}
-      </div>
+        <div className="col-md-4">
+          <table className="table game-score">
+            <thead>
+              <tr>
+                <th>Final</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="visitor">
+                <td className="team-name">{this.props.visitorTeam}</td>
+                <td>{this.props.visitorScore}</td>
+              </tr>
+              <tr className="home">
+                <td className="team-name">{this.props.homeTeam}</td>
+                <td>{this.props.homeScore}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
     );
   }
 });

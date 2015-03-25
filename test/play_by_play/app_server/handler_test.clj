@@ -8,10 +8,10 @@
   (testing "index HTML"
     (let [response (app (request :get "/"))]
       (is (= (:status response) 200))
-      (is (re-find #"Final" (slurp (:body response))))))
+      (is (re-find #"material.init" (slurp (:body response))))))
 
   (testing "index JSON"
     (let [response (app (request :get "/index.json"))]
       (is (= (:status response) 200))
-      (is (= "New Orleans" (:team
+      (is (= "New Orleans" (:homeTeam
         (first (json/parse-string (:body response) true))))))))

@@ -19,13 +19,15 @@ var GameScores = React.createClass({
   render: function() {
     var gameScores = this.state.data.map(function (gameScore) {
       return (
-        <GameScore team={gameScore.team}>
+        <GameScore homeTeam={gameScore.homeTeam} visitorTeam={gameScore.visitorTeam} homeScore={gameScore.homeScore} visitorScore={gameScore.visitorScore}>
           {gameScore.score}
         </GameScore>
+
       );
     });
     return (
-      <div className="game-scores">
+      <div className="container">
+        <h1>March 10, 2015</h1>
         {gameScores}
       </div>
     );

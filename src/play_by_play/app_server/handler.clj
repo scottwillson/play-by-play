@@ -9,7 +9,11 @@
 (defn index-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body "[{\"team\": \"New Orleans\"}]"})
+   :body "[{
+     \"homeTeam\": \"New Orleans\",
+     \"homeScore\": 100,
+     \"visitorTeam\": \"New York\",
+     \"visitorScore\": 99}]"})
 
 (defroutes app-routes
   (GET "/index.json" [] index-json)

@@ -10,7 +10,7 @@
     (to "http://localhost:3000?date=2014-10-28")
     (is (and
       (exists? ".container")
-      (= "New Orleans" (text ".game-score .team-name"))))))
+      (= "New Orleans" (text ".game-score .home .team-name"))))))
 
 (defn ^:browser start-app-server [f]
   (loop [server (jetty/run-jetty 'handler/app {:port 3000, :join? false})]
