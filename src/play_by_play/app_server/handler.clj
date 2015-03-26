@@ -2,6 +2,7 @@
   (:require [play-by-play.app-server.logging :refer :all]
             [ring.middleware.stacktrace :refer :all]
             [ring.middleware.reload :refer :all]
+            [ring.util.response :as resp]
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]))
@@ -17,7 +18,8 @@
 
 (defroutes app-routes
   (GET "/index.json" [] index-json)
-  (route/files "/"))
+  (GET "/" [] (resp/resource-response "index.html" {:root "public"}))
+  (route/resources "/" ))
 
 (def app
  (-> #'app-routes

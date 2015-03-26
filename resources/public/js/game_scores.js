@@ -19,7 +19,10 @@ var GameScores = React.createClass({
   render: function() {
     var gameScores = this.state.data.map(function (gameScore) {
       return (
-        <GameScore homeTeam={gameScore.homeTeam} visitorTeam={gameScore.visitorTeam} homeScore={gameScore.homeScore} visitorScore={gameScore.visitorScore}>
+        <GameScore homeTeam={gameScore.homeTeam}
+                   visitorTeam={gameScore.visitorTeam}
+                   homeScore={gameScore.homeScore}
+                   visitorScore={gameScore.visitorScore}>
           {gameScore.score}
         </GameScore>
 

@@ -1,5 +1,4 @@
 (ns play-by-play.homepage-test
-  (:import [java.lang ProcessBuilder])
   (:require [clojure.test :refer :all]
             [clj-webdriver.taxi :refer :all]
             [ring.adapter.jetty :as jetty :only [run-jetty]]
@@ -7,7 +6,8 @@
 
 (deftest ^:browser home-page
   (testing "view"
-    (to "http://localhost:3000?date=2014-10-28")
+    (to "http://0.0.0.0:3000/")
+    (println (html "body"))
     (is (and
       (exists? ".container")
       (= "New Orleans" (text ".game-score .home .team-name"))))))
@@ -20,13 +20,6 @@
         (.stop server))
       (recur server))))
 
-(defn ^:browser start-web-server [f]
-  (do
-    (let [process (-> (ProcessBuilder. ["node" "node/app.js"])
-                      (.start))]
-      (f)
-      (-> process (.destroy)))))
-
 (defn ^:browser start-browser-fixture
   [f]
   (set-driver! {:browser :phantomjs})
@@ -37,6 +30,6 @@
   (f)
   (quit))
 
-(use-fixtures :once start-app-server start-web-server)
+(use-fixtures :once start-app-server)
 (use-fixtures :each start-browser-fixture quit-browser-fixture)
 
