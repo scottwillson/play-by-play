@@ -12,11 +12,11 @@ var GameScore = React.createClass({
             <tbody>
               <tr className="visitor">
                 <td className="team-name">{this.props.visitorTeam}</td>
-                <td>{this.props.visitorScore}</td>
+                <td className="score">{this.props.visitorScore}</td>
               </tr>
               <tr className="home">
                 <td className="team-name">{this.props.homeTeam}</td>
-                <td>{this.props.homeScore}</td>
+                <td className="score">{this.props.homeScore}</td>
               </tr>
             </tbody>
           </table>

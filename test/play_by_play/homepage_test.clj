@@ -10,7 +10,10 @@
     (println (html "body"))
     (is (and
       (exists? ".container")
-      (= "New Orleans" (text ".game-score .home .team-name"))))))
+      (= "New York" (text ".game-score .visitor .team-name"))
+      (re-find #"\d{2,3}" (text ".game-score .visitor .score"))
+      (= "New Orleans" (text ".game-score .home .team-name"))
+      (re-find #"\d{2,3}" (text ".game-score .home .score"))))))
 
 (defn ^:browser start-app-server [f]
   (loop [server (jetty/run-jetty #'handler/app {:port 3000, :join? false})]
@@ -32,4 +35,3 @@
 
 (use-fixtures :once start-app-server)
 (use-fixtures :each start-browser-fixture quit-browser-fixture)
-
