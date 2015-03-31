@@ -1,0 +1,23 @@
+{
+  "name": "play-by-play",
+  "version": "0.0.0",
+  "authors": [
+    "Scott Willson <scott.willson@gmail.com>"
+  ],
+  "description": "Basketball simulation",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "homepage": "http://rocketsurgeryllc.com",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.3"
+  }
+}
