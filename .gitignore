@@ -9,6 +9,6 @@
 /classes
 /target
 data
-node/node_modules
+node_modules
 pom.xml
 pom.xml.asc
