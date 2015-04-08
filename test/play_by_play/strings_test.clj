@@ -4,4 +4,10 @@
 
 (deftest test-to-camel-case
   (testing "empty string"
-    (is (= "" (to-camel-case "")))))
+    (is (= "" (to-camel-case ""))))
+
+  (testing "single word"
+    (is (= "key" (to-camel-case "key"))))
+
+  (testing "dashed word"
+    (is (= "dash-key" (to-camel-case "dashKey")))))
