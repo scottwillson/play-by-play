@@ -5,7 +5,6 @@
 .hgignore
 /.lein-*
 /.nrepl-port
-bower_components
 /checkouts
 /classes
 /target
