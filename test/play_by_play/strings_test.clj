@@ -10,4 +10,4 @@
     (is (= "key" (to-camel-case "key"))))
 
   (testing "dashed word"
-    (is (= "dash-key" (to-camel-case "dashKey")))))
+    (is (= "dashKey" (to-camel-case "dash-key")))))
