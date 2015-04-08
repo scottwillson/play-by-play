@@ -7,17 +7,12 @@
     "doc": "doc",
     "test": "test"
   },
-  "repository" :
-    { "type" : "git",
-      "url" : "http://github.com/scottwillson/play-by-play.git"
-    }
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Scott Willson",
   "license": "MIT",
   "devDependencies": {
-    "gulp": "~3.8",
-    "gulp-webpack-build": "~0.6"
+    "bower": "^1.4.0"
   }
 }
