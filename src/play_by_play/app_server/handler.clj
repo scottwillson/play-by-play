@@ -11,10 +11,13 @@
             [compojure.route :as route]
             [cheshire.core :as cheshire]))
 
+(defn to-json [object]
+  (cheshire/encode object {:key-fn hashes/to-camel-case-keys}))
+
 (defn index-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (cheshire/encode season/day {:key-fn hashes/to-camel-case-keys})})
+   :body (to-json season/day)})
 
 (defroutes app-routes
   (GET "/index.json" [] index-json)
