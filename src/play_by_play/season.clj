@@ -15,7 +15,7 @@
     :home-score    (score)
     :visitor-score (score) })
 
-(def day
+(defn day [& date]
   (repeatedly 2 game))
 
 (def season

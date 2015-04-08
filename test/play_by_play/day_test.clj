@@ -4,4 +4,4 @@
 
 (deftest test-day
   (testing "games for one day"
-    (is (> (count day) 1))))
+    (is (> (count (day "2012")) 1))))
