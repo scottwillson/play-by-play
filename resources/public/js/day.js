@@ -1,4 +1,4 @@
-var GameScores = React.createClass({
+var Day = React.createClass({
   getInitialState: function() {
     return {data: []};
   },
@@ -17,7 +17,7 @@ var GameScores = React.createClass({
   },
 
   render: function() {
-    var gameScores = this.state.data.map(function (gameScore) {
+    var day = this.state.data.map(function (gameScore) {
       return (
         <GameScore homeTeam={gameScore.homeTeam}
                    visitorTeam={gameScore.visitorTeam}
@@ -31,13 +31,13 @@ var GameScores = React.createClass({
     return (
       <div className="container">
         <h1>March 10, 2015</h1>
-        {gameScores}
+        {day}
       </div>
     );
   }
 });
 
 React.render(
-  <GameScores url={'index.json?date=2014-01-01'} />,
-  document.getElementById('game-scores')
+  <Day url={'index.json?date=2014-01-01'} />,
+  document.getElementById('day')
 );
