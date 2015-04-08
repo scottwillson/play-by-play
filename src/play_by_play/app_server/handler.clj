@@ -1,6 +1,7 @@
 (ns play-by-play.app-server.handler
   (:require [play-by-play.season :as season]
             [play-by-play.strings :as strings]
+            [play-by-play.hashes :as hashes]
             [play-by-play.app-server.logging :refer :all]
             [ring.middleware.stacktrace :refer :all]
             [ring.middleware.reload :refer :all]
@@ -13,7 +14,7 @@
 (defn index-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (cheshire/encode season/day {:key-fn (fn [k] (strings/to-camel-case (name k)))})})
+   :body (cheshire/encode season/day {:key-fn hashes/to-camel-case-keys})})
 
 (defroutes app-routes
   (GET "/index.json" [] index-json)
