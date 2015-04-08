@@ -1,5 +1,6 @@
 (ns play-by-play.app-server.handler
   (:require [play-by-play.season :as season]
+            [play-by-play.strings :as strings]
             [play-by-play.app-server.logging :refer :all]
             [ring.middleware.stacktrace :refer :all]
             [ring.middleware.reload :refer :all]
@@ -7,18 +8,12 @@
             [compojure.core :refer :all]
             [compojure.handler :as handler]
             [compojure.route :as route]
-            [cheshire.core :as cheshire]
-            [clojure.string :as str]))
-
-(defn to-camel-case [k]
-  (let [s (if (keyword? k) (name k) k)]
-    (str/replace s #"\-[A-z]" (fn [[dash letter]]
-                            (.toUpperCase (str letter))))))
+            [cheshire.core :as cheshire]))
 
 (defn index-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (cheshire/encode season/day {:key-fn (fn [k] (to-camel-case (name k)))})})
+   :body (cheshire/encode season/day {:key-fn (fn [k] (strings/to-camel-case (name k)))})})
 
 (defroutes app-routes
   (GET "/index.json" [] index-json)
