@@ -30,8 +30,7 @@ var Day = React.createClass({
     });
     return (
       <div className="container">
-        <h1>March 10, 2015</h1>
-        {day}
+      {day}
       </div>
     );
   }
