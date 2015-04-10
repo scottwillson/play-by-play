@@ -1,31 +1,12 @@
 # play-by-play
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
+Stats-based basketball simulation
 
     $ java -jar play-by-play-0.1.0-standalone.jar [args]
 
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Known Issues
-
-...
-
 ### TODO
   * Hot-reload/run for Clojure tests
+  * Handle default, no date case
   * Grunt/Gulp: https://github.com/newtriks/generator-react-webpack, https://github.com/webpack/grunt-webpack
   * Webpack and friends via Yeoman: npm install -g generator-react-webpack
   * Flux: https://github.com/banderson/generator-flux-react, https://github.com/vn38minhtran/generator-react-flux

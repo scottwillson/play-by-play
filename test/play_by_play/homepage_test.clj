@@ -6,7 +6,8 @@
 
 (deftest ^:browser home-page
   (testing "view"
-    (to "http://0.0.0.0:3000/")
+    ; 2012-2013 season opening day
+    (to "http://0.0.0.0:3000/?date=2012-10-30")
     (is (and
       (exists? ".container")
       (= "Washington Wizards" (text ".game-score .visitor .team-name"))
