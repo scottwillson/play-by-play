@@ -1,25 +1,19 @@
 (ns play-by-play.app-server.handler
   (:require [play-by-play.season :as season]
-            [play-by-play.strings :as strings]
-            [play-by-play.hashes :as hashes]
+            [play-by-play.app-server.date-conversion :as dates]
+            [play-by-play.app-server.json-conversion :as json]
             [play-by-play.app-server.logging :refer :all]
             [ring.middleware.params :refer :all]
             [ring.middleware.stacktrace :refer :all]
             [ring.middleware.reload :refer :all]
             [ring.util.response :as resp]
             [compojure.core :refer :all]
-            [compojure.handler :as handler]
-            [compojure.route :as route]
-            [cheshire.core :as cheshire]))
-
-(defn to-json [object]
-  (cheshire/encode object {:key-fn hashes/to-camel-case-keys}))
+            [compojure.route :as route]))
 
 (defn index-json [date]
-  (println date)
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (to-json (season/day date))})
+   :body (json/to-json (season/day (dates/parse-string date)))})
 
 (defroutes app-routes
   (GET "/index.json" [date] (index-json date))

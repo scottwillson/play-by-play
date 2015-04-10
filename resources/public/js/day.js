@@ -38,6 +38,6 @@ var Day = React.createClass({
 });
 
 React.render(
-  <Day url={'index.json?date=2014-01-01'} />,
+  <Day url={'index.json?date=2012-10-30'} />,
   document.getElementById('day')
 );

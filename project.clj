@@ -7,6 +7,7 @@
                  [org.clojure/data.csv "0.1.2"]
                  [org.clojure/tools.cli "0.3.1"]
                  [cheshire "5.4.0"]
+                 [clj-time "0.9.0"]
                  [incanter "1.5.6"]
                  [ring "1.3.2"]
                  [compojure "1.3.2"]]

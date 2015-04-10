@@ -7,12 +7,11 @@
 (deftest ^:browser home-page
   (testing "view"
     (to "http://0.0.0.0:3000/")
-    (println (html "body"))
     (is (and
       (exists? ".container")
-      (= "New York" (text ".game-score .visitor .team-name"))
+      (= "Washington Wizards" (text ".game-score .visitor .team-name"))
       (re-find #"\d{2,3}" (text ".game-score .visitor .score"))
-      (= "New Orleans" (text ".game-score .home .team-name"))
+      (= "Cleveland Cavaliers" (text ".game-score .home .team-name"))
       (re-find #"\d{2,3}" (text ".game-score .home .score"))))))
 
 (defn ^:browser start-app-server [f]

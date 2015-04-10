@@ -11,7 +11,7 @@
       (is (re-find #"material.init" (slurp (:body response))))))
 
   (testing "index JSON"
-    (let [response (app (request :get "/index.json"))]
+    (let [response (app (request :get "/index.json?date=2012-10-30"))]
       (is (= (:status response) 200))
-      (is (= "New Orleans" (:homeTeam
+      (is (= "Cleveland Cavaliers" (:homeTeam
         (first (json/parse-string (:body response) true))))))))

@@ -10,34 +10,29 @@
       (map :home-team season)
       (map :visitor-team season)])))
 
-(deftest test-score
+(deftest test-random-score
   (testing "realistic score"
-    (is (realistic-score? (score)))))
+    (is (realistic-score? (random-score)))))
 
 (deftest test-season
-  (testing "full slate of games"
-    (is (= 1260 (count season))))
+  (testing "full slate of games for 2012"
+    (is (= 1229 (count (flatten season)))))
 
   (testing "all teams play games"
     (is (= 30
-      (count (unique-teams season)))))
+      (count (unique-teams (flatten season))))))
 
   (testing "realistic average home score"
-    (let [average-score (stats/mean (map :home-score season))]
+    (let [average-score (stats/mean (map :home-score (flatten season)))]
       (is (and
         (>= average-score 95)
         (<= average-score 99)))))
 
   (testing "realistic average visitor score"
-    (let [average-score (stats/mean (map :visitor-score season))]
+    (let [average-score (stats/mean (map :visitor-score (flatten season)))]
       (is (and
         (>= average-score 95)
         (<= average-score 99)))))
 
   (testing "realistic game scores"
-    (is (every? #(realistic-game-score? %) season))))
-
-(deftest test-team
-  (testing "team returns a team name"
-    (is (> (count (team))
-      5))))
+    (is (every? #(realistic-game-score? %) (flatten season)))))

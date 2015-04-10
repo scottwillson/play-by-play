@@ -3,20 +3,24 @@
             [incanter.stats :as stats])
   (:gen-class))
 
-(defn score []
+(defn random-score []
   (stats/sample rw/scores :size 1))
 
-(defn team []
-  (stats/sample rw/teams :size 1))
+(defn score [game]
+  (assoc game
+    :home-score (random-score)
+    :visitor-score (random-score)))
 
-(defn game []
-  { :home-team     (team)
-    :visitor-team  (team)
-    :home-score    (score)
-    :visitor-score (score) })
+(defn games [date]
+  (filter
+    #(= 0 (compare (:date %) date))
+    @rw/games))
+
+(defn game-scores [date]
+  (map score (games date)))
 
 (defn day [& date]
-  (repeatedly 2 game))
+  (game-scores (first date)))
 
 (def season
-  (repeatedly (* 30 42) game))
+  (map score @rw/games))
