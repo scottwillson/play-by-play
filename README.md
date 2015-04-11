@@ -7,6 +7,7 @@ Stats-based basketball simulation
 ### TODO
   * Hot-reload/run for Clojure tests
   * Handle default, no date case
+  * Optimize mobile. Type is too small.
   * Grunt/Gulp: https://github.com/newtriks/generator-react-webpack, https://github.com/webpack/grunt-webpack
   * Webpack and friends via Yeoman: npm install -g generator-react-webpack
   * Flux: https://github.com/banderson/generator-flux-react, https://github.com/vn38minhtran/generator-react-flux

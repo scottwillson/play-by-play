@@ -1,0 +1,83 @@
+<html>
+  <head>
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/ripples.css" rel="stylesheet">
+    <link href="css/material-wfont.css" rel="stylesheet">
+
+    <!-- Tests only -->
+    <script src="js/vendor/es5-shim.js"></script>
+
+    <script src="js/vendor/react/react.js"></script>
+    <script src="js/vendor/react/JSXTransformer.js"></script>
+  </head>
+
+  <body>
+    <div id="box-score">
+      <div class="container">
+        <div class="col-md-12 visitor">
+          <h2 class="team-name">Washington Wizards</h2>
+          <table class="table box-score">
+            <thead>
+            <tr>
+              <th class="name">Player</th>
+              <th class="points">Points</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr class="player">
+                <td class="name">Ray Allen</td>
+                <td class="points">22</td>
+              </tr>
+              <tr class="player">
+                <td class="name">Glenn Robinson</td>
+                <td class="points">29</td>
+              </tr>
+              <tr class="totals">
+                <td></td>
+                <td class="score">99</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="col-md-12 home">
+          <h2 class="team-name">Cleveland Cavaliers</h2>
+          <table class="table">
+            <thead>
+            <tr>
+              <th class="player">Player</th>
+              <th class="points">Points</th>
+            </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="player">Latrell Sprewell</td>
+                <td class="points">12</td>
+              </tr>
+              <tr>
+                <td class="player">Mark Jackson</td>
+                <td class="points">8</td>
+              </tr>
+              <tr class="totals">
+                <td></td>
+                <td class="score">97</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <script src="js/vendor/jquery-1.10.2.js"></script>
+    <script src="js/vendor/bootstrap.js"></script>
+
+    <script src="js/vendor/ripples.js"></script>
+    <script src="js/vendor/material.js"></script>
+    <script>
+      $(document).ready(function() {
+        $.material.init();
+      });
+    </script>
+
+  </body>
+</html>

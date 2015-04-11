@@ -4,7 +4,7 @@
             [ring.mock.request :refer :all]
             [play-by-play.app-server.handler :refer :all]))
 
-(deftest test-app
+(deftest test-index
   (testing "index HTML"
     (let [response (app (request :get "/"))]
       (is (= (:status response) 200))
@@ -15,3 +15,9 @@
       (is (= (:status response) 200))
       (is (= "Cleveland Cavaliers" (:homeTeam
         (first (json/parse-string (:body response) true))))))))
+
+(deftest test-box-score
+  (testing "HTML"
+    (let [response (app (request :get "/box_score"))]
+      (is (= (:status response) 200))
+      (is (re-find #"material.init" (slurp (:body response)))))))
