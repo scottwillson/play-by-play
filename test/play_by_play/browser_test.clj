@@ -20,9 +20,9 @@
     (to "http://0.0.0.0:3000/box_score.html")
     (is (exists? ".container"))
     (is (= "Washington Wizards" (text "#box-score .visitor .team-name")))
-    (is (re-find #"\d{2,3}" (text "#box-score .visitor .score")))
+    (is (re-find #"\d{2,3}" (text "#box-score .visitor .totals .points")))
     (is (= "Cleveland Cavaliers" (text "#box-score .home .team-name")))
-    (is (re-find #"\d{2,3}" (text "#box-score .home .score")))
+    (is (re-find #"\d{2,3}" (text "#box-score .home .totals .points")))
     (is (= 30 (count (find-elements {:css ".player"}))))))
 
 (defn ^:browser start-app-server [f]
