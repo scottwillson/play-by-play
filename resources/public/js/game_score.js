@@ -5,7 +5,7 @@ var GameScore = React.createClass({
           <table className="table game-score">
             <thead>
               <tr>
-                <th>Final</th>
+                <th><a href ="/box_score">Final</a></th>
                 <th></th>
               </tr>
             </thead>
