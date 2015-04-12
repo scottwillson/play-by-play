@@ -14,6 +14,14 @@
   (testing "realistic score"
     (is (realistic-score? (random-score)))))
 
+(deftest test-box-score
+  (testing "should total player points"
+    (let [team (first (box-score))
+          players (:players team)]
+    (is (=
+         (reduce + (map :points players))
+         (:points team))))))
+
 (deftest test-season
   (testing "full slate of games for 2012"
     (is (= 1229 (count (flatten season)))))

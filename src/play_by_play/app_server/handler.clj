@@ -19,19 +19,7 @@
 (defn box-score-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (json/to-json
-     [
-       {
-         :name "Washington Wizards"
-         :location "visitor"
-         :points 101
-         :players (repeatedly 15 #(rw/player))
-       }
-       {
-         :name "Cleveland Cavaliers"
-         :location "home"
-         :points 113
-         :players (repeatedly 15 #(rw/player))}])})
+   :body (json/to-json (season/box-score))})
 
 (defroutes app-routes
   (GET "/index.json" [date] (index-json date))
