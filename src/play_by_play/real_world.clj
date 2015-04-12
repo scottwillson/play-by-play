@@ -1,6 +1,7 @@
 (ns play-by-play.real-world
   (:require [clj-time.coerce :as time-coerce]
             [clj-time.format :as time-format]
+            [incanter.stats :as stats]
             [clojure.data.csv :as csv]
             [clojure.java.io :as io]))
 
@@ -24,6 +25,18 @@
         (map to-game
           (rest (csv/read-csv in-file)))))))
 
+
+(defn to-player [player-row]
+  { :name (first player-row)
+    :points (rand-int 30) })
+
+(def players
+  (delay
+    (with-open [in-file (io/reader "data/players.csv")]
+      (doall
+        (map to-player
+          (rest (csv/read-csv in-file)))))))
+
 (def home-scores
   (map
     #(:home-score %) @games))
@@ -38,3 +51,6 @@
 (def teams
   (map
     #(:home-team %) @games))
+
+(defn player []
+  (stats/sample @players :size 1))

@@ -1,27 +1,24 @@
 var BoxScore = React.createClass({
   getInitialState: function() {
-    return {
-      teams: [{
-          name: "Washington Wizards",
-          location: "visitor",
-          points: 97,
-          players: [{
-            name: "Kevin Durant",
-            points: 17
-          }]
-        }, {
-          name: "Cleveland Cavaliers",
-          location: "home",
-          points: 99,
-          players: [{
-            name: "Mo Williams",
-            points: 17
-          }]
-        }]};
-      },
+    return {data: []};
+  },
+
+  // TODO DRY up dupe code
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
 
   render: function() {
-    var boxScore = this.state.teams.map(function (team) {
+    var boxScore = this.state.data.map(function (team) {
       return (
         <Team name={team.name} players={team.players} location={team.location} points={team.points}/>
       );
@@ -35,6 +32,6 @@ var BoxScore = React.createClass({
 });
 
 React.render(
-  <BoxScore />,
+  <BoxScore url={'box_score.json'} />,
   document.getElementById('box-score')
 );

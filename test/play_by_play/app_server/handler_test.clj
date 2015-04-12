@@ -18,6 +18,13 @@
 
 (deftest test-box-score
   (testing "HTML"
-    (let [response (app (request :get "/box_score"))]
+    (let [response (app (request :get "/box_score.html"))]
       (is (= (:status response) 200))
-      (is (re-find #"material.init" (slurp (:body response)))))))
+      (is (re-find #"material.init" (slurp (:body response))))))
+
+  (testing "JSON"
+    (let [response (app (request :get "/box_score.json"))]
+      (is (= (:status response) 200))
+      (is (= "Washington Wizards"
+        (:name
+          (first (json/parse-string (:body response) true))))))))

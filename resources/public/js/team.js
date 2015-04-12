@@ -6,8 +6,10 @@ var Team = React.createClass({
       );
     });
 
+    var className = 'col-md-12 ' + this.props.location;
+
     return (
-      <div className="col-md-12 {this.props.location}">
+      <div className={className}>
         <h2 className="team-name">{this.props.name}</h2>
         <table className="table box-score">
           <thead>
