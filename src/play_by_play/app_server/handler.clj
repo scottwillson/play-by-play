@@ -19,7 +19,8 @@
 (defn box-score-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (json/to-json (season/box-score))})
+   :body (json/to-json (season/box-score
+     (first @rw/games)))})
 
 (defroutes app-routes
   (GET "/index.json" [date] (index-json date))

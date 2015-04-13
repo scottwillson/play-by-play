@@ -6,17 +6,15 @@
 
 (defn unique-teams [season]
   (set
-    (flatten [
-      (map :home-team season)
-      (map :visitor-team season)])))
-
-(deftest test-random-score
-  (testing "realistic score"
-    (is (realistic-score? (random-score)))))
+    (flatten
+      (map :name
+        (flatten
+          (map :teams season))))))
 
 (deftest test-box-score
   (testing "should total player points"
-    (let [team (first (box-score))
+    (let [game {:teams [{:name "Bulls"} {:name "Cavs"}]}
+          team (first (:teams (box-score game)))
           players (:players team)]
     (is (=
          (reduce + (map :points players))
@@ -24,23 +22,33 @@
 
 (deftest test-season
   (testing "full slate of games for 2012"
-    (is (= 1229 (count (flatten season)))))
+    (is (= 1229 (count season))))
 
   (testing "all teams play games"
     (is (= 30
-      (count (unique-teams (flatten season))))))
+      (count (unique-teams season)))))
 
   (testing "realistic average home score"
-    (let [average-score (stats/mean (map :home-score (flatten season)))]
+    (let [average-score (stats/mean (map #(:points (first (:teams %))) season))]
       (is (and
         (>= average-score 95)
         (<= average-score 99)))))
 
   (testing "realistic average visitor score"
-    (let [average-score (stats/mean (map :visitor-score (flatten season)))]
+  (let [average-score (stats/mean (map #(:points (last (:teams %))) season))]
       (is (and
         (>= average-score 95)
         (<= average-score 99)))))
 
   (testing "realistic game scores"
-    (is (every? #(realistic-game-score? %) (flatten season)))))
+    (is (every? realistic-game-score? season))))
+
+(deftest test-player
+  (testing "name length"
+    (is
+      (> (count
+        (:name (player))) 3)))
+
+    (testing "points"
+      (is
+        (>= (:points (player))) 0)))

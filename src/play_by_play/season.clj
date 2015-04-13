@@ -3,43 +3,40 @@
             [incanter.stats :as stats])
   (:gen-class))
 
-(defn random-score []
-  (stats/sample rw/scores :size 1))
-
-(defn score [game]
-  (assoc game
-    :home-score (random-score)
-    :visitor-score (random-score)))
-
 (defn games [date]
   (filter
     #(= 0 (compare (:date %) date))
     @rw/games))
 
-(defn game-scores [date]
-  (map score (games date)))
+(defn player-points []
+  (if (< 0.5 (rand))
+    (rand-int 27)
+    0))
+
+(defn player []
+  (assoc
+    (stats/sample @rw/players :size 1)
+    :points
+    (player-points)))
+
+(defn assoc-players [team]
+  (assoc team :players
+    (repeatedly 15 player)))
+
+(defn assoc-team-points [team]
+  (assoc team :points
+    (reduce + (map :points (:players team)))))
+
+(defn box-score [game]
+  (assoc game :teams (map assoc-team-points (map assoc-players (:teams game)))))
+
+; (defn box-score [game]
+;   (map team-box-score
+;     (map assoc-players
+;       (:teams game))))
+;
+(def season
+  (map box-score @rw/games))
 
 (defn day [& date]
-  (game-scores (first date)))
-
-(def season
-  (map score @rw/games))
-
-(defn team-box-score [team]
-  (assoc team
-    :points (reduce + (map :points (:players team)))))
-
-(defn teams []
-  [
-    {
-      :name "Washington Wizards"
-      :location "visitor"
-      :players (repeatedly 15 #(rw/player))
-    }
-    {
-      :name "Cleveland Cavaliers"
-      :location "home"
-      :players (repeatedly 15 #(rw/player))}])
-
-(defn box-score []
-  (map #(team-box-score %) (teams)))
+  (map box-score (games (first date))))

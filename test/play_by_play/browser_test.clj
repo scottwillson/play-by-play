@@ -11,9 +11,9 @@
     (is (and
       (exists? ".container")
       (= "Washington Wizards" (text ".game-score .visitor .team-name"))
-      (re-find #"\d{2,3}" (text ".game-score .visitor .score"))
+      (re-find #"\d{2,3}" (text ".game-score .visitor .points"))
       (= "Cleveland Cavaliers" (text ".game-score .home .team-name"))
-      (re-find #"\d{2,3}" (text ".game-score .home .score"))))))
+      (re-find #"\d{2,3}" (text ".game-score .home .points"))))))
 
 (deftest ^:browser box-score
   (testing "view"

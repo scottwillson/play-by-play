@@ -12,11 +12,16 @@
   (time-format/formatter "EEEEE MMM d yyyy"))
 
 (defn to-game [game-row]
-  { :date          (time-coerce/to-date (time-format/parse data-file-date-format (first game-row)))
-    :visitor-team  (nth game-row 2)
-    :visitor-score (parse-int (nth game-row 3))
-    :home-team     (nth game-row 4)
-    :home-score    (parse-int (nth game-row 5))})
+  { :date (time-coerce/to-date (time-format/parse data-file-date-format (first game-row)))
+    :teams [
+      {
+        :name  (nth game-row 2)
+        :location "visitor"
+        :points (parse-int (nth game-row 3))}
+      {
+        :name  (nth game-row 4)
+        :location "home"
+        :points (parse-int (nth game-row 5))}]})
 
 (def games
   (delay
@@ -27,8 +32,7 @@
 
 
 (defn to-player [player-row]
-  { :name (first player-row)
-    :points (rand-int 30) })
+  { :name (first player-row)})
 
 (def players
   (delay
@@ -39,18 +43,15 @@
 
 (def home-scores
   (map
-    #(:home-score %) @games))
+    #(:points (last (:teams %))) @games))
 
 (def visitor-scores
   (map
-    #(:visitor-score %) @games))
+    #(:points (first (:teams %))) @games))
 
 (def scores
   (concat home-scores visitor-scores))
 
 (def teams
   (map
-    #(:home-team %) @games))
-
-(defn player []
-  (stats/sample @players :size 1))
+    #(first (:teams %)) @games))

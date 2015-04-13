@@ -8,5 +8,5 @@
 
 (defn realistic-game-score? [game]
   (is
-    (and (realistic-score? (:home-score game))
-         (realistic-score? (:visitor-score game)))))
+    (and (realistic-score? (:points (first (:teams game))))
+         (realistic-score? (:points (last (:teams game)))))))

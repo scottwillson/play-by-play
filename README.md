@@ -9,6 +9,9 @@ Stats-based basketball simulation
   * Handle default, no date case
   * Optimize mobile. Type is too small.
   * Use terms points and score consistently
+  * Use .jsx for JSX files
+  * Use param for box score like HOUDEN20121030 (or something)
+  * add function for home-points (and probably home-team-name)
   * Grunt/Gulp: https://github.com/newtriks/generator-react-webpack, https://github.com/webpack/grunt-webpack
   * Webpack and friends via Yeoman: npm install -g generator-react-webpack
   * Flux: https://github.com/banderson/generator-flux-react, https://github.com/vn38minhtran/generator-react-flux

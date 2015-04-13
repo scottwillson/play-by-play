@@ -1,23 +1,21 @@
 var GameScore = React.createClass({
   render: function() {
+    var teamGameScores = this.props.teams.map(function (team) {
+      return (
+        <TeamGameScore name={team.name} points={team.points} location={team.location} />
+      );
+    });
     return (
         <div className="col-md-4">
           <table className="table game-score">
             <thead>
               <tr>
-                <th><a href ="/box_score">Final</a></th>
+                <th><a href ="/box_score.html">Final</a></th>
                 <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr className="visitor">
-                <td className="team-name">{this.props.visitorTeam}</td>
-                <td className="score">{this.props.visitorScore}</td>
-              </tr>
-              <tr className="home">
-                <td className="team-name">{this.props.homeTeam}</td>
-                <td className="score">{this.props.homeScore}</td>
-              </tr>
+              {teamGameScores}
             </tbody>
           </table>
         </div>

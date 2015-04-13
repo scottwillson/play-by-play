@@ -19,13 +19,7 @@ var Day = React.createClass({
   render: function() {
     var day = this.state.data.map(function (gameScore) {
       return (
-        <GameScore homeTeam={gameScore.homeTeam}
-                   visitorTeam={gameScore.visitorTeam}
-                   homeScore={gameScore.homeScore}
-                   visitorScore={gameScore.visitorScore}>
-          {gameScore.score}
-        </GameScore>
-
+        <GameScore teams={gameScore.teams} />
       );
     });
     return (

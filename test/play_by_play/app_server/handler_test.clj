@@ -13,8 +13,9 @@
   (testing "index JSON"
     (let [response (app (request :get "/index.json?date=2012-10-30"))]
       (is (= (:status response) 200))
-      (is (= "Cleveland Cavaliers" (:homeTeam
-        (first (json/parse-string (:body response) true))))))))
+      (is (= "Cleveland Cavaliers"
+        (:name (last (:teams (first
+          (json/parse-string (:body response) true))))))))))
 
 (deftest test-box-score
   (testing "HTML"
@@ -26,5 +27,5 @@
     (let [response (app (request :get "/box_score.json"))]
       (is (= (:status response) 200))
       (is (= "Washington Wizards"
-        (:name
-          (first (json/parse-string (:body response) true))))))))
+        (:name (first (:teams
+          (json/parse-string (:body response) true)))))))))

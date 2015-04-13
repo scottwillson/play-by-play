@@ -1,6 +1,6 @@
 var BoxScore = React.createClass({
   getInitialState: function() {
-    return {data: []};
+    return {data: {teams: []}};
   },
 
   // TODO DRY up dupe code
@@ -18,7 +18,7 @@ var BoxScore = React.createClass({
   },
 
   render: function() {
-    var boxScore = this.state.data.map(function (team) {
+    var boxScore = this.state.data.teams.map(function (team) {
       return (
         <Team name={team.name} players={team.players} location={team.location} points={team.points}/>
       );

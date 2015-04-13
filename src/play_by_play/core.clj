@@ -1,5 +1,7 @@
 (ns play-by-play.core
-  (:require [play-by-play.real-world :as rw]
+  (:require
+            [play-by-play.app-server.date-conversion :as dates]
+            [play-by-play.real-world :as rw]
             [play-by-play.season :refer :all]
             [incanter.stats :as stats]
             [clojure.tools.cli :refer [parse-opts]]
@@ -24,13 +26,19 @@
   (println season))
 
 (defn print-day
+  [date]
+  ; TODO Move date functions
+  (println (day (dates/parse-string date))))
+
+(defn print-box-score
   []
-  (println day))
+  (println (box-score (first @rw/games))))
 
 (defn -main
   [& args]
   (let [{:keys [options arguments errors summary]} (parse-opts args [])]
     (case (first arguments)
-      "season" (print-season)
-      "day"    (print-day)
-               (real-world-stats))))
+      "season"    (print-season)
+      "day"       (print-day (second arguments))
+      "box-score" (print-box-score)
+                  (real-world-stats))))
