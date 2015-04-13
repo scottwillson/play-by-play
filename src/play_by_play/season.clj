@@ -28,13 +28,10 @@
     (reduce + (map :points (:players team)))))
 
 (defn box-score [game]
-  (assoc game :teams (map assoc-team-points (map assoc-players (:teams game)))))
+  (assoc game :teams
+    (map assoc-team-points
+      (map assoc-players (:teams game)))))
 
-; (defn box-score [game]
-;   (map team-box-score
-;     (map assoc-players
-;       (:teams game))))
-;
 (def season
   (map box-score @rw/games))
 
