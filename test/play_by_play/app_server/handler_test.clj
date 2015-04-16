@@ -24,15 +24,10 @@
       (is (re-find #"material.init" (slurp (:body response))))))
 
   (testing "JSON"
-    (let [response (app (request :get "/box_score.json"))]
+    (let [response (app (request :get "/box_score.json"))
+          plays (:plays response)]
       (is (= (:status response) 200))
       (is (= "Washington Wizards"
         (:name (first (:teams
-          (json/parse-string (:body response) true)))))))))
-
-(deftest test-plays
-  (testing "JSON"
-    (let [response (app (request :get "/plays.json"))]
-      (is (= (:status response) 200))
-      (is (> (count (json/parse-string (:body response) true))
-             0)))))
+          (json/parse-string (:body response) true))))))
+      (is (> plays) 0))))

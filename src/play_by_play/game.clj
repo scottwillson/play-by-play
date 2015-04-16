@@ -1,35 +1,39 @@
 (ns play-by-play.game
-  (:require [play-by-play.real-world :as rw]
+  (:require [play-by-play.player :as player :refer [update-players]]
+            [play-by-play.team :as team :refer [add-players-to-team update-teams]]
             [incanter.stats :as stats]))
 
-(defn player []
-  (stats/sample @rw/players :size 1))
+; TODO sample a weighted list of [player, team] weighted by FGM per minute
+(defn create-play [game]
+  (let [team   (stats/sample (:teams game) :size 1)
+        player (stats/sample (:players team) :size 1)]
+  {:name "FGM"
+   :player (:name player)
+   :points 2
+   :team (:name team)}))
 
-(defn assoc-players [team]
-  (assoc team :players
-    (repeatedly 15 player)))
+(defn create-plays [game]
+  (repeatedly 97 #(create-play game)))
 
-; TODO add up points in #play
-(defn assoc-team-points [team]
-  (assoc team :points
-    (reduce + (map :points (:players team)))))
+(defn add-players [game]
+  (update-teams add-players-to-team game))
 
-(defn assoc-player-points [team]
-  (assoc team :players
-    (map #(assoc % :points (rand-int 15))
-      (:players team))))
+(defn add-plays [game]
+  (assoc game :plays (create-plays game)))
 
-(defn plays [game]
-  [{:name "fgm"}])
+(defn sum-player-points [game]
+  (update-players player/sum-points game))
 
-(defn play [game]
-  (assoc
-    (assoc game :teams
-      (map assoc-player-points
-        (:teams game)))
-        :plays (plays game)))
+(defn sum-team-points [game]
+  (update-teams team/sum-points game))
+
+(defn sum-points [game]
+  (-> game
+    (sum-player-points)
+    (sum-team-points)))
 
 (defn box-score [game]
-  (play
-    (assoc game :teams
-      (map assoc-players (:teams game)))))
+  (-> game
+    (add-players)
+    (add-plays)
+    (sum-points)))

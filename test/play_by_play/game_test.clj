@@ -13,17 +13,12 @@
          (reduce + (map :points players))
          (:points team))))))
 
-(deftest test-player
-  (testing "name length"
-   (is
-     (> (count
-       (:name (player))) 3)))
-
-   (testing "points"
-     (is
-       (>= (:points (player))) 0)))
-
-(deftest test-play
+(deftest test-add-plays
   (testing "plays"
-    (let [game {:teams [{:name "Bulls"} {:name "Cavs"}]}]
-    (is (> (count (:plays (play game))) 0)))))
+    (let [game {}]
+    (is (> (count (:plays (add-plays game))) 20)))))
+
+(deftest test-create-plays
+  (testing "plays"
+    (let [play (create-play {})]
+    (is (not (nil? (:name play)))))))
