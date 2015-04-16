@@ -1,5 +1,6 @@
 (ns play-by-play.app-server.handler
-  (:require [play-by-play.real-world :as rw]
+  (:require [play-by-play.game :as game]
+            [play-by-play.real-world :as rw]
             [play-by-play.season :as season]
             [play-by-play.app-server.date-conversion :as dates]
             [play-by-play.app-server.json-conversion :as json]
@@ -19,7 +20,7 @@
 (defn box-score-json [request]
   {:status 200
    :headers {"Content-Type" "application/json"}
-   :body (json/to-json (season/box-score
+   :body (json/to-json (game/box-score
      (first @rw/games)))})
 
 (defroutes app-routes

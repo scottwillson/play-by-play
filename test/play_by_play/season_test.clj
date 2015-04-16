@@ -11,15 +11,6 @@
         (flatten
           (map :teams season))))))
 
-(deftest test-box-score
-  (testing "should total player points"
-    (let [game {:teams [{:name "Bulls"} {:name "Cavs"}]}
-          team (first (:teams (box-score game)))
-          players (:players team)]
-    (is (=
-         (reduce + (map :points players))
-         (:points team))))))
-
 (deftest test-season
   (testing "full slate of games for 2012"
     (is (= 1229 (count season))))
@@ -42,13 +33,3 @@
 
   (testing "realistic game scores"
     (is (every? realistic-game-score? season))))
-
-(deftest test-player
-  (testing "name length"
-    (is
-      (> (count
-        (:name (player))) 3)))
-
-    (testing "points"
-      (is
-        (>= (:points (player))) 0)))
