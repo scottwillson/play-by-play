@@ -19,10 +19,15 @@
     (map #(assoc % :points (rand-int 15))
       (:players team))))
 
+(defn plays [game]
+  [{:name "fgm"}])
+
 (defn play [game]
-  (assoc game :teams
-    (map assoc-player-points
-      (:teams game))))
+  (assoc
+    (assoc game :teams
+      (map assoc-player-points
+        (:teams game)))
+        :plays (plays game)))
 
 (defn box-score [game]
   (play

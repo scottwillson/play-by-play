@@ -29,3 +29,10 @@
       (is (= "Washington Wizards"
         (:name (first (:teams
           (json/parse-string (:body response) true)))))))))
+
+(deftest test-plays
+  (testing "JSON"
+    (let [response (app (request :get "/plays.json"))]
+      (is (= (:status response) 200))
+      (is (> (count (json/parse-string (:body response) true))
+             0)))))

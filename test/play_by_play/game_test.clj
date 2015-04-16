@@ -22,3 +22,8 @@
    (testing "points"
      (is
        (>= (:points (player))) 0)))
+
+(deftest test-play
+  (testing "plays"
+    (let [game {:teams [{:name "Bulls"} {:name "Cavs"}]}]
+    (is (> (count (:plays (play game))) 0)))))

@@ -1,6 +1,6 @@
 (ns play-by-play.core
-  (:require
-            [play-by-play.app-server.date-conversion :as dates]
+  (:require [play-by-play.app-server.date-conversion :as dates]
+            [play-by-play.game :as game]
             [play-by-play.real-world :as rw]
             [play-by-play.season :refer :all]
             [incanter.stats :as stats]
@@ -32,7 +32,7 @@
 
 (defn print-box-score
   []
-  (println (box-score (first @rw/games))))
+  (println (game/box-score (first @rw/games))))
 
 (defn -main
   [& args]
