@@ -8,28 +8,31 @@
     #(= 0 (compare (:date %) date))
     @rw/games))
 
-(defn player-points []
-  (if (< 0.5 (rand))
-    (rand-int 27)
-    0))
-
 (defn player []
-  (assoc
-    (stats/sample @rw/players :size 1)
-    :points
-    (player-points)))
+  (stats/sample @rw/players :size 1))
 
 (defn assoc-players [team]
   (assoc team :players
     (repeatedly 15 player)))
 
+; TODO add up points in #play
 (defn assoc-team-points [team]
   (assoc team :points
     (reduce + (map :points (:players team)))))
 
-(defn box-score [game]
+(defn assoc-player-points [team]
+  (assoc team :players
+    (map #(assoc % :points (rand-int 15))
+      (:players team))))
+
+(defn play [game]
   (assoc game :teams
-    (map assoc-team-points
+    (map assoc-player-points
+      (:teams game))))
+
+(defn box-score [game]
+  (play
+    (assoc game :teams
       (map assoc-players (:teams game)))))
 
 (def season
