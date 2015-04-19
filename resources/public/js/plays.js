@@ -20,12 +20,13 @@ var Plays = React.createClass({
   render: function() {
     var plays = this.state.data.plays.map(function (play) {
       return (
-        <Play name={play.name} />
+        <Play name={play.name} team={play.team} player={play.player} points={play.points} />
       );
     });
     return (
-      <div className="container">
-      {plays}
+      <div className="col-md-12">
+        <h2>Play by Play</h2>
+        {plays}
       </div>
     );
   }

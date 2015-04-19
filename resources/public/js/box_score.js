@@ -24,7 +24,8 @@ var BoxScore = React.createClass({
       );
     });
     return (
-      <div className="container">
+      <div className="col-md-12">
+      <h2>Box Score</h2>
       {boxScore}
       </div>
     );

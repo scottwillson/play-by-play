@@ -10,7 +10,7 @@ var Team = React.createClass({
 
     return (
       <div className={className}>
-        <h2 className="team-name">{this.props.name}</h2>
+        <h3 className="team-name">{this.props.name}</h3>
         <table className="table box-score">
           <thead>
           <tr>
