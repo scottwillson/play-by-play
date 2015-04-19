@@ -3,14 +3,25 @@
             [play-by-play.team :as team :refer [add-players-to-team update-teams]]
             [incanter.stats :as stats]))
 
+; Percentages from one random game
+(defn- made-basket []
+  (let [r (rand)]
+  (cond
+    (< r 0.62) {:name "FGM" :points 2}
+    (< r 0.76) {:name "3PM" :points 3}
+    :else      {:name "FTM" :points 3})))
+
 ; TODO sample a weighted list of [player, team] weighted by FGM per minute
+; 36 11 21
+; 42 6 9
+; 78 17 30 = 125
 (defn create-play [game]
   (let [team   (stats/sample (:teams game) :size 1)
-        player (stats/sample (:players team) :size 1)]
-  {:name "FGM"
-   :player (:name player)
-   :points 2
-   :team (:name team)}))
+        player (stats/sample (:players team) :size 1)
+        basket (made-basket)]
+  (assoc basket
+    :player (:name player)
+    :team (:name team))))
 
 (defn create-plays [game]
   (repeatedly 97 #(create-play game)))
