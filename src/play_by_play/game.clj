@@ -9,7 +9,7 @@
   (cond
     (< r 0.62) {:name "FGM" :points 2}
     (< r 0.76) {:name "3PM" :points 3}
-    :else      {:name "FTM" :points 3})))
+    :else      {:name "FTM" :points 1})))
 
 ; TODO sample a weighted list of [player, team] weighted by FGM per minute
 ; 36 11 21
