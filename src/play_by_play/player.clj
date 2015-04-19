@@ -11,10 +11,14 @@
 (defn points-for [player game]
   (reduce + (map :points (plays-for player game))))
 
-(defn sum-points [player game]
+(defn sum-points
+  "Sum and associate points for each player"
+  [player game]
   (assoc player :points (points-for (:name player) game)))
 
-(defn update-players [f game]
+(defn update-players
+  "Update (map + assoc) players on each team in game using f"
+  [f game]
   (assoc game :teams
     (map (fn [team]
       (assoc team :players

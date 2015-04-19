@@ -32,7 +32,9 @@
     (sum-player-points)
     (sum-team-points)))
 
-(defn box-score [game]
+(defn box-score
+  "'Play' the game"
+  [game]
   (-> game
     (add-players)
     (add-plays)
