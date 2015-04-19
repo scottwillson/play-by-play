@@ -2,13 +2,38 @@
 
 Stats-based basketball simulation
 
-    $ java -jar play-by-play-0.1.0-standalone.jar [args]
+Excuse to use Clojure + React for something "real"
+
+Use Incanter to validate simulation (t-test, etc.) with real stats
+
+### Install (OS X)
+    brew install leiningen
+
+### Run
+    lein ring server-headless
+
+Browser: http://0.0.0.0:3000/?date=2012-10-30
+Click on Final for box score
+
+    lein run
+
+Run options
+
+  * (default) real world stats
+  * box-score: simulate single game
+  * day: simulate day of games
+  * season: simulate entire season
+
+### Develop
+    lein test
+    lein test :browser
+
+Browser test requires PhantomJS
 
 ### TODO
   * Hot-reload/run for Clojure tests
   * Handle default, no date case
   * Optimize mobile. Type is too small.
-  * Use terms points and score consistently
   * Use .jsx for JSX files
   * Use param for box score like HOUDEN20121030 (or something)
   * add function for home-points (and probably home-team-name)
