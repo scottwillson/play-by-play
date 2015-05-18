@@ -63,7 +63,7 @@
 
 (def headers-file
   (delay
-    (cheshire/parse-string (slurp "data/games/0021400001.json"))))
+    (cheshire/parse-string (slurp (first (game-files))))))
 
 (defn headers []
   (((@headers-file
