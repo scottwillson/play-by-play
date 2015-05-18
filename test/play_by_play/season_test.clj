@@ -21,15 +21,13 @@
 
   (testing "realistic average home score"
     (let [average-score (stats/mean (map #(:points (first (:teams %))) season))]
-      (is (and
-        (>= average-score 95)
-        (<= average-score 99)))))
+      (is (>= average-score 95))
+      (is (<= average-score 99))))
 
   (testing "realistic average visitor score"
-  (let [average-score (stats/mean (map #(:points (last (:teams %))) season))]
-      (is (and
-        (>= average-score 95)
-        (<= average-score 99)))))
+    (let [average-score (stats/mean (map #(:points (last (:teams %))) season))]
+      (is (>= average-score 95))
+      (is (<= average-score 99))))
 
   (testing "realistic game scores"
     (is (every? realistic-game-score? season))))
