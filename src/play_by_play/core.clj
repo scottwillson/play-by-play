@@ -12,13 +12,19 @@
   []
   (do
     (println
-      "minimum"
+      "count FGM: "
+      (count (rw/fgm)))
+    (println
+      "count 3PM: "
+      (count (rw/three-pm)))
+    (println
+      "minimum game points: "
       (apply min rw/scores))
     (println
-      "maximum"
+      "maximum game points: "
       (apply max rw/scores))
     (println
-      "mean"
+      "mean game points: "
       (stats/mean rw/scores))))
 
 (defn print-season

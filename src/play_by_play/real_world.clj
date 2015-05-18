@@ -1,5 +1,6 @@
 (ns play-by-play.real-world
-  (:require [clj-time.coerce :as time-coerce]
+  (:require [cheshire.core :as cheshire]
+            [clj-time.coerce :as time-coerce]
             [clj-time.format :as time-format]
             [incanter.stats :as stats]
             [clojure.data.csv :as csv]
@@ -55,3 +56,39 @@
 (def teams
   (map
     #(first (:teams %)) @games))
+
+(defn game-files []
+  (filter #(.isFile %)
+    (file-seq (io/file "data/games"))))
+
+(def headers-file
+  (delay
+    (cheshire/parse-string (slurp "data/games/0021400001.json"))))
+
+(defn headers []
+  (((@headers-file
+    "resultSets") 0) "headers"))
+
+(defn file-rows [f]
+  ((((cheshire/parse-string (slurp f))
+    "resultSets") 0) "rowSet"))
+
+(defn file-plays [f]
+  (map (fn[row] (zipmap (headers) row)) (file-rows f)))
+
+(defn plays []
+  (flatten (map file-plays (game-files))))
+
+(defn fgm []
+  (filter #(and
+      (= 1 (% "EVENTMSGTYPE"))
+      (or (nil? (% "HOMEDESCRIPTION"))
+        (not (re-find #"3PT" (% "HOMEDESCRIPTION")))))
+    (plays)))
+
+(defn three-pm []
+  (filter #(and
+      (= 1 (% "EVENTMSGTYPE"))
+      (not (nil? (% "HOMEDESCRIPTION")))
+      (re-find #"3PT" (% "HOMEDESCRIPTION")))
+    (plays)))
