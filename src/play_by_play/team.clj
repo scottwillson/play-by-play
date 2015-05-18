@@ -3,7 +3,8 @@
 
 (defn add-players-to-team [team game]
   (assoc team :players
-    (repeatedly 15 player/create)))
+    (distinct
+      (repeatedly 15 player/create))))
 
 (defn plays-for [team game]
   (filter #(= team (:team %)) (:plays game)))
