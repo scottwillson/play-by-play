@@ -4,7 +4,15 @@
 
 (deftest test-fgm
   (testing "count"
-    (is (> (count (rw/fgm))) 100)))
+    (is (> (count (rw/fgm)) 70,000))))
+
+(deftest test-three-pm
+  (testing "count"
+    (is (> (count (rw/three-pm)) 19,000))))
+
+(deftest test-ftm
+  (testing "count"
+    (is (> (count (rw/ftm)) 500))))
 
 (deftest test-headers
   (testing "headers"

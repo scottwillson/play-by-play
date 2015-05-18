@@ -18,6 +18,9 @@
       "count 3PM: "
       (count (rw/three-pm)))
     (println
+      "count FTM: "
+      (count (rw/ftm)))
+    (println
       "minimum game points: "
       (apply min rw/scores))
     (println

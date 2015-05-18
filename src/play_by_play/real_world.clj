@@ -79,16 +79,26 @@
 (defn plays []
   (flatten (map file-plays (game-files))))
 
+(defn home-and-visitor-descriptions
+  [file-row]
+  (clojure.string/join ""
+    [(file-row "HOMEDESCRIPTION")
+     (file-row "VISITORDESCRIPTION")]))
+
 (defn fgm []
   (filter #(and
       (= 1 (% "EVENTMSGTYPE"))
-      (or (nil? (% "HOMEDESCRIPTION"))
-        (not (re-find #"3PT" (% "HOMEDESCRIPTION")))))
+      (not (.contains (home-and-visitor-descriptions %) "3PT")))
     (plays)))
 
 (defn three-pm []
   (filter #(and
       (= 1 (% "EVENTMSGTYPE"))
-      (not (nil? (% "HOMEDESCRIPTION")))
-      (re-find #"3PT" (% "HOMEDESCRIPTION")))
+      (.contains (home-and-visitor-descriptions %) "3PT"))
+    (plays)))
+
+(defn ftm []
+  (filter #(and
+      (= 3 (% "EVENTMSGTYPE"))
+      (not (.contains (home-and-visitor-descriptions %) "MISS")))
     (plays)))
