@@ -24,7 +24,7 @@
     :team (:name team))))
 
 (defn create-plays [game]
-  (repeatedly 97 #(create-play game)))
+  (repeatedly 102 #(create-play game)))
 
 (defn add-players [game]
   (update-teams add-players-to-team game))
