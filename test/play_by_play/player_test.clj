@@ -22,8 +22,19 @@
     (let [game  {:plays [{:player "Lopez"}
                          {:player "Rondo"}
                          {:player "Lopez"}]}]
-    (is (= 1 (count (plays-for "Rondo" game))))
-    (is (= 2 (count (plays-for "Lopez" game)))))))
+    (is (= 1 (count (plays-for {:name "Rondo"} game))))
+    (is (= 2 (count (plays-for {:name "Lopez"} game))))))
+
+  ; Edge case that will be fixed by player IDs
+  (testing "plays for different players same name different team"
+    (let [game  {:plays [{:player "Lopez" :team "Bulls"}
+                         {:player "Rondo" :team "Bulls"}
+                         {:player "Rondo" :team "Cavs"}
+                         {:player "Lopez" :team "Bulls"}]}]
+    (is (= 1 (count (plays-for {:name "Rondo" :team "Bulls"} game))))
+    (is (= 1 (count (plays-for {:name "Rondo" :team "Cavs"} game))))
+    (is (= 2 (count (plays-for {:name "Lopez" :team "Bulls"} game))))
+    (is (= 0 (count (plays-for {:name "Lopez" :team "Cavs"} game)))))))
 
 (deftest test-sum-points
   (testing "no plays"
@@ -51,5 +62,5 @@
     (let [game  {:plays [{:player "Lopez", :points 2}
                          {:player "Rondo", :points 3}
                          {:player "Lopez", :points 2}]}]
-    (is (= 3 (points-for "Rondo" game)))
-    (is (= 4 (points-for "Lopez" game))))))
+    (is (= 3 (points-for {:name "Rondo"} game)))
+    (is (= 4 (points-for {:name "Lopez"} game))))))

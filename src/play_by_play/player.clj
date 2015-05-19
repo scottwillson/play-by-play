@@ -6,7 +6,11 @@
   (stats/sample @rw/players :size 1))
 
 (defn plays-for [player game]
-  (filter #(= player (:player %)) (:plays game)))
+  (filter
+    #(and
+      (= (:name player) (:player %))
+      (= (:team player) (:team %)))
+    (:plays game)))
 
 (defn points-for [player game]
   (reduce + (map :points (plays-for player game))))
@@ -14,7 +18,7 @@
 (defn sum-points
   "Sum and associate points for each player"
   [player game]
-  (assoc player :points (points-for (:name player) game)))
+  (assoc player :points (points-for player game)))
 
 (defn update-players
   "Update (map + assoc) players on each team in game using f"
@@ -24,6 +28,6 @@
       (assoc team :players
         (map
           (fn [player]
-            (f player game))
+            (f (assoc player :team (:name team)) game))
           (:players team))))
       (:teams game))))
