@@ -210,7 +210,7 @@ module PlayByPlay
       end
 
       def shooting_foul?
-        foul? && (eventmsgactiontype == 2 || eventmsgactiontype == 29)
+        foul? && (eventmsgactiontype == 2 || eventmsgactiontype == 29 || (away_from_play? && previous_row&.fg? && previous_row.team != team))
       end
 
       def start_of_game?
@@ -305,12 +305,7 @@ module PlayByPlay
         elsif turnover?
           :turnover
         elsif shooting_foul?
-          # and one
-          if previous_row&.and_one?
-            nil
-          else
-            :shooting_foul
-          end
+          :shooting_foul
         elsif double_technical_foul?
           :double_technical_foul
         elsif technical_foul?
@@ -377,7 +372,7 @@ module PlayByPlay
 
       def to_s
         instance_variables
-          .reject { |v| v == :@game || v == :@next_row }
+          .reject { |v| [ :@game, :@next_row, :@previous_row, :@possession ].include?(v) }
             .map do |v|
               [ v, send(v.to_s.gsub("@", "")) ]
           end

@@ -92,8 +92,6 @@ module PlayByPlay
 
         if game_id == "0021400009" && row.eventnum == 393
           row.eventmsgactiontype = 7
-        elsif game_id == "0021400029" && row.eventnum == 349
-          row.eventmsgactiontype = 2
         end
 
         row
@@ -134,9 +132,6 @@ module PlayByPlay
       def debug(possession, row)
         return unless PlayByPlay.logger.debug?
         PlayByPlay.logger.debug possession.to_h
-        row = row.dup
-        row.game = nil
-        row.possession = nil
         PlayByPlay.logger.debug row
       end
 
