@@ -16,7 +16,7 @@ Install
  * [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/), [node.js](https://nodejs.org/en/download/)
  * `gem install bundler`
  * `bundle`
- * cd web; npm install
+ * `cd web; npm install; npm run dev:dist`
 
 Test
 ====
