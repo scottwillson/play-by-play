@@ -183,7 +183,9 @@ module PlayByPlay
       end
 
       def previous_row
-        @previous_row ||= rows[rows.find_index(self) - 1]
+        if rows
+          @previous_row ||= rows[rows.find_index(self) - 1]
+        end
       end
 
       def rebound?
