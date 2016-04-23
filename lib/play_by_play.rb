@@ -1,12 +1,15 @@
 require "logger"
 
 module PlayByPlay
+  @logger = nil
+  @environment = nil
+  
   def self.environment
-    @@environment = ENV["RACK_ENV"]&.to_sym || :development
+    @environment = ENV["RACK_ENV"]&.to_sym || :development
   end
 
   def self.logger
-    @@logger ||= new_logger
+    @logger ||= new_logger
   end
 
   def self.new_logger
