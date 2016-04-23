@@ -1,7 +1,7 @@
 module PlayByPlay
   module Model
     module GamePlay
-      def self.team_rebound(possession, play)
+      def self.team_rebound(_, play)
         { team: play.team }
       end
     end

@@ -1,7 +1,7 @@
 module PlayByPlay
   module Model
     module GamePlay
-      def self.block(possession, play)
+      def self.block(_, _)
         { ball_in_play: true, team: nil }
       end
     end

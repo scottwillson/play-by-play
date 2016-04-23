@@ -1,7 +1,7 @@
 module PlayByPlay
   module Model
     module GamePlay
-      def self.period_end(possession, play)
+      def self.period_end(possession, _)
         {
           ball_in_play: false,
           home: possession.home.merge(period_personal_fouls: 0, personal_foul_in_last_two_minutes: false),

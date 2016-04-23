@@ -32,7 +32,19 @@ module PlayByPlay
       attr_reader :team
       attr_reader :type
 
-      def initialize(type, and_one: false, assisted: false, away_from_play: false, clear_path: false, flagarant: false, intentional: false, point_value: 2, seconds: 7, team: nil)
+      def initialize(
+        type,
+        and_one: false,
+        assisted: false,
+        away_from_play: false,
+        clear_path: false,
+        flagarant: false,
+        intentional: false,
+        point_value: 2,
+        seconds: 7,
+        team: nil
+      )
+
         @and_one = and_one
         @assisted = assisted
         @away_from_play = away_from_play
@@ -43,6 +55,7 @@ module PlayByPlay
         @seconds = seconds
         @team = team
         @type = type
+        
         validate!
       end
 

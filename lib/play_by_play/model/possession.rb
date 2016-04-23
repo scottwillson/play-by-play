@@ -115,7 +115,6 @@ module PlayByPlay
         [ visitor, home ]
       end
 
-      # TODO dupe?
       def merge_team(team, key)
         if team.is_a?(Team)
           team

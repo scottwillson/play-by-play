@@ -1,7 +1,7 @@
 module PlayByPlay
   module Model
     module GamePlay
-      def self.steal(possession, play)
+      def self.steal(_, _)
         { team: :defense }
       end
     end
