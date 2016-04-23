@@ -1,8 +1,13 @@
-*.class
-*.jar
 .DS_Store
 .hg/
 .hgignore
+.rspec
+.ruby-gemset
+.ruby-version
+*.class
+*.db
+*.db-journal
+*.jar
 /.lein-*
 /.nrepl-port
 /checkouts
@@ -11,5 +16,10 @@
 data/days
 data/games
 node_modules
+node_modules
+npm-debug.log
 pom.xml
 pom.xml.asc
+spec/examples.txt
+tmp
+web/dist
