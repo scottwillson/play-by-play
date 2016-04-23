@@ -89,6 +89,7 @@ DEPENDENCIES
   capybara-screenshot
   poltergeist
   puma
+  rack
   rspec
   rubocop
   sequel
