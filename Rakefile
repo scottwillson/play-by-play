@@ -30,6 +30,12 @@ namespace :parse do
     json = file.read_json(dir)
     file.parse json, invalid_state_error: ENV["DEBUG"]
   end
+
+  desc "Parse season and show errors but do not save"
+  task :season do
+    dir = ENV["DIR"] || "spec/data"
+    PlayByPlay::Sample::Season.parse dir, invalid_state_error: ENV["DEBUG"]
+  end
 end
 
 namespace :import do

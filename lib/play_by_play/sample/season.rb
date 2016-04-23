@@ -16,6 +16,17 @@ module PlayByPlay
         Season.new days
       end
 
+      def self.parse(path, invalid_state_error: true)
+        Dir.glob("#{path}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json").map do |file_path|
+          json = JSON.parse(File.read(file_path))
+          day = Day.parse(json)
+          day.games.each do |game|
+            json = game.read_json(path)
+            game.parse json, invalid_state_error
+          end
+        end
+      end
+
       def initialize(days = nil)
         @days = days
       end

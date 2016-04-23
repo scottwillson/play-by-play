@@ -35,7 +35,6 @@ module PlayByPlay
         @id = repository.save_game(self)
         repository.save_sample_plays plays
         repository.save_rows rows
-        PlayByPlay.logger.info(play: :import, game_id: game_id, errors: errors)
         game.errors?
       end
 
@@ -71,6 +70,8 @@ module PlayByPlay
             break
           end
         end
+
+        PlayByPlay.logger.info(sample_game: :parse, game_id: game_id, errors: possession.errors)
 
         possession
       end
