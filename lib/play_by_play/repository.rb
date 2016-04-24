@@ -21,7 +21,7 @@ module PlayByPlay
         play_attributes = play.last
       end
 
-      query = play_query(play_attributes, play.first, possession_key)
+      query = sample_play_query(play_attributes, play.first, possession_key)
       @db[:sample_plays].where(query).count
     end
 
@@ -37,12 +37,12 @@ module PlayByPlay
         play_attributes = play.key.last
       end
 
-      query = play_query(play_attributes, play.key.first, play.possession_key)
+      query = sample_play_query(play_attributes, play.key.first, play.possession_key)
       id = @db[:sample_plays].insert(query)
       update_row(play.row, id)
     end
 
-    def play_query(play_attributes, key, possession_key)
+    def sample_play_query(play_attributes, key, possession_key)
       {
         ball_in_play: false,
         free_throws: false,
@@ -60,7 +60,7 @@ module PlayByPlay
       }.merge(possession_key)
     end
 
-    def save_game(file)
+    def save_sample_game(file)
       @db[:sample_games].insert(
         errors: file.errors,
         error_eventnum: file.error_eventnum,
@@ -70,13 +70,13 @@ module PlayByPlay
       )
     end
 
-    def games(page = 1)
+    def sample_games(page = 1)
       @db[:sample_games].exclude(error_eventnum: nil).paginate(page, 20).all
     end
 
-    def rows(game_id)
-      game_id = @db[:sample_games].where(sample_game_id: game_id).first[:id]
-      @db[:rows].where(sample_game_id: game_id).all
+    def rows(sample_game_id)
+      sample_game_id = @db[:sample_games].where(sample_game_id: sample_game_id).first[:id]
+      @db[:rows].where(sample_game_id: sample_game_id).all
     end
 
     def save_rows(rows)
@@ -156,7 +156,7 @@ module PlayByPlay
         ]
       end
 
-      @db[:rows].import(columns, values)
+      @db[:rows].import columns, values
     end
 
     def update_row(row, play_id)

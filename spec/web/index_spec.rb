@@ -8,7 +8,7 @@ RSpec.describe "index page", web: true, js: true do
 
     file = PlayByPlay::Sample::Game.new("0021400014", "GSW", "POR")
     file.error_eventnum = 291
-    repository.save_game file
+    repository.save_sample_game file
 
     spawn "npm run dist:test", chdir: "web"
     Process.wait

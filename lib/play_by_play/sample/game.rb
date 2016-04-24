@@ -32,7 +32,7 @@ module PlayByPlay
         json = read_json(path)
         game = parse(json, invalid_state_error)
         @errors = game.errors
-        @id = repository.save_game(self)
+        @id = repository.save_sample_game(self)
         repository.save_sample_plays plays
         repository.save_rows rows
         game.errors?

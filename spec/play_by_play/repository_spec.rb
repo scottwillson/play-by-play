@@ -7,7 +7,7 @@ module PlayByPlay
       it "returns array", database: true do
         repository = Repository.new
         repository.reset!
-        expect(repository.games).to eq([])
+        expect(repository.sample_games).to eq([])
       end
     end
   end
