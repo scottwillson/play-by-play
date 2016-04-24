@@ -22,7 +22,7 @@ module PlayByPlay
       end
 
       query = play_query(play_attributes, play.first, possession_key)
-      @db[:plays].where(query).count
+      @db[:sample_plays].where(query).count
     end
 
     def save_sample_plays(plays)
@@ -38,7 +38,7 @@ module PlayByPlay
       end
 
       query = play_query(play_attributes, play.key.first, play.possession_key)
-      id = @db[:plays].insert(query)
+      id = @db[:sample_plays].insert(query)
       update_row(play.row, id)
     end
 
@@ -61,7 +61,7 @@ module PlayByPlay
     end
 
     def save_game(file)
-      @db[:games].insert(
+      @db[:sample_games].insert(
         errors: file.errors,
         error_eventnum: file.error_eventnum,
         game_id: file.game_id,
@@ -71,18 +71,18 @@ module PlayByPlay
     end
 
     def games(page = 1)
-      @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
+      @db[:sample_games].exclude(error_eventnum: nil).paginate(page, 20).all
     end
 
     def rows(game_id)
-      game_id = @db[:games].where(game_id: game_id).first[:id]
-      @db[:rows].where(game_id: game_id).all
+      game_id = @db[:sample_games].where(sample_game_id: game_id).first[:id]
+      @db[:rows].where(sample_game_id: game_id).all
     end
 
     def save_rows(rows)
       columns = [
         :play_id,
-        :game_id,
+        :sample_game_id,
         :eventmsgactiontype,
         :eventmsgtype,
         :eventnum,
@@ -166,9 +166,9 @@ module PlayByPlay
     end
 
     def reset!
-      if @db.table_exists?(:plays)
-        @db[:plays].truncate
-        @db[:games].truncate
+      if @db.table_exists?(:sample_plays)
+        @db[:sample_plays].truncate
+        @db[:sample_games].truncate
         @db[:rows].truncate
       else
         create!
@@ -185,7 +185,7 @@ module PlayByPlay
 
     def create_tables(reset = false)
       create_table_method = reset ? :create_table! : :create_table?
-      @db.send(create_table_method, :plays) do
+      @db.send(create_table_method, :sample_plays) do
         primary_key :id
         Boolean :ball_in_play, default: false
         Boolean :clear_path, default: false
@@ -202,7 +202,7 @@ module PlayByPlay
         String :type
       end
 
-      @db.send(create_table_method, :games) do
+      @db.send(create_table_method, :sample_games) do
         primary_key :id
         Integer :game_id
         String :errors
@@ -215,7 +215,7 @@ module PlayByPlay
 
       @db.send(create_table_method, :rows) do
         primary_key :id
-        Integer :game_id
+        Integer :sample_game_id
         Integer :play_id
         Integer :eventmsgactiontype
         Integer :eventmsgtype
@@ -249,7 +249,7 @@ module PlayByPlay
         Integer :scoremargin
         String :visitordescription
         String :wctimestring
-        index :game_id
+        index :sample_game_id
         index :play_id
       end
     end
