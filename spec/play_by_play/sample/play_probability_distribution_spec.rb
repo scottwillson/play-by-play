@@ -24,8 +24,8 @@ module PlayByPlay
           possession = Model::Possession.new(ball_in_play: true)
 
           possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(18)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ])
+          expect(possession_play_probability_distribution.size).to eq(13)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ])
 
           possession = Model::Possession.new
           possession_play_probability_distribution = play_probability_distribution.for(possession)
@@ -34,7 +34,7 @@ module PlayByPlay
 
           possession = Model::Possession.new(team: :visitor)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(32)
+          expect(possession_play_probability_distribution.size).to eq(27)
           expect(possession_play_probability_distribution.map(&:probability)).to include(3)
           expect(possession_play_probability_distribution.map(&:probability)).to include(1)
         end

@@ -1,5 +1,4 @@
  * Play methods that only involve Possession should live on Possession
- * standardize argument order to possession, play
  * rename game_id to sample_game_id or nba_game_id
  * move to_visitor_or_home_symbol and other_team to GamePlay or shared module?
  * break apart play_spec and rename
