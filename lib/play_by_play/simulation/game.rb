@@ -7,11 +7,20 @@ require "play_by_play/simulation/random_play_generator"
 module PlayByPlay
   module Simulation
     class Game
+      attr_reader :home
       attr_reader :possessions
+      attr_reader :visitor
 
-      def initialize(repository)
-        @repository = repository
+      def initialize(home: Team.new(key: :home), visitor: Team.new(key: :visitor), repository: PlayByPlay::Repository.new)
+        @home = home
         @possessions = [ Model::Possession.new ]
+        @repository = repository
+        @visitor = visitor
+
+        raise(Model::InvalidStateError, "Team cannot play itself") if home == visitor
+
+        @home.games << self
+        @visitor.games << self
       end
 
       def play!
@@ -31,6 +40,26 @@ module PlayByPlay
 
       def possession
         possessions.last
+      end
+
+      def loser
+        return unless possession.game_over?
+
+        if possession.home.points < possession.visitor.points
+          home
+        else
+          visitor
+        end
+      end
+
+      def winner
+        return unless possession.game_over?
+
+        if possession.home.points > possession.visitor.points
+          home
+        else
+          visitor
+        end
       end
     end
   end

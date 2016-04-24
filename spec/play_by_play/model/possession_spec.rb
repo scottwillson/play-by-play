@@ -75,6 +75,13 @@ module PlayByPlay
           expect(Possession.new.errors?).to eq(false)
         end
       end
+
+      describe "#game_over?" do
+        it "defaults to false" do
+          possession = Model::Possession.new
+          expect(possession.game_over?).to eq false
+        end
+      end
     end
   end
 end

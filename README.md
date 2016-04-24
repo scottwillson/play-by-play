@@ -75,9 +75,17 @@ This is a handy way to model basketball games that leads to concise, testable mo
 
 System
 ------
-
 The larger system accepts play-by-play JSON files as input and outputs Simulation::Game.
 Input: historical state transitions. Output: chain of states
+
+Modules:
+ * Sample. Import JSON files from real world games.
+ * Model. Abstract model of basketball game.
+ * Simulation. Use probabilities from Sample to run Model to simulation a game or season of games.
+ * View. Display Simulation output as text.
+ * Web. Web UI.
+
+Many modules have duplicate names (Game, Team), but these duplicates are different, though related concepts. Mixing those concepts makes for confusing code.
 
 States
 ------

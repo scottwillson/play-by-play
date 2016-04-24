@@ -9,7 +9,7 @@ module PlayByPlay
       describe ".play!" do
         it "plays a game" do
           repository = Mock::Repository.new
-          game = Game.new(repository)
+          game = Game.new(repository: repository)
           possession = game.play!
           expect(possession.visitor.points).to be > 0
           expect(possession.home.points).to be > 0

@@ -1,3 +1,8 @@
+ * Use better Rspec predicate matchers
+ * Fix "PlayByPlay::Model::InvalidStateError: team must not be nil if free throws are pending" in simulation
+ * Optimize season simulation speed (seems slow)
+ * Test season simulation with database
+ * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)
  * better favicon
  * change model initialize to *attribute?
@@ -16,3 +21,5 @@
  * Add view for probability distribution
  * bulk insert plays
  * Add missing FT play to 0021400052
+ * Random season schedule shouldn't allow teams to play multiple gams per day
+ * Show errors in web UI

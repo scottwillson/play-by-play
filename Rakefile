@@ -5,20 +5,42 @@ require "play_by_play/repository"
 require "play_by_play/sample/game"
 require "play_by_play/sample/season"
 require "play_by_play/simulation/game"
+require "play_by_play/simulation/season"
 require "play_by_play/views/possession"
+require "play_by_play/views/season"
 
-task default: [ :play ]
+task default: [ "play:game" ]
 
-desc "Play a single sample game"
-task :play do
-  unless File.exist?("play_by_play_development.db")
-    Rake::Task["import:season"].invoke
+namespace :play do
+  desc "Play a single sample game"
+  task :game do
+    unless File.exist?("play_by_play_development.db")
+      Rake::Task["import:season"].invoke
+    end
+
+    game = PlayByPlay::Simulation::Game.new
+    possession = game.play!
+    view = PlayByPlay::Views::Possession.new(possession)
+    puts view
   end
 
-  game = PlayByPlay::Simulation::Game.new(PlayByPlay::Repository.new)
-  possession = game.play!
-  view = PlayByPlay::Views::Possession.new(possession)
-  puts view
+  desc "Simulate a season of games"
+  task :season do
+    args = {}
+
+    if ENV["GAMES"]
+      args[:scheduled_games_per_teams_count] = ENV["GAMES"].to_i
+    end
+
+    if ENV["TEAMS"]
+      args[:teams_count] = ENV["TEAMS"].to_i
+    end
+
+    season = PlayByPlay::Simulation::Season.new(args)
+    season = season.play!
+    view = PlayByPlay::Views::Season.new(season)
+    puts view
+  end
 end
 
 namespace :parse do
