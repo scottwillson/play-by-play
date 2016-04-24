@@ -104,7 +104,8 @@ module PlayByPlay
           row.offensive_foul_turnover? ||
           row.double_technical_foul? ||
           [ :unknown, :defensive_violation, :ejection, :period_start ].include?(row.event) ||
-          (row.shooting_foul? && row.previous_row.and_one?)
+          (row.shooting_foul? && row.previous_row.and_one?) ||
+          (row.jump_ball? && possession.period < 5 && possession.opening_tip)
       end
 
       # FT miss with more FTs upcoming count as team rebounds (doesn't count in stats)

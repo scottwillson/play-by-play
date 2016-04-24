@@ -172,7 +172,7 @@ module PlayByPlay
 
           expect(actual).to eq(expected)
 
-          expect(file.plays.size).to eq(426)
+          expect(file.plays.size).to eq(425)
           expect(file.rows.size).to eq(512)
         end
       end

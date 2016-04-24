@@ -100,41 +100,6 @@ module PlayByPlay
           end
         end
       end
-
-      describe "jump_ball" do
-        it "assigns team for possession 0021400017" do
-          # Jump Ball Pekovic vs. Drummond: Tip to
-          row.eventmsgtype = 10
-          row.eventmsgactiontype = 0
-          row.person1type = 4
-          row.person2type = 5
-          row.person3type = 3
-          row.player1_team_id = 1610612750
-          row.player2_team_id = 1610612765
-          row.player3_team_id = 1610612765
-          row.player1_id = 201593
-          row.player2_id = 203083
-          row.player3_id = 2746
-
-          expect(row.play_team).to eq(:home)
-        end
-
-        it "assigns team for possession 0021400040" do
-          row.eventmsgtype = 10
-          row.eventmsgactiontype = 0
-          row.person1type = 4
-          row.person2type = 5
-          row.person3type = 3
-          row.player1_team_id = 1610612748
-          row.player2_team_id = 1610612761
-          row.player3_team_id = 1610612761
-          row.player1_id = 203120
-          row.player2_id = 202335
-          row.player3_id = 203082
-
-          expect(row.play_team).to eq(:home)
-        end
-      end
     end
   end
 end

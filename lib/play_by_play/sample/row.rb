@@ -1,3 +1,5 @@
+require "play_by_play/model/invalid_state_error"
+
 module PlayByPlay
   module Sample
     class Row
@@ -356,7 +358,7 @@ module PlayByPlay
       end
 
       def team
-        if person3type && person3type > 3
+        if person3type && person3type > 1
           person_type = person3type
         else
           person_type = person1type
