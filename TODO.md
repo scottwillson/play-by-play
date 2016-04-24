@@ -1,5 +1,4 @@
  * Use better Rspec predicate matchers
- * Fix "PlayByPlay::Model::InvalidStateError: team must not be nil if free throws are pending" in simulation
  * Optimize season simulation speed (seems slow)
  * Test season simulation with database
  * Refactor season simulation to be more like Redux
