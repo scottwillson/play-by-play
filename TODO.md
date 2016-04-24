@@ -12,10 +12,7 @@
  * Simulation should only consider time remaining when choosing :period_end
  * Double personal fouls shall add to a player's total, but not to the team total.
  * validate seconds_remaining when importing sample
- * split import from parse so import can be run to check model
- * only persist after import(s)
  * do imports concurrently
  * Add view for probability distribution
- * Team#merge_team dupe of code in Duplication
  * bulk insert plays
  * Add missing FT play to 0021400052
