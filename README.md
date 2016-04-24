@@ -9,7 +9,7 @@ simulate games. There is also a web app to browse imported data.
 
 Game simulation is very simple. There is a "home" team and a "visitor" team, each with exactly equal chances, league-average to make field
 goals, block shots, etc. There isn't even the concept of players, yet! Even this simulation is interesting: given two perfectly-matched
-teams, ~10% of games are 20-point blowouts.
+teams, ~10% of games are 20-point blowouts. Maybe there's [more than coin-flipping](http://www.sloansportsconference.com/?p=11265) going on?
 
 Install
 =======

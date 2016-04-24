@@ -3,7 +3,7 @@ module PlayByPlay
     module GamePlay
       def self.personal_foul(possession, play)
         attributes = { ball_in_play: false }.merge(increment_period_personal_fouls(possession, play.team))
-        other_team = possession.to_visitor_or_home_symbol(possession.other_team(play.team))
+        other_team = possession.other_team(play.team)
 
         if play.away_from_play?
           attributes = attributes.merge(free_throws: [ other_team ], team: other_team)
