@@ -13,16 +13,16 @@ module PlayByPlay
       attr_reader :plays
       attr_reader :errors
       attr_accessor :error_eventnum
-      attr_reader :game_id
+      attr_reader :nba_game_id
       attr_accessor :headers
       attr_reader :id
       attr_reader :home_team_name
       attr_reader :rows
       attr_reader :visitor_team_name
 
-      def initialize(game_id, visitor_team_name, home_team_name)
+      def initialize(nba_game_id, visitor_team_name, home_team_name)
         @plays = []
-        @game_id = game_id
+        @nba_game_id = nba_game_id
         @headers = []
         @home_team_name = home_team_name
         @visitor_team_name = visitor_team_name
@@ -39,7 +39,7 @@ module PlayByPlay
       end
 
       def read_json(path)
-        JSON.parse(File.read("#{path}/#{game_id}.json"))
+        JSON.parse(File.read("#{path}/#{nba_game_id}.json"))
       end
 
       def parse(json, invalid_state_error = true)
@@ -71,7 +71,7 @@ module PlayByPlay
           end
         end
 
-        PlayByPlay.logger.info(sample_game: :parse, game_id: game_id, errors: possession.errors)
+        PlayByPlay.logger.info(sample_game: :parse, nba_game_id: nba_game_id, errors: possession.errors)
 
         possession
       end
@@ -90,7 +90,7 @@ module PlayByPlay
           row.eventmsgactiontype = 2
         end
 
-        if game_id == "0021400009" && row.eventnum == 393
+        if nba_game_id == "0021400009" && row.eventnum == 393
           row.eventmsgactiontype = 7
         end
 

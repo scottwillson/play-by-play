@@ -6,12 +6,12 @@ class GameSummary extends React.Component {
     return (
       <tr key={this.props.file.id}>
         <td>
-          <Link to={`/games/${this.props.file.game_id}`}>{this.props.file.game_id}</Link>
+          <Link to={`/games/${this.props.file.nba_game_id}`}>{this.props.file.nba_game_id}</Link>
         </td>
         <td className="mdl-data-table__cell--non-numeric">{this.props.file.visitor_team_name}</td>
         <td className="mdl-data-table__cell--non-numeric">{this.props.file.home_team_name}</td>
         <td>
-          <Link to={`/games/${this.props.file.game_id}/${this.props.file.error_eventnum}`}>{this.props.file.error_eventnum}</Link>
+          <Link to={`/games/${this.props.file.nba_game_id}/${this.props.file.error_eventnum}`}>{this.props.file.error_eventnum}</Link>
         </td>
         <td className="mdl-data-table__cell--non-numeric">{this.props.file.errors}</td>
       </tr>

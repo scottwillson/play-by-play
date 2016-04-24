@@ -3,7 +3,7 @@ import React from 'react';
 const Row = (props) => (
   <tr>
     <td id={props.data.eventnum}>
-      <a href={`http://stats.nba.com/game/#!/00${props.data.game_id}/playbyplay/#play${props.data.eventnum}`}>{props.data.eventnum}</a>
+      <a href={`http://stats.nba.com/game/#!/00${props.data.nba_game_id}/playbyplay/#play${props.data.eventnum}`}>{props.data.eventnum}</a>
     </td>
     <td>{props.data.period}</td>
     <td>{props.data.pctimestring}</td>

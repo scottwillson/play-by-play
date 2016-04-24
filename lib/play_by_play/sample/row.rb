@@ -27,7 +27,6 @@ module PlayByPlay
       attr_accessor :eventmsgtype
       # *Not* in exact chronological order
       attr_accessor :eventnum
-      attr_accessor :game_id
       attr_accessor :homedescription
       attr_accessor :neutraldescription
       attr_accessor :pctimestring
@@ -127,6 +126,10 @@ module PlayByPlay
         event == :ft && description["MISS"]
       end
 
+      def game_id=(value)
+        @nba_game_id = value
+      end
+
       def headers
         game.headers
       end
@@ -145,6 +148,10 @@ module PlayByPlay
 
       def miss?
         fg_miss? || ft_miss?
+      end
+
+      def nba_game_id
+        @nba_game_id
       end
 
       def next_row

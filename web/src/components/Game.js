@@ -7,7 +7,7 @@ class Game extends React.Component {
     super(props);
     this.state = {
       eventnum: props.params.eventnum,
-      game_id: props.params.game_id,
+      nba_game_id: props.params.nba_game_id,
       rows: []
     };
   }
@@ -62,7 +62,7 @@ class Game extends React.Component {
 
   componentWillMount() {
     request
-      .get(`/games/${this.state.game_id}.json`)
+      .get(`/games/${this.state.nba_game_id}.json`)
       .accept('json')
       .end(function(err, res) {
         this.setState({rows: res.body});

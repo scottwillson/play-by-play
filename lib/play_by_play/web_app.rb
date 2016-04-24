@@ -19,8 +19,8 @@ module PlayByPlay
       json repository.sample_games(page)
     end
 
-    get "/games/:game_id.json" do |game_id|
-      json repository.rows(game_id)
+    get "/games/:nba_game_id.json" do |nba_game_id|
+      json repository.rows(nba_game_id)
     end
 
     def repository

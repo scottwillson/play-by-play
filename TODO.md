@@ -1,5 +1,4 @@
  * Play methods that only involve Possession should live on Possession
- * rename game_id to sample_game_id or nba_game_id
  * move to_visitor_or_home_symbol and other_team to GamePlay or shared module?
  * break apart play_spec and rename
  * rename Possession#to_visitor_or_home_symbol to #team_key ?
@@ -22,3 +21,5 @@
  * do imports concurrently
  * Add view for probability distribution
  * Team#merge_team dupe of code in Duplication
+ * bulk insert plays
+ * Add missing FT play to 0021400052
