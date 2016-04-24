@@ -1,6 +1,3 @@
- * move to_visitor_or_home_symbol and other_team to GamePlay or shared module?
- * break apart play_spec and rename
- * rename Possession#to_visitor_or_home_symbol to #team_key ?
  * Add sequence number to row? (or just rely on ID)
  * better favicon
  * change model initialize to *attribute?
