@@ -23,6 +23,12 @@ module PlayByPlay
 
         create_teams
         create_days
+
+        teams.each do |team|
+          if scheduled_games_per_teams_count != team.games.size
+            raise(Model::InvalidStateError, "#{team.name} has #{team.games.size} instead of #{scheduled_games_per_teams_count}")
+          end
+        end
       end
 
       def create_teams

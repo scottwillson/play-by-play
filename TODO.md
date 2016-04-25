@@ -1,4 +1,5 @@
  * Use better Rspec predicate matchers
+ * Sample:Schedule
  * Optimize season simulation speed (seems slow)
  * Test season simulation with database
  * Refactor season simulation to be more like Redux
@@ -22,3 +23,4 @@
  * Add missing FT play to 0021400052
  * Random season schedule shouldn't allow teams to play multiple gams per day
  * Show errors in web UI
+ * Move InvalidStateError out of Model
