@@ -20,6 +20,15 @@ module PlayByPlay
         validate!
       end
 
+      def attributes
+        @attributes ||= {
+          key: key,
+          period_personal_fouls: period_personal_fouls,
+          personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
+          points: points
+        }
+      end
+
       def next_foul_in_penalty?
         period_personal_fouls >= 4 || personal_foul_in_last_two_minutes
       end

@@ -67,6 +67,23 @@ module PlayByPlay
         validate!
       end
 
+      def attributes
+        @attributes ||= {
+          ball_in_play: ball_in_play,
+          errors: errors.dup,
+          free_throws: free_throws.dup,
+          home: dup_value(:home),
+          next_team: next_team,
+          offense: offense,
+          opening_tip: opening_tip,
+          period: period,
+          seconds_remaining: seconds_remaining,
+          team: team,
+          technical_free_throws: technical_free_throws,
+          visitor: dup_value(:visitor),
+        }
+      end
+
       def ball_in_play?
         ball_in_play
       end
