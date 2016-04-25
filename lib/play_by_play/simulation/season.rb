@@ -1,10 +1,12 @@
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/simulation/conference"
 require "play_by_play/simulation/day"
 require "play_by_play/simulation/team"
 
 module PlayByPlay
   module Simulation
     class Season
+      attr_reader :conferences
       attr_reader :days
       attr_reader :random_play_generator
       attr_reader :repository
@@ -36,6 +38,11 @@ module PlayByPlay
       def create_teams
         i = 0
         @teams = Array.new(teams_count) { Team.new("team_#{i += 1}") }
+        @conferences = [
+          Conference.new("conference_1", @teams[ 0, teams_count / 2 ]),
+          Conference.new("conference_2", @teams[ teams_count / 2, teams_count ])
+        ]
+
       end
 
       def create_days

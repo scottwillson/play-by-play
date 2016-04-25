@@ -1,15 +1,10 @@
 Play by Play
 ============
-Ruby basketball simulation. Partial recreation of a BASIC college basketball simulation I wrote in the 1980s. Inspired by discussion about
-[The Hot Hand in Basketball: On the Misperception of Random Sequences](http://bit.ly/1PkU2Qh):
-"Kobe Bryant shooting a basketball is essentially flipping a coin." Given seasons of NBA data, I can model those coin flips.
+Ruby basketball simulation. Partial recreation of a BASIC college basketball simulation I wrote in the 1980s. Inspired by discussion about [The Hot Hand in Basketball: On the Misperception of Random Sequences](http://bit.ly/1PkU2Qh): "Kobe Bryant shooting a basketball is essentially flipping a coin." Given seasons of NBA data, I can model those coin flips.
 
-The project reads [NBA play-by-play game files](/) and builds a probability distribution. It uses the probability distribution and a model to
-simulate games. There is also a web app to browse imported data.
+The project reads [NBA play-by-play game files](/) and builds a probability distribution. It uses the probability distribution and a model to simulate games. There is also a web app to browse imported data.
 
-Game simulation is very simple. There is a "home" team and a "visitor" team, each with exactly equal chances, league-average to make field
-goals, block shots, etc. There isn't even the concept of players, yet! Even this simulation is interesting: given two perfectly-matched
-teams, ~10% of games are 20-point blowouts. Maybe there's [more than coin-flipping](http://www.sloansportsconference.com/?p=11265) going on?
+Game simulation is very simple. There is a "home" team and a "visitor" team, each with exactly equal chances, league-average to make field goals, block shots, etc. There isn't even the concept of players, yet! Even this simulation is interesting: given two perfectly-matched teams, ~10% of games are 20-point blowouts. Maybe there's [more than coin-flipping](http://www.sloansportsconference.com/?p=11265) going on? An entire simulated season routinely produces at least one 50-win team and one 33-win team.
 
 Install
 =======
