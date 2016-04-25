@@ -3,6 +3,7 @@ require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/possession"
 require "play_by_play/repository"
 require "play_by_play/simulation/random_play_generator"
+require "play_by_play/simulation/team"
 
 module PlayByPlay
   module Simulation

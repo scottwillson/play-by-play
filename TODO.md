@@ -1,6 +1,5 @@
  * Use better Rspec predicate matchers
  * Sample:Schedule
- * Optimize season simulation speed (seems slow)
  * Test season simulation with database
  * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)
@@ -24,3 +23,4 @@
  * Random season schedule shouldn't allow teams to play multiple gams per day
  * Show errors in web UI
  * Move InvalidStateError out of Model
+ * PlayByPlay::Model::Duplication#attributes is slow
