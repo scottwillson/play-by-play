@@ -7,7 +7,7 @@ module PlayByPlay
 
       def to_s
         strings = []
-        @season.conferences.each do |conference|
+        @season.league.conferences.each do |conference|
           strings << ""
           strings << conference.name
           strings << "=" * conference.name.size

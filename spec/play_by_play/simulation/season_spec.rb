@@ -20,14 +20,16 @@ module PlayByPlay
 
       describe "#play!" do
         it "plays games" do
-          season = Season.new(scheduled_games_per_teams_count: 4, teams_count: 4, repository: Mock::Repository.new)
+          league = League.new(4)
+          season = Season.new(league: league, scheduled_games_per_teams_count: 4, repository: Mock::Repository.new)
           season.play!
           expect(season.days.size).to be > 0
           expect(season.games.size).to eq(8)
         end
 
         it "tallies wins and losses" do
-          season = Season.new(scheduled_games_per_teams_count: 4, teams_count: 4, repository: Mock::Repository.new)
+          league = League.new(4)
+          season = Season.new(league: league, scheduled_games_per_teams_count: 4, repository: Mock::Repository.new)
           season.play!
           expect(season.games.all? { |game| game.possession.game_over? }).to be true
           expect(season.games.all?(&:winner)).to be true
