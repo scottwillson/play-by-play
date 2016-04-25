@@ -26,7 +26,7 @@ module PlayByPlay
           raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{season.scheduled_games_per_teams_count} games") if teams.size == 1
           home = teams.pop
           visitor = teams.pop
-          game = Game.new(home: home, repository: season.repository, visitor: visitor)
+          game = Game.new(home: home, random_play_generator: season.random_play_generator, visitor: visitor)
           self.games << game
         end
       end

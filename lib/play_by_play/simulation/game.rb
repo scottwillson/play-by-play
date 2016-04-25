@@ -11,10 +11,10 @@ module PlayByPlay
       attr_reader :possessions
       attr_reader :visitor
 
-      def initialize(home: Team.new(key: :home), visitor: Team.new(key: :visitor), repository: PlayByPlay::Repository.new)
+      def initialize(home: Team.new(key: :home), visitor: Team.new(key: :visitor), random_play_generator: nil)
         @home = home
         @possessions = [ Model::Possession.new ]
-        @repository = repository
+        @random_play_generator = random_play_generator
         @visitor = visitor
 
         raise(Model::InvalidStateError, "Team cannot play itself") if home == visitor
@@ -24,8 +24,6 @@ module PlayByPlay
       end
 
       def play!
-        random_play_generator = RandomPlayGenerator.new(@repository)
-
         until possession.game_over?
           play = random_play_generator.new_play(possession)
           possessions << Model::GamePlay.play!(possession, play)
@@ -60,6 +58,10 @@ module PlayByPlay
         else
           visitor
         end
+      end
+
+      def random_play_generator
+        @random_play_generator ||= RandomPlayGenerator.new(PlayByPlay::Repository.new)
       end
     end
   end

@@ -6,6 +6,7 @@ module PlayByPlay
   module Simulation
     class Season
       attr_reader :days
+      attr_reader :random_play_generator
       attr_reader :repository
       attr_reader :scheduled_games_count
       attr_reader :scheduled_games_per_teams_count
@@ -17,6 +18,7 @@ module PlayByPlay
 
         @scheduled_games_per_teams_count = scheduled_games_per_teams_count.to_i
         @teams_count = teams_count.to_i
+        @random_play_generator = RandomPlayGenerator.new(repository)
         @repository = repository
 
         @scheduled_games_count = teams_count * (scheduled_games_per_teams_count / 2)
