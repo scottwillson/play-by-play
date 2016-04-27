@@ -3,6 +3,7 @@ $LOAD_PATH << "lib"
 require "play_by_play"
 require "play_by_play/repository"
 require "play_by_play/sample/game"
+require "play_by_play/sample/league"
 require "play_by_play/sample/season"
 require "play_by_play/simulation/game"
 require "play_by_play/simulation/season"
@@ -34,6 +35,12 @@ namespace :play do
 
     if ENV["TEAMS"]
       args[:teams_count] = ENV["TEAMS"].to_i
+    end
+
+    repository = PlayByPlay::Repository.new
+    repository.create
+    if repository.sample_league?
+      args[:league] = PlayByPlay::Simulation::League.new_from_sample(repository.sample_league)
     end
 
     season = PlayByPlay::Simulation::Season.new(args)
@@ -75,6 +82,12 @@ namespace :import do
     PlayByPlay::Repository.new.create!
     dir = ENV["DIR"] || "spec/data"
     PlayByPlay::Sample::Season.import dir, invalid_state_error: ENV["DEBUG"]
+  end
+
+  desc "Import league"
+  task :league do
+    dir = ENV["DIR"] || "spec/data"
+    PlayByPlay::Sample::League.import dir, 2014
   end
 end
 

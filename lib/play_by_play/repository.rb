@@ -165,8 +165,52 @@ module PlayByPlay
       true
     end
 
+    def sample_league
+      league = Sample::League.new(id: @db[:sample_leagues].first[:id])
+
+      # TODO use a join!
+      @db[:sample_conferences].where(sample_league_id: league.id).each do |conference_attributes|
+        conference = Sample::Conference.new(id: conference_attributes[:id], name: conference_attributes[:name], league_id: league.id)
+        league.conferences << conference
+
+        @db[:sample_divisions].where(sample_conference_id: conference.id).each do |division_attributes|
+          division = Sample::Division.new(id: division_attributes[:id], name: division_attributes[:name], conference_id: conference.id)
+          conference.divisions << division
+
+          @db[:sample_teams].where(sample_division_id: division.id).each do |team_attributes|
+            team = Sample::Team.new(id: team_attributes[:id], name: team_attributes[:name], division_id: division.id)
+            division.teams << team
+          end
+        end
+      end
+
+      league
+    end
+
+    def sample_league?
+      @db[:sample_leagues].first != nil
+    end
+
+    def save_sample_league(league)
+      league.id = @db[:sample_leagues].insert
+      league.conferences.each do |conference|
+        conference.id = @db[:sample_conferences].insert(sample_league_id: league.id, name: conference.name)
+        conference.divisions.each do |division|
+          division.id = @db[:sample_divisions].insert(sample_conference_id: conference.id, name: division.name)
+          division.teams.each do |team|
+            team.id = @db[:sample_teams].insert(sample_division_id: division.id, name: team.name)
+          end
+        end
+      end
+      true
+    end
+
     def reset!
       if @db.table_exists?(:sample_plays)
+        @db[:sample_conferences].truncate
+        @db[:sample_divisions].truncate
+        @db[:sample_leagues].truncate
+        @db[:sample_teams].truncate
         @db[:sample_plays].truncate
         @db[:sample_games].truncate
         @db[:rows].truncate
@@ -211,6 +255,29 @@ module PlayByPlay
         String :visitor_team_name
         index :error_eventnum
         index :nba_game_id
+      end
+
+      @db.send(create_table_method, :sample_conferences) do
+        primary_key :id
+        String :name
+        Integer :sample_league_id
+      end
+
+      @db.send(create_table_method, :sample_divisions) do
+        primary_key :id
+        String :name
+        Integer :sample_conference_id
+      end
+
+      @db.send(create_table_method, :sample_leagues) do
+        primary_key :id
+        String :name
+      end
+
+      @db.send(create_table_method, :sample_teams) do
+        primary_key :id
+        String :name
+        Integer :sample_division_id
       end
 
       @db.send(create_table_method, :rows) do

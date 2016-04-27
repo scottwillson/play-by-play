@@ -7,13 +7,16 @@ module PlayByPlay
       attr_reader :name
       attr_reader :teams
 
-      def initialize(name, teams)
+      def initialize(name, teams = [])
         @name = name
         @teams = teams
         create_divisons
       end
 
       def create_divisons
+        @divisions = []
+        return if @teams.empty?
+
         size = 5
         if @teams.size < 8
           size = @teams.size
@@ -21,7 +24,6 @@ module PlayByPlay
           size = 4
         end
 
-        @divisions = []
         teams.each_slice(size).with_index do |teams, i|
           @divisions << Division.new("division_#{i}", teams)
         end

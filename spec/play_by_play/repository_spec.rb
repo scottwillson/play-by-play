@@ -10,5 +10,13 @@ module PlayByPlay
         expect(repository.sample_games).to eq([])
       end
     end
+
+    describe "#sample_league?" do
+      it "checks for sample league in database", database: true do
+        repository = Repository.new
+        repository.reset!
+        expect(repository.sample_league?).to be(false)
+      end
+    end
   end
 end
