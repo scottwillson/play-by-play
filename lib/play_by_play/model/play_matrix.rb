@@ -2,7 +2,7 @@ module PlayByPlay
   module Model
     class PlayMatrix
       ACCESSIBLE_PLAYS = {
-        { technical_free_throws: true } => [
+        technical_free_throws: [
             [ :ft ],
             [ :ft_miss ],
             [ :period_end ],
@@ -11,7 +11,7 @@ module PlayByPlay
             [ :technical_foul, flagarant: true, team: :defense ],
             [ :technical_foul, flagarant: true, team: :offense ],
           ],
-        { free_throws: true } => [
+        free_throws: [
             [ :ft ],
             [ :ft_miss ],
             [ :offensive_foul ],
@@ -24,7 +24,7 @@ module PlayByPlay
             [ :technical_foul, flagarant: true, team: :offense ],
             [ :turnover ],
           ],
-        { team: true } => [
+        team: [
             [ :block ],
             [ :block, point_value: 3 ],
             [ :fg ],
@@ -54,7 +54,7 @@ module PlayByPlay
             [ :technical_foul, flagarant: true, team: :offense ],
             [ :turnover ],
           ],
-        { ball_in_play: true } => [
+        ball_in_play: [
             [ :offensive_foul ],
             [ :period_end ],
             [ :personal_foul, clear_path: true, team: :defense ],
@@ -70,10 +70,10 @@ module PlayByPlay
             [ :technical_foul, flagarant: true, team: :defense ],
             [ :technical_foul, flagarant: true, team: :offense ],
           ],
-        { seconds_remaining: false } => [
+        seconds_remaining: [
           [ :period_end ],
         ],
-        {} => [
+        nil => [
             [ :jump_ball, team: :home ],
             [ :jump_ball, team: :visitor ],
             [ :jump_ball_out_of_bounds, team: :home ],
@@ -90,20 +90,20 @@ module PlayByPlay
           ]
       }.freeze
 
-      def self.game_key?(key)
-        game_keys.include? key
+      def self.possession_key?(key)
+        possession_keys.include? key
       end
 
-      def self.game_keys
+      def self.possession_keys
         ACCESSIBLE_PLAYS.keys
       end
 
-      def self.next_plays(possession_key)
+      def self.accessible_plays(possession_key)
         ACCESSIBLE_PLAYS[possession_key]
       end
 
-      def self.next?(possession, play)
-        next_plays(possession.key).include? play.key
+      def self.accessible?(possession, play)
+        accessible_plays(possession.key).include? play.key
       end
     end
   end

@@ -228,17 +228,17 @@ module PlayByPlay
 
       def key
         if technical_free_throws?
-          { technical_free_throws: true }
+          :technical_free_throws
         elsif free_throws?
-          { free_throws: true }
+          :free_throws
         elsif team?
-          { team: true }
+          :team
         elsif ball_in_play?
-          { ball_in_play: true }
+          :ball_in_play
         elsif !seconds_remaining?
-          { seconds_remaining: false }
+          :seconds_remaining
         else
-          {}
+          nil
         end
       end
 
@@ -256,8 +256,8 @@ module PlayByPlay
         raise(ArgumentError, "visitor must be Team") unless visitor.is_a?(Team)
         raise(ArgumentError, "home must be Team") unless home.is_a?(Team)
 
-        unless PlayMatrix.game_key?(key)
-          return [ "Possession key #{key} not found in #{PlayMatrix.game_keys.join(', ')}" ]
+        unless PlayMatrix.possession_key?(key)
+          return [ "Possession key #{key} not found in #{PlayMatrix.possession_keys.join(', ')}" ]
         end
 
         if pending_free_throws? && ball_in_play?

@@ -23,7 +23,7 @@ module PlayByPlay
 
       def fetch_play_probability_distribution(possession_key)
         puts("====== #{possession_key} =====") if debug?
-        Model::PlayMatrix::next_plays(possession_key).map do |play|
+        Model::PlayMatrix::accessible_plays(possession_key).map do |play|
           count = @repository.count_plays(possession_key, play)
           puts("#{count}   #{play}") if debug?
           PlayProbability.new(count, play)

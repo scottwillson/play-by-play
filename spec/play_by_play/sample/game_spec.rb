@@ -13,8 +13,8 @@ module PlayByPlay
           file = Game.new("0021400001", "ORL", "NOP")
           file.import("spec/data", repository: repository)
 
-          expect(repository.count_plays({}, [ :jump_ball, team: :home ])).to eq(1)
-          expect(repository.count_plays({ team: true }, [ :fg ])).to eq(32)
+          expect(repository.count_plays(nil, [ :jump_ball, team: :home ])).to eq(1)
+          expect(repository.count_plays(:team, [ :fg ])).to eq(32)
           expect(file.error_eventnum).to be_nil
           expect(file.errors).to eq([])
           expect(file.id).to_not be_nil
@@ -36,21 +36,21 @@ module PlayByPlay
 
           expect(file.plays[0].possession.opening_tip).to eq(nil)
           expect(file.plays[0].possession.period).to eq(1)
-          expect(file.plays[0].possession_key => file.plays[0].key).to eq({} => [ :jump_ball, team: :home ])
+          expect(file.plays[0].possession_key => file.plays[0].key).to eq(nil => [ :jump_ball, team: :home ])
           expect(file.plays[0].possession.seconds_remaining).to eq(720)
           expect(file.plays[0].seconds).to eq(0)
 
           expect(file.plays[1].possession.opening_tip).to eq(:home)
           expect(file.plays[1].possession.period).to eq(1)
           expect(file.plays[1].possession.seconds_remaining).to eq(720)
-          expect(file.plays[1].possession_key => file.plays[1].key).to eq({ team: true } => [ :fg_miss ])
+          expect(file.plays[1].possession_key => file.plays[1].key).to eq(team: [ :fg_miss ])
           expect(file.plays[1].seconds).to eq(17)
 
-          expect(file.plays[2].possession_key => file.plays[2].key).to eq({ ball_in_play: true } => [ :rebound, team: :defense ])
+          expect(file.plays[2].possession_key => file.plays[2].key).to eq(ball_in_play: [ :rebound, team: :defense ])
 
           play = file.find_play_by_eventnum!(14)
           expect(play.possession.team).to eq(:home)
-          expect(play.possession_key => play.key).to eq({ free_throws: true } => [ :ft_miss ])
+          expect(play.possession_key => play.key).to eq(free_throws: [ :ft_miss ])
           expect(play.possession.visitor.points).to eq(2)
           expect(play.possession.home.points).to eq(1)
 
@@ -71,7 +71,7 @@ module PlayByPlay
           expect(play.possession.home.points).to eq(14)
           expect(play.possession.team).to eq(:visitor)
           expect(play.possession.offense).to eq(:visitor)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :fg ])
+          expect(play.possession_key => play.key).to eq(team: [ :fg ])
 
           play = file.find_play_by_eventnum!(67)
           expect(play.possession.visitor.points).to eq(15)
@@ -89,13 +89,13 @@ module PlayByPlay
           expect(play.possession.team).to eq(nil)
           expect(play.possession.seconds_remaining).to eq(25)
           expect(play.possession.offense).to eq(:visitor)
-          expect(play.possession_key => play.key).to eq({ ball_in_play: true } => [ :rebound, team: :offense ])
+          expect(play.possession_key => play.key).to eq(ball_in_play: [ :rebound, team: :offense ])
           expect(play.possession.visitor.points).to eq(25)
           expect(play.possession.home.points).to eq(22)
 
           play = file.find_play_by_eventnum!(157)
           expect(play.possession.team).to eq(:visitor)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :steal ])
+          expect(play.possession_key => play.key).to eq(team: [ :steal ])
           expect(play.possession.seconds_remaining).to eq(24)
           expect(play.possession.period).to eq(1)
 
@@ -114,13 +114,13 @@ module PlayByPlay
 
           play = file.find_play_by_eventnum!(178)
           expect(play.possession.team).to eq(:visitor)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :turnover ])
+          expect(play.possession_key => play.key).to eq(team: [ :turnover ])
 
           play = file.find_play_by_eventnum!(179)
           expect(play.possession.team).to eq(:home)
           expect(play.possession.home.period_personal_fouls).to eq(0)
           expect(play.possession.visitor.period_personal_fouls).to eq(0)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :shooting_foul ])
+          expect(play.possession_key => play.key).to eq(team: [ :shooting_foul ])
 
           play = file.find_play_by_eventnum!(180)
           expect(play.possession.home.period_personal_fouls).to eq(0)
@@ -128,18 +128,18 @@ module PlayByPlay
 
           play = file.find_play_by_eventnum!(187)
           expect(play.possession.home.period_personal_fouls).to eq(0)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :fg ])
+          expect(play.possession_key => play.key).to eq(team: [ :fg ])
 
           play = file.find_play_by_eventnum!(189)
           expect(play.possession.home.period_personal_fouls).to eq(1)
-          expect(play.possession_key => play.key).to eq({ free_throws: true } => [ :ft ])
+          expect(play.possession_key => play.key).to eq(free_throws: [ :ft ])
 
           play = file.find_play_by_eventnum!(218)
           expect(play.possession.home.period_personal_fouls).to eq(1)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :fg, and_one: true, assisted: true ])
+          expect(play.possession_key => play.key).to eq(team: [ :fg, and_one: true, assisted: true ])
 
           play = file.find_play_by_eventnum!(346)
-          expect(play.possession_key => play.key).to eq({ team: true } => [ :fg, point_value: 3, assisted: true ])
+          expect(play.possession_key => play.key).to eq(team: [ :fg, point_value: 3, assisted: true ])
 
           play = file.find_play_by_eventnum!(556)
           expect(play.possession.home.period_personal_fouls).to eq(2)

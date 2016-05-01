@@ -28,8 +28,8 @@ module PlayByPlay
       def self.errors!(possession, play)
         errors = []
 
-        unless PlayMatrix.next?(possession, play)
-          errors << "#{play.key} not valid for #{possession.key}. Valid plays: #{PlayMatrix.next_plays(possession.key)}"
+        unless PlayMatrix.accessible?(possession, play)
+          errors << "#{play.key} not accessible for #{possession.key}. Accessible plays: #{PlayMatrix.accessible_plays(possession.key)}"
         end
 
         if possession.seconds_remaining > 24 && play.key == [ :period_end ]
