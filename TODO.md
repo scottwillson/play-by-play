@@ -1,3 +1,4 @@
+ * GamePlay#play! should only accept Play key, not a Play?
  * Use better Rspec predicate matchers
  * Sample:Schedule
  * Test season simulation with database

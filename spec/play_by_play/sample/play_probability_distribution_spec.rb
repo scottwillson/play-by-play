@@ -1,7 +1,7 @@
 require "spec_helper"
-require "play_by_play/sample/play"
-require "play_by_play/sample/play_probability_distribution"
+require "play_by_play/model/play"
 require "play_by_play/model/possession"
+require "play_by_play/sample/play_probability_distribution"
 require "play_by_play/repository"
 
 module PlayByPlay

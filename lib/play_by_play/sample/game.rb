@@ -1,5 +1,4 @@
 require "json"
-require "play_by_play/sample/play"
 require "play_by_play/sample/row"
 require "play_by_play/model/game_play"
 require "play_by_play/model/play"
@@ -56,11 +55,10 @@ module PlayByPlay
           begin
             row.possession = possession
             row = correct_row(row)
-            model_play = Model::Play.new(row.play_type, row.play_attributes)
-            debug_play possession, model_play
-            play = Play.new(possession, model_play.key, row)
+            play = Model::Play.new(row.play_type, row.play_attributes)
+            debug_play possession, play
             plays << play
-            possession = Model::GamePlay.play!(possession, model_play)
+            possession = Model::GamePlay.play!(possession, play)
             validate_score!(possession, row)
             break if possession.errors?
           rescue Model::InvalidStateError, ArgumentError => e
@@ -125,7 +123,7 @@ module PlayByPlay
       end
 
       def find_play_by_eventnum!(eventnum)
-        play = plays.detect { |a| a.row.eventnum == eventnum }
+        play = plays.detect { |p| p.row.eventnum == eventnum }
         raise(ArgumentError, "No play with eventnum #{eventnum}") unless play
         play
       end

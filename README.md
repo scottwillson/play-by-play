@@ -66,6 +66,8 @@ Redux
 -----
 While not strictly a Redux app, the simulation uses the reducer, state, and action ideas from [Redux](http://redux.js.org/docs/basics/Reducers.html). Possessions are immutable Redux states, Plays are actions, and the [GamePlay](lib/play_by_play/model/game_play.rb) play! method is a reducer. GamePlay.play!(possession, play) => possession is equivalent to Redux's function(previousState, action) => newState.
 
+A Play is a record of an "applied" action, either from a real-world sample or a simulation. The Play key (:rebound, team: :defense) is the Redux action.
+
 This is a handy way to model basketball games that leads to concise, testable model code.
 
 System

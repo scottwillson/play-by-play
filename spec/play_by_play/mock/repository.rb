@@ -27,7 +27,7 @@ module PlayByPlay
       end
 
       def save_sample_play(hash)
-        sample_plays << Sample::Play.from_hash(hash)
+        sample_plays << Model::Play.from_hash(hash)
       end
 
       def reset!

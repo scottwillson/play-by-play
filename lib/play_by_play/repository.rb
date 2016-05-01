@@ -1,5 +1,5 @@
 require "sequel"
-require "play_by_play/sample/play"
+require "play_by_play/model/play"
 
 module PlayByPlay
   class Repository
@@ -30,7 +30,7 @@ module PlayByPlay
     end
 
     def save_sample_play(play)
-      play = Sample::Play.from_hash(play)
+      play = Model::Play.from_hash(play)
       play_attributes = {}
 
       if play.key.size > 1

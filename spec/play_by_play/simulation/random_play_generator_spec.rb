@@ -1,7 +1,6 @@
 require "spec_helper"
 require "play_by_play/mock/repository"
 require "play_by_play/model/possession"
-require "play_by_play/sample/play"
 require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay

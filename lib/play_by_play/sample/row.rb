@@ -343,6 +343,8 @@ module PlayByPlay
           flagarant: flagarant?,
           intentional: intentional?,
           point_value: point_value,
+          possession: possession,
+          row: self,
           seconds: seconds,
           team: play_team
         }
