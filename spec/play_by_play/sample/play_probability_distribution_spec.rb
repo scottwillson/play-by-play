@@ -11,7 +11,7 @@ module PlayByPlay
         it "returns instances of PlayProbability", database: true do
           repository = Repository.new
           repository.reset!
-          repository.save_sample_play(nil => [ :jump_ball, team: :visitor ])
+          repository.save_sample_play({} => [ :jump_ball, team: :visitor ])
           repository.save_sample_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
           repository.save_sample_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
           repository.save_sample_play({ ball_in_play: true } => [ :rebound, team: :defense ])

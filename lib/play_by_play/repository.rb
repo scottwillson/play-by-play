@@ -44,12 +44,8 @@ module PlayByPlay
 
     def sample_play_query(play_attributes, key, possession_key)
       {
-        ball_in_play: false,
-        free_throws: false,
-        seconds_remaining: true,
-        team: false,
-        technical_free_throws: false,
-        play_team: play_attributes[:team]&.to_s,
+        possession_key: possession_key.to_s,
+        team: play_attributes[:team]&.to_s,
         and_one: play_attributes[:and_one] || false,
         assisted: play_attributes[:assisted] || false,
         clear_path: play_attributes[:clear_path] || false,
@@ -57,7 +53,7 @@ module PlayByPlay
         intentional: play_attributes[:intentional] || false,
         point_value: play_attributes[:point_value],
         type: key.to_s
-      }.merge(possession_key)
+      }
     end
 
     def save_sample_game(file)
@@ -231,19 +227,16 @@ module PlayByPlay
       create_table_method = reset ? :create_table! : :create_table?
       @db.send(create_table_method, :sample_plays) do
         primary_key :id
-        Boolean :ball_in_play, default: false
-        Boolean :clear_path, default: false
-        Boolean :flagarant, default: false
-        Boolean :free_throws, default: false
-        Boolean :intentional, default: false
-        Boolean :seconds_remaining, default: true
-        Boolean :team, default: false
-        Boolean :technical_free_throws, default: false
-        String :play_team
         Boolean :and_one, default: false
         Boolean :assisted, default: false
+        Boolean :clear_path, default: false
+        Boolean :flagarant, default: false
+        Boolean :intentional, default: false
         Integer :point_value
+        String :possession_key, null: false
+        String :team
         String :type
+        index :possession_key
       end
 
       @db.send(create_table_method, :sample_games) do
