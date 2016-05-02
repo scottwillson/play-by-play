@@ -14,7 +14,7 @@ module PlayByPlay
             expect(possession.visitor.personal_foul_in_last_two_minutes).to eq(true)
           end
         end
-  
+
         describe ":personal_foul" do
           it "maintains possession and puts ball not in play" do
             possession = Possession.new(ball_in_play: true, team: :home)
@@ -131,6 +131,45 @@ module PlayByPlay
             expect(possession.team).to eq(:visitor)
             expect(possession.free_throws).to eq([])
             expect(possession.next_team).to eq(nil)
+          end
+        end
+
+        describe "next_foul_in_penalty?" do
+          let(:possession) { Possession.new }
+
+          context "start of possession" do
+            it "returns false" do
+              expect(GamePlay.next_foul_in_penalty?(possession, possession.visitor)).to eq(false)
+              expect(GamePlay.next_foul_in_penalty?(possession, possession.home)).to eq(false)
+            end
+          end
+
+          context "3 fouls" do
+            it "returns false" do
+              next_possession = possession.merge(home: possession.home.merge(period_personal_fouls: 3))
+              expect(GamePlay.next_foul_in_penalty?(next_possession, next_possession.home)).to eq(false)
+            end
+          end
+
+          context "4 fouls" do
+            it "returns true" do
+              next_possession = possession.merge(home: possession.home.merge(period_personal_fouls: 4))
+              expect(GamePlay.next_foul_in_penalty?(next_possession, next_possession.home)).to eq(true)
+            end
+          end
+
+          context "5 fouls" do
+            it "returns true" do
+              next_possession = possession.merge(home: possession.home.merge(period_personal_fouls: 5))
+              expect(GamePlay.next_foul_in_penalty?(next_possession, next_possession.home)).to eq(true)
+            end
+          end
+
+          context "6 fouls" do
+            it "returns true" do
+              next_possession = possession.merge(home: possession.home.merge(period_personal_fouls: 6))
+              expect(GamePlay.next_foul_in_penalty?(next_possession, next_possession.home)).to eq(true)
+            end
           end
         end
       end

@@ -29,10 +29,6 @@ module PlayByPlay
         }
       end
 
-      def next_foul_in_penalty?
-        period_personal_fouls >= 4 || personal_foul_in_last_two_minutes
-      end
-
       def validate!
         raise(ArgumentError, "key must be :home or :visitor") unless key == :home || key == :visitor
       end

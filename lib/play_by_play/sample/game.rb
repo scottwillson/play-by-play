@@ -84,7 +84,7 @@ module PlayByPlay
       # Source data may have specific problems
       # Change to correct_play
       def correct_row(row)
-        if row.personal_foul? && !row.possession.team_instance(row.team).next_foul_in_penalty? && row.next_row.event == :ft
+        if row.personal_foul? && !Model::GamePlay.next_foul_in_penalty?(row.possession, row.team) && row.next_row.event == :ft
           row.eventmsgactiontype = 2
         end
 

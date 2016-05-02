@@ -14,7 +14,7 @@ module PlayByPlay
         elsif play.clear_path?
           attributes = attributes.merge(free_throws: [ other_team ] * 2, team: other_team, next_team: other_team)
 
-        elsif possession.team_instance(play.team).next_foul_in_penalty?
+        elsif next_foul_in_penalty?(possession, play.team)
           attributes = attributes.merge(free_throws: [ other_team ] * 2, team: other_team)
 
         elsif play.team == :offense
@@ -23,6 +23,11 @@ module PlayByPlay
         else
           attributes.merge(team: other_team)
         end
+      end
+
+      def self.next_foul_in_penalty?(possession, team)
+        team = possession.team_instance(team)
+        team.period_personal_fouls >= 4 || team.personal_foul_in_last_two_minutes
       end
     end
   end
