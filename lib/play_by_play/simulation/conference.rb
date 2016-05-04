@@ -1,4 +1,4 @@
-require "play_by_play/simulation/division"
+require "play_by_play/persistent/division"
 
 module PlayByPlay
   module Simulation
@@ -25,7 +25,7 @@ module PlayByPlay
         end
 
         teams.each_slice(size).with_index do |teams, i|
-          @divisions << Division.new("division_#{i}", teams)
+          @divisions << Persistent::Division.new(name: "division_#{i}", teams: teams)
         end
       end
     end
