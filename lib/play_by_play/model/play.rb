@@ -28,23 +28,9 @@ module PlayByPlay
       attr_reader :flagarant
       attr_reader :intentional
       attr_reader :point_value
-      attr_reader :possession
-      attr_reader :row
       attr_reader :seconds
       attr_reader :team
       attr_reader :type
-
-      # { team: :visitor } => [ :fg, point_value: 3 ]
-      def self.from_hash(hash)
-        return hash unless hash.is_a?(Hash)
-
-        possession = Possession.new(hash.keys.first)
-        play_attributes = hash.values.first.dup
-        type = play_attributes.shift
-        play_attributes = play_attributes.first || {}
-
-        Play.new(type, play_attributes.merge(possession: possession))
-      end
 
       def initialize(
         type,
@@ -55,8 +41,6 @@ module PlayByPlay
         flagarant: false,
         intentional: false,
         point_value: 2,
-        possession: nil,
-        row: nil,
         seconds: 7,
         team: nil
       )
@@ -68,8 +52,6 @@ module PlayByPlay
         @flagarant = flagarant
         @intentional = intentional
         @point_value = point_value
-        @possession = possession
-        @row = row
         @seconds = seconds
         @team = team
         @type = type

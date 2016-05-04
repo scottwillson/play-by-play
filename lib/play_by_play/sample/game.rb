@@ -4,6 +4,7 @@ require "play_by_play/model/game_play"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/persistent/play"
 require "play_by_play/repository"
 
 module PlayByPlay
@@ -55,7 +56,7 @@ module PlayByPlay
           begin
             row.possession = possession
             row = correct_row(row)
-            play = Model::Play.new(row.play_type, row.play_attributes)
+            play = Persistent::Play.new(row.play_type, row.play_attributes)
             debug_play possession, play
             plays << play
             possession = Model::GamePlay.play!(possession, play)

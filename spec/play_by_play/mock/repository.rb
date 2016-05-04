@@ -1,4 +1,4 @@
-require "play_by_play/model/possession"
+require "play_by_play/persistent/play"
 
 module PlayByPlay
   module Mock
@@ -27,7 +27,7 @@ module PlayByPlay
       end
 
       def save_sample_play(hash)
-        sample_plays << Model::Play.from_hash(hash)
+        sample_plays << Persistent::Play.from_hash(hash)
       end
 
       def reset!
