@@ -1,16 +1,16 @@
 module PlayByPlay
-  module Sample
+  module Persistent
     class Conference
       attr_accessor :id
       attr_reader :divisions
       attr_reader :league_id
       attr_reader :name
 
-      def initialize(id: nil, name: nil, league_id: nil)
-        @divisions = []
+      def initialize(league_id: nil, divisions: nil, id: nil, name: nil)
+        @divisions = divisions
         @id = id
-        @name = name
         @league_id = league_id
+        @name = name
       end
     end
   end

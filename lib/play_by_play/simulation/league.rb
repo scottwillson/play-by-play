@@ -9,7 +9,7 @@ module PlayByPlay
         league = League.new(0)
         league.conferences.clear
         sample.conferences.each do |sample_conference|
-          conference = Conference.new(sample_conference.name)
+          conference = Conference.new(name: sample_conference.name)
           league.conferences << conference
           sample_conference.divisions.each do |sample_division|
             teams = sample_division.teams.map { |team| Team.new(team.name) }
@@ -31,8 +31,8 @@ module PlayByPlay
         i = 0
         @teams = Array.new(teams_count) { Persistent::Team.new(name: "team_#{i += 1}") }
         @conferences = [
-          Conference.new("conference_1", @teams[ 0, teams_count / 2 ]),
-          Conference.new("conference_2", @teams[ teams_count / 2, teams_count ])
+          Conference.new(name: "conference_1", teams: @teams[ 0, teams_count / 2 ]),
+          Conference.new(name: "conference_2", teams: @teams[ teams_count / 2, teams_count ])
         ]
       end
     end
