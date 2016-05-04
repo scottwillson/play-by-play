@@ -46,7 +46,7 @@ module PlayByPlay
             games_to_go = rand(12) + 1
           end
 
-          @days << Day.new(self, games_to_go, date += 1)
+          @days << Day.new(date: date += 1, number_of_games: games_to_go, season: self)
         end
       end
 
