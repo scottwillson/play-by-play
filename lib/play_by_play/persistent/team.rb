@@ -1,12 +1,20 @@
+require "play_by_play/model/team"
+
 module PlayByPlay
-  module Simulation
-    class Team
+  module Persistent
+    class Team < Model::Team
+      attr_accessor :id
+
+      attr_reader :division_id
       attr_reader :games
       attr_reader :name
 
-      def initialize(name)
+      def initialize(attributes)
         @games = []
-        @name = name
+
+        attributes = attributes.dup
+        @name = attributes.delete(:name)
+        super attributes
       end
 
       def wins
@@ -18,7 +26,7 @@ module PlayByPlay
       end
 
       def inspect
-        "#<PlayByPlay::Simulation::Team #{name}>"
+        "#<PlayByPlay::Persistent::Team #{name}>"
       end
 
       def to_s

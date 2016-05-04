@@ -1,9 +1,9 @@
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/persistent/team"
 require "play_by_play/repository"
 require "play_by_play/simulation/conference"
 require "play_by_play/simulation/day"
 require "play_by_play/simulation/league"
-require "play_by_play/simulation/team"
 
 module PlayByPlay
   module Simulation

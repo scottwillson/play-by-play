@@ -28,6 +28,8 @@ module PlayByPlay
           visitor = teams.pop
           game = Game.new(home: home, random_play_generator: season.random_play_generator, visitor: visitor)
           self.games << game
+          home.games << game
+          visitor.games << game
         end
       end
 

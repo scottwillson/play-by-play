@@ -1,5 +1,5 @@
+require "play_by_play/persistent/team"
 require "play_by_play/simulation/conference"
-require "play_by_play/simulation/team"
 
 module PlayByPlay
   module Simulation
@@ -30,7 +30,7 @@ module PlayByPlay
 
       def create_teams(teams_count)
         i = 0
-        @teams = Array.new(teams_count) { Team.new("team_#{i += 1}") }
+        @teams = Array.new(teams_count) { Persistent::Team.new(name: "team_#{i += 1}") }
         @conferences = [
           Conference.new("conference_1", @teams[ 0, teams_count / 2 ]),
           Conference.new("conference_2", @teams[ teams_count / 2, teams_count ])

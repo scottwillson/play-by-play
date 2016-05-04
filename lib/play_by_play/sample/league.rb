@@ -1,6 +1,6 @@
+require "play_by_play/persistent/team"
 require "play_by_play/sample/conference"
 require "play_by_play/sample/division"
-require "play_by_play/sample/team"
 
 module PlayByPlay
   module Sample

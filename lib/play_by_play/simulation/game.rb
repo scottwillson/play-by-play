@@ -1,9 +1,9 @@
 require "play_by_play/model/game_play"
 require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/possession"
+require "play_by_play/persistent/team"
 require "play_by_play/repository"
 require "play_by_play/simulation/random_play_generator"
-require "play_by_play/simulation/team"
 
 module PlayByPlay
   module Simulation
@@ -12,13 +12,14 @@ module PlayByPlay
       attr_reader :possessions
       attr_reader :visitor
 
-      def initialize(home: Team.new(key: :home), visitor: Team.new(key: :visitor), random_play_generator: nil)
-        @home = home
+      def initialize(home: Persistent::Team.new(key: :home), visitor: Persistent::Team.new(key: :visitor), random_play_generator: nil)
         @possessions = [ Model::Possession.new ]
         @random_play_generator = random_play_generator
-        @visitor = visitor
 
-        raise(Model::InvalidStateError, "Team cannot play itself") if home == visitor
+        @home = home.merge(key: :home)
+        @visitor = visitor.merge(key: :visitor)
+
+        raise(Model::InvalidStateError, "Team cannot play itself") if @home == @visitor
 
         @home.games << self
         @visitor.games << self
