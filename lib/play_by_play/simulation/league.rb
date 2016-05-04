@@ -1,12 +1,10 @@
+require "play_by_play/persistent/league"
 require "play_by_play/persistent/team"
 require "play_by_play/simulation/conference"
 
 module PlayByPlay
   module Simulation
-    class League
-      attr_reader :conferences
-      attr_reader :teams
-
+    class League < Persistent::League
       def self.new_from_sample(sample)
         league = League.new(0)
         league.conferences.clear
@@ -25,6 +23,7 @@ module PlayByPlay
       end
 
       def initialize(teams_count = 30)
+        super()
         create_teams teams_count
       end
 

@@ -1,13 +1,11 @@
 require "play_by_play/persistent/division"
+require "play_by_play/persistent/league"
 require "play_by_play/persistent/team"
 require "play_by_play/sample/conference"
 
 module PlayByPlay
   module Sample
-    class League
-      attr_accessor :id
-      attr_reader :conferences
-
+    class League < Persistent::League
       def self.import(path, year, repository: Repository.new)
         league = self.new
 
@@ -27,15 +25,6 @@ module PlayByPlay
         @id = repository.save_sample_league(league)
 
         league
-      end
-
-      def initialize(id: nil)
-        @conferences = []
-        @id = id
-      end
-
-      def teams
-        conferences.map(&:divisions).flatten.map(&:teams).flatten
       end
     end
   end
