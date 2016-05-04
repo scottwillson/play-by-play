@@ -1,25 +1,18 @@
 require "play_by_play/model/game_play"
 require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/possession"
+require "play_by_play/persistent/game"
 require "play_by_play/persistent/team"
 require "play_by_play/repository"
 require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay
   module Simulation
-    class Game
-      attr_reader :home
-      attr_reader :possessions
-      attr_reader :visitor
-
-      def initialize(home: Persistent::Team.new(key: :home), visitor: Persistent::Team.new(key: :visitor), random_play_generator: nil)
-        @possessions = [ Model::Possession.new ]
-        @random_play_generator = random_play_generator
-
-        @home = home.merge(key: :home)
-        @visitor = visitor.merge(key: :visitor)
-
-        raise(Model::InvalidStateError, "Team cannot play itself") if @home == @visitor
+    class Game < Persistent::Game
+      def initialize(attributes)
+        attributes = attributes.dup
+        @random_play_generator = attributes.delete(:random_play_generator)
+        super attributes
 
         @home.games << self
         @visitor.games << self
@@ -36,30 +29,6 @@ module PlayByPlay
         end
 
         possession
-      end
-
-      def possession
-        possessions.last
-      end
-
-      def loser
-        return unless possession.game_over?
-
-        if possession.home.points < possession.visitor.points
-          home
-        else
-          visitor
-        end
-      end
-
-      def winner
-        return unless possession.game_over?
-
-        if possession.home.points > possession.visitor.points
-          home
-        else
-          visitor
-        end
       end
 
       def random_play_generator

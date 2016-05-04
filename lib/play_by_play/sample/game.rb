@@ -4,18 +4,18 @@ require "play_by_play/model/game_play"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/persistent/game"
 require "play_by_play/persistent/play"
 require "play_by_play/repository"
 
 module PlayByPlay
   module Sample
-    class Game
+    class Game < Persistent::Game
       attr_reader :plays
       attr_reader :errors
       attr_accessor :error_eventnum
       attr_reader :nba_game_id
       attr_accessor :headers
-      attr_reader :id
       attr_reader :home_team_name
       attr_reader :rows
       attr_reader :visitor_team_name

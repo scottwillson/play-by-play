@@ -25,3 +25,4 @@
  * Show errors in web UI
  * Move InvalidStateError out of Model
  * PlayByPlay::Model::Duplication#attributes is slow
+ * Freeze new models
