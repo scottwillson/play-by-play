@@ -1,4 +1,5 @@
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/persistent/season"
 require "play_by_play/persistent/team"
 require "play_by_play/repository"
 require "play_by_play/simulation/conference"
@@ -7,27 +8,25 @@ require "play_by_play/simulation/league"
 
 module PlayByPlay
   module Simulation
-    class Season
-      attr_reader :days
-      attr_reader :league
+    class Season < Persistent::Season
       attr_reader :random_play_generator
       attr_reader :repository
-      attr_reader :scheduled_games_count
       attr_reader :scheduled_games_per_teams_count
-      attr_reader :teams_count
 
-      def initialize(league: League.new, repository: Repository.new, scheduled_games_per_teams_count: 82)
+      def initialize(attributes)
+        attributes = attributes.dup
+        @repository = attributes.delete(:repository) || Repository.new
+        @scheduled_games_per_teams_count = (attributes.delete(:scheduled_games_per_teams_count) || 82).to_i
+        attributes[:league] = attributes[:league] || League.new(30)
+
         raise(Model::InvalidStateError, "scheduled_games_per_teams_count must be even but was #[scheduled_games_per_teams_count]") if scheduled_games_per_teams_count.odd?
 
-        @league = league
-        @scheduled_games_per_teams_count = scheduled_games_per_teams_count.to_i
-        @teams_count = teams_count.to_i
+        super attributes
+
         @random_play_generator = RandomPlayGenerator.new(repository)
-        @repository = repository
 
-        @scheduled_games_count = league.teams.size * (scheduled_games_per_teams_count / 2)
-
-        create_days
+        scheduled_games_count = league.teams.size * (scheduled_games_per_teams_count / 2)
+        create_days scheduled_games_count
 
         league.teams.each do |team|
           if scheduled_games_per_teams_count != team.games.size
@@ -36,7 +35,7 @@ module PlayByPlay
         end
       end
 
-      def create_days
+      def create_days(scheduled_games_count)
         date = Date.today
         @days = []
         while games.size < scheduled_games_count
@@ -50,17 +49,9 @@ module PlayByPlay
         end
       end
 
-      def games
-        days.map(&:games).flatten
-      end
-
       def play!
         days.each(&:play!)
         self
-      end
-
-      def teams
-        @league.teams
       end
     end
   end

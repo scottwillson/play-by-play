@@ -7,7 +7,7 @@ module PlayByPlay
     RSpec.describe Season do
       describe ".new" do
         it "creates realistic number of days" do
-          season = Season.new
+          season = Season.new({})
           expect(season.days.size).to be > 100
           expect(season.games.size).to eq(1230)
         end

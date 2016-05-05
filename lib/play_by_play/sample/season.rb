@@ -4,8 +4,6 @@ require "play_by_play/sample/day"
 module PlayByPlay
   module Sample
     class Season
-      attr_reader :days
-
       def self.import(path, repository: Repository.new, invalid_state_error: true)
         days = Dir.glob("#{path}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json").map do |file_path|
           json = JSON.parse(File.read(file_path))
@@ -25,14 +23,6 @@ module PlayByPlay
             game.parse json, invalid_state_error
           end
         end
-      end
-
-      def initialize(days = nil)
-        @days = days
-      end
-
-      def games
-        @game ||= days.map(&:games).flatten
       end
     end
   end
