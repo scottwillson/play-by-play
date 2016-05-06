@@ -1,6 +1,7 @@
 $LOAD_PATH << "lib"
 
 require "play_by_play"
+require "play_by_play/persistent/game"
 require "play_by_play/repository"
 require "play_by_play/sample/game"
 require "play_by_play/sample/league"
@@ -19,9 +20,9 @@ namespace :play do
       Rake::Task["import:season"].invoke
     end
 
-    game = PlayByPlay::Simulation::Game.new
-    possession = game.play!
-    view = PlayByPlay::Views::Possession.new(possession)
+    game = PlayByPlay::Persistent::Game.new
+    game = PlayByPlay::Simulation::Game.play!(game)
+    view = PlayByPlay::Views::Possession.new(game.possession)
     puts view
   end
 

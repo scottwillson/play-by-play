@@ -8,31 +8,21 @@ require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay
   module Simulation
-    class Game < Persistent::Game
-      def initialize(attributes)
-        attributes = attributes.dup
-        @random_play_generator = attributes.delete(:random_play_generator)
-        super attributes
+    module Game
+      def self.play!(game, random_play_generator = RandomPlayGenerator.new(PlayByPlay::Repository.new))
+        until game.possession.game_over?
+          play = random_play_generator.new_play(game.possession)
+          game.possessions << Model::GamePlay.play!(game.possession, play)
 
-        @home.games << self
-        @visitor.games << self
-      end
-
-      def play!
-        until possession.game_over?
-          play = random_play_generator.new_play(possession)
-          possessions << Model::GamePlay.play!(possession, play)
-
-          if possessions.size > 3_000
-            raise Model::InvalidStateError, "Game not over after #{possessions.size} plays"
+          if game.possessions.size > 3_000
+            raise Model::InvalidStateError, "Game not over after #{game.possessions.size} plays"
           end
         end
 
-        possession
-      end
+        game.home.games << game
+        game.visitor.games << game
 
-      def random_play_generator
-        @random_play_generator ||= RandomPlayGenerator.new(PlayByPlay::Repository.new)
+        game.possession
       end
     end
   end
