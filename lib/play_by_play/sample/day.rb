@@ -4,12 +4,12 @@ require "play_by_play/sample/game"
 
 module PlayByPlay
   module Sample
-    class Day < Persistent::Day
+    class Day
       def self.parse(json)
         games = json["resultSets"][0]["rowSet"].map do |row|
           parse_row row
         end
-        Day.new games: games
+        Persistent::Day.new games: games
       end
 
       def self.parse_row(row)
