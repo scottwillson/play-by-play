@@ -5,9 +5,9 @@ require "play_by_play/persistent/team"
 
 module PlayByPlay
   module Sample
-    class League < Persistent::League
+    class League
       def self.import(path, year, repository: Repository.new)
-        league = self.new
+        league = Persistent::League.new
 
         json = JSON.parse(File.read("#{path}/#{year}.json"))
         json.dig("content", "standings", "groups").each do |conference_node|
