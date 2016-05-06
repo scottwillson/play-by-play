@@ -28,24 +28,19 @@ namespace :play do
 
   desc "Simulate a season of games"
   task :season do
-    args = {}
-
-    if ENV["GAMES"]
-      args[:scheduled_games_per_teams_count] = ENV["GAMES"].to_i
-    end
-
-    if ENV["TEAMS"]
-      args[:teams_count] = ENV["TEAMS"].to_i
-    end
-
     repository = PlayByPlay::Repository.new
     repository.create
     if repository.sample_league?
       args[:league] = PlayByPlay::Simulation::League.new_from_sample(repository.sample_league)
     end
 
-    season = PlayByPlay::Simulation::Season.new(args)
-    season = season.play!
+    teams_count = ENV["TEAMS"]&.to_i || 30
+    league = PlayByPlay::Simulation::League.new_random(teams_count)
+
+    scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
+    season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
+
+    season = PlayByPlay::Simulation::Season.play!(season: season, repository: repository)
     view = PlayByPlay::Views::Season.new(season)
     puts view
   end
