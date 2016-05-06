@@ -21,8 +21,8 @@ namespace :play do
     end
 
     game = PlayByPlay::Persistent::Game.new
-    game = PlayByPlay::Simulation::Game.play!(game)
-    view = PlayByPlay::Views::Possession.new(game.possession)
+    possession = PlayByPlay::Simulation::Game.play!(game)
+    view = PlayByPlay::Views::Possession.new(possession)
     puts view
   end
 
