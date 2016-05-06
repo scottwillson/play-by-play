@@ -1,57 +1,85 @@
 require "play_by_play/model/invalid_state_error"
+require "play_by_play/persistent/day"
+require "play_by_play/persistent/game"
 require "play_by_play/persistent/season"
 require "play_by_play/persistent/team"
 require "play_by_play/repository"
-require "play_by_play/simulation/conference"
-require "play_by_play/simulation/day"
+require "play_by_play/simulation/game"
 require "play_by_play/simulation/league"
+require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay
   module Simulation
-    class Season < Persistent::Season
-      attr_reader :random_play_generator
-      attr_reader :repository
-      attr_reader :scheduled_games_per_teams_count
-
-      def initialize(attributes)
-        attributes = attributes.dup
-        @repository = attributes.delete(:repository) || Repository.new
-        @scheduled_games_per_teams_count = (attributes.delete(:scheduled_games_per_teams_count) || 82).to_i
-        attributes[:league] = attributes[:league] || League.new(30)
+    module Season
+      def self.new_random(league: League.new_random(30), scheduled_games_per_teams_count: 82)
+        scheduled_games_per_teams_count = scheduled_games_per_teams_count.to_i
 
         raise(Model::InvalidStateError, "scheduled_games_per_teams_count must be even but was #[scheduled_games_per_teams_count]") if scheduled_games_per_teams_count.odd?
 
-        super attributes
+        season = Persistent::Season.new(league: league)
 
-        @random_play_generator = RandomPlayGenerator.new(repository)
+        scheduled_games_count = season.teams.size * (scheduled_games_per_teams_count / 2)
+        create_days season, scheduled_games_count, scheduled_games_per_teams_count
 
-        scheduled_games_count = league.teams.size * (scheduled_games_per_teams_count / 2)
-        create_days scheduled_games_count
-
-        league.teams.each do |team|
+        season.teams.each do |team|
           if scheduled_games_per_teams_count != team.games.size
             raise(Model::InvalidStateError, "#{team.name} has #{team.games.size} instead of #{scheduled_games_per_teams_count}")
           end
         end
+
+        season
       end
 
-      def create_days(scheduled_games_count)
-        date = Date.today
-        @days = []
-        while games.size < scheduled_games_count
-          games_to_go = scheduled_games_count - games.size
+      def self.play!(season: Season.new_random, repository: Repository.new)
+        random_play_generator = RandomPlayGenerator.new(repository)
+        season.days.each { |day| play_day! day, random_play_generator }
+        season
+      end
 
+      def self.create_days(season, scheduled_games_count, scheduled_games_per_teams_count)
+        date = Date.today
+        while season.games.size < scheduled_games_count
+          games_to_go = scheduled_games_count - season.games.size
           if games_to_go > 12
-            games_to_go = rand(12) + 1
+            number_of_games = rand(12) + 1
+          else
+            number_of_games = games_to_go
           end
 
-          @days << Day.new(date: date += 1, number_of_games: games_to_go, season: self)
+          day = Persistent::Day.new(date: date += 1, season: season)
+          season.days << day
+          create_games season, day, scheduled_games_per_teams_count, number_of_games
         end
       end
 
-      def play!
-        days.each(&:play!)
-        self
+      def self.create_games(season, day, scheduled_games_per_teams_count, number_of_games)
+        teams = season.teams.select { |team| team.games.size < scheduled_games_per_teams_count }
+                  .shuffle
+                  .sort_by { |team| team.games.size }
+
+        raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.size == 0
+        raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{scheduled_games_per_teams_count} games") if teams.size == 1
+
+        if number_of_games > teams.size / 2
+          number_of_games = teams.size / 2
+        end
+
+        number_of_games.times do
+          raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.size == 0
+          raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{scheduled_games_per_teams_count} games") if teams.size == 1
+          home = teams.pop
+          visitor = teams.pop
+          game = Persistent::Game.new(home: home, visitor: visitor)
+          day.games << game
+          home.games << game
+          visitor.games << game
+        end
+      end
+
+      def self.play_day!(day, random_play_generator)
+        day.games.each do |game|
+          Simulation::Game.play! game, random_play_generator
+        end
       end
     end
   end

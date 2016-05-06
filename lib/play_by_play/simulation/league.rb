@@ -1,39 +1,42 @@
+require "play_by_play/persistent/conference"
+require "play_by_play/persistent/division"
 require "play_by_play/persistent/league"
 require "play_by_play/persistent/team"
-require "play_by_play/simulation/conference"
 
 module PlayByPlay
   module Simulation
-    class League < Persistent::League
-      def self.new_from_sample(sample)
-        league = League.new(0)
-        league.conferences.clear
-        sample.conferences.each do |sample_conference|
-          conference = Conference.new(name: sample_conference.name)
-          league.conferences << conference
-          sample_conference.divisions.each do |sample_division|
-            teams = sample_division.teams.map { |team| Team.new(team.name) }
-            division = Division.new(sample_division.name, teams)
-            conference.divisions << division
-            league.teams.push(*teams)
-          end
-        end
+    module League
+      def self.new_random(teams_count = 30)
+        teams = create_teams(teams_count)
+
+        league = Persistent::League.new
+        league.conferences << Persistent::Conference.new(name: "conference_1")
+        league.conferences << Persistent::Conference.new(name: "conference_2")
+
+        create_divisons league.conferences[0], teams[ 0, teams_count / 2 ]
+        create_divisons league.conferences[1], teams[ teams_count / 2, teams_count ]
 
         league
       end
 
-      def initialize(teams_count = 30)
-        super()
-        create_teams teams_count
+      def self.create_teams(teams_count)
+        i = 0
+        Array.new(teams_count) { Persistent::Team.new(name: "team_#{i += 1}") }
       end
 
-      def create_teams(teams_count)
-        i = 0
-        @teams = Array.new(teams_count) { Persistent::Team.new(name: "team_#{i += 1}") }
-        @conferences = [
-          Conference.new(name: "conference_1", teams: @teams[ 0, teams_count / 2 ]),
-          Conference.new(name: "conference_2", teams: @teams[ teams_count / 2, teams_count ])
-        ]
+      def self.create_divisons(conference, teams)
+        return if teams.empty?
+
+        size = 5
+        if teams.size < 8
+          size = teams.size
+        elsif teams.size % 5 == 1
+          size = 4
+        end
+
+        teams.each_slice(size).with_index do |division_teams, i|
+          conference.divisions << Persistent::Division.new(name: "division_#{i}", teams: division_teams)
+        end
       end
     end
   end
