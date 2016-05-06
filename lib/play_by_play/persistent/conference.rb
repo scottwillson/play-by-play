@@ -6,7 +6,7 @@ module PlayByPlay
       attr_reader :league_id
       attr_reader :name
 
-      def initialize(league_id: nil, divisions: nil, id: nil, name: nil)
+      def initialize(league_id: nil, divisions: [], id: nil, name: nil)
         @divisions = divisions
         @id = id
         @league_id = league_id

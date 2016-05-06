@@ -13,6 +13,8 @@ module PlayByPlay
         @games = []
 
         attributes = attributes.dup
+        @division_id = attributes.delete(:division_id)
+        @id = attributes.delete(:id)
         @name = attributes.delete(:name)
         super attributes
       end

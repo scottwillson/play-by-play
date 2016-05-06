@@ -1,5 +1,5 @@
 require "sequel"
-require "play_by_play/model/play"
+require "play_by_play/persistent/play"
 
 module PlayByPlay
   class Repository
@@ -30,7 +30,7 @@ module PlayByPlay
     end
 
     def save_sample_play(play)
-      play = Model::Play.from_hash(play)
+      play = Persistent::Play.from_hash(play)
       play_attributes = {}
 
       if play.key.size > 1
@@ -166,15 +166,15 @@ module PlayByPlay
 
       # TODO use a join!
       @db[:sample_conferences].where(sample_league_id: league.id).each do |conference_attributes|
-        conference = Sample::Conference.new(id: conference_attributes[:id], name: conference_attributes[:name], league_id: league.id)
+        conference = Persistent::Conference.new(id: conference_attributes[:id], name: conference_attributes[:name], league_id: league.id)
         league.conferences << conference
 
         @db[:sample_divisions].where(sample_conference_id: conference.id).each do |division_attributes|
-          division = Sample::Division.new(id: division_attributes[:id], name: division_attributes[:name], conference_id: conference.id)
+          division = Persistent::Division.new(id: division_attributes[:id], name: division_attributes[:name], conference_id: conference.id)
           conference.divisions << division
 
           @db[:sample_teams].where(sample_division_id: division.id).each do |team_attributes|
-            team = Sample::Team.new(id: team_attributes[:id], name: team_attributes[:name], division_id: division.id)
+            team = Persistent::Team.new(id: team_attributes[:id], name: team_attributes[:name], division_id: division.id)
             division.teams << team
           end
         end
