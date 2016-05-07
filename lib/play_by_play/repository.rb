@@ -60,9 +60,9 @@ module PlayByPlay
       game.id = @db[:games].insert(
         errors: game.errors,
         error_eventnum: game.error_eventnum,
+        home_team_id: game.home.id,
         nba_id: game.nba_id,
-        home_team_name: game.home.name,
-        visitor_team_name: game.visitor.name
+        visitor_team_id: game.visitor.id
       )
     end
 
@@ -241,11 +241,13 @@ module PlayByPlay
         primary_key :id
         String :errors
         Integer :error_eventnum
-        String :home_team_name
+        Integer :home_team_id
         String :nba_id
-        String :visitor_team_name
+        Integer :visitor_team_id
         index :error_eventnum
+        index :home_team_id
         index :nba_id
+        index :visitor_team_id
       end
 
       @db.send(create_table_method, :leagues) do
