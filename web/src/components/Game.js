@@ -65,7 +65,15 @@ class Game extends React.Component {
       .get(`/games/${this.state.nba_game_id}.json`)
       .accept('json')
       .end(function(err, res) {
-        this.setState({rows: res.body});
+        if (err) {
+          document.querySelector('.mdl-js-snackbar').MaterialSnackbar.showSnackbar({
+            message: err.message,
+            timeout: 5000
+          });
+        }
+        else {
+          this.setState({rows: res.body});
+        }
       }.bind(this));
   }
 

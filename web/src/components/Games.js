@@ -1,7 +1,7 @@
 import request from 'superagent';
 import React from 'react';
-import Pagination from './Pagination';
 import GameSummary from './GameSummary';
+import Pagination from './Pagination';
 
 class Games extends React.Component {
   constructor(props) {
@@ -49,9 +49,17 @@ class Games extends React.Component {
       .query(this.fetchDataQuery(page))
       .accept('json')
       .end(function(err, res) {
-        this.setState({
-          playByPlayFiles: res.body
-        })
+        if (err) {
+          document.querySelector('.mdl-js-snackbar').MaterialSnackbar.showSnackbar({
+            message: err.message,
+            timeout: 5000
+          });
+        }
+        else {
+          this.setState({
+            playByPlayFiles: res.body
+          })
+        }
       }.bind(this));
   }
 
