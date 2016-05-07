@@ -1,6 +1,7 @@
 require "json"
 require "play_by_play/persistent/season"
 require "play_by_play/sample/day"
+require "play_by_play/sample/game"
 
 module PlayByPlay
   module Sample
@@ -20,8 +21,8 @@ module PlayByPlay
           json = JSON.parse(File.read(file_path))
           day = Day.parse(json)
           day.games.each do |game|
-            json = game.read_json(path)
-            game.parse json, invalid_state_error
+            json = PlayByPlay::Sample::Game.read_json(path, game.nba_game_id)
+            PlayByPlay::Sample::Game.parse game, json, invalid_state_error
           end
         end
       end

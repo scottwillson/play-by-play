@@ -164,7 +164,6 @@ module PlayByPlay
     def league
       league = Persistent::League.new(id: @db[:leagues].first[:id])
 
-      # TODO use a join!
       @db[:conferences].where(league_id: league.id).each do |conference_attributes|
         conference = Persistent::Conference.new(id: conference_attributes[:id], name: conference_attributes[:name], league_id: league.id)
         league.conferences << conference

@@ -6,6 +6,23 @@ require "play_by_play/persistent/team"
 module PlayByPlay
   module Simulation
     module League
+      def self.new_from_sample(sample_league)
+        league = Persistent::League.new
+        sample_league.conferences.each do |sample_conference|
+          conference = Persistent::Conference.new(name: sample_conference.name)
+          league.conferences << conference
+          sample_conference.divisions.each do |sample_division|
+            division = Persistent::Division.new(name: sample_division.name)
+            conference.divisions << division
+            sample_division.teams.each do |sample_team|
+              division.teams << Persistent::Team.new(name: sample_team.name)
+            end
+          end
+        end
+
+        league
+      end
+
       def self.new_random(teams_count = 30)
         teams = create_teams(teams_count)
 

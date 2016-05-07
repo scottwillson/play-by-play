@@ -31,11 +31,11 @@ namespace :play do
     repository = PlayByPlay::Repository.new
     repository.create
     if repository.league?
-      args[:league] = PlayByPlay::Simulation::League.new_from_sample(repository.league)
+      league = PlayByPlay::Simulation::League.new_from_sample(repository.league)
+    else
+      teams_count = ENV["TEAMS"]&.to_i || 30
+      league = PlayByPlay::Simulation::League.new_random(teams_count)
     end
-
-    teams_count = ENV["TEAMS"]&.to_i || 30
-    league = PlayByPlay::Simulation::League.new_random(teams_count)
 
     scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
     season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
@@ -50,10 +50,10 @@ namespace :parse do
   desc "Parse historical play by play file in memory"
   task :game do
     game_id = ENV["GAME_ID"] || "0021400001"
-    file = PlayByPlay::Sample::Game.new(game_id, "ORL", "NOP")
+    game = PlayByPlay::Sample::Game.new_game(game_id, "ORL", "NOP")
     dir = ENV["DIR"] || "spec/data"
-    json = file.read_json(dir)
-    file.parse json, invalid_state_error: ENV["DEBUG"]
+    json = PlayByPlay::Sample::Game.read_json(dir, game_id)
+    PlayByPlay::Sample::Game.parse game, json, invalid_state_error: ENV["DEBUG"]
   end
 
   desc "Parse season and show errors but do not save"
@@ -68,9 +68,9 @@ namespace :import do
   task :game do
     PlayByPlay::Repository.new.create
     game_id = ENV["GAME_ID"] || "0021400001"
-    file = PlayByPlay::Sample::Game.new(game_id, "ORL", "NOP")
+    game = PlayByPlay::Sample::Game.new_game(game_id, "ORL", "NOP")
     dir = ENV["DIR"] || "spec/data"
-    file.import dir, invalid_state_error: ENV["DEBUG"]
+    PlayByPlay::Sample::Game.import(game, dir, invalid_state_error: ENV["DEBUG"])
   end
 
   desc "Import season into database"

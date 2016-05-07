@@ -1,4 +1,4 @@
- * Update SB schema names and Repository method names
+ * Rename nba_game_id to nba_id
  * GamePlay#play! should only accept Play key, not a Play?
  * Use better Rspec predicate matchers
  * Sample:Schedule
@@ -27,3 +27,5 @@
  * Move InvalidStateError out of Model
  * PlayByPlay::Model::Duplication#attributes is slow
  * Freeze new models
+ * Code called in Rake tasks shouldn't need setup
+ * use a join in Repository#league
