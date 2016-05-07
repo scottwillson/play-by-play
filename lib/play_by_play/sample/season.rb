@@ -21,7 +21,7 @@ module PlayByPlay
           json = JSON.parse(File.read(file_path))
           day = Day.parse(json)
           day.games.each do |game|
-            json = PlayByPlay::Sample::Game.read_json(path, game.nba_game_id)
+            json = PlayByPlay::Sample::Game.read_json(path, game.nba_id)
             PlayByPlay::Sample::Game.parse game, json, invalid_state_error
           end
         end

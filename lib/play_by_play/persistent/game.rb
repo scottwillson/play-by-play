@@ -9,15 +9,15 @@ module PlayByPlay
 
       attr_reader :errors
       attr_reader :home
-      attr_reader :nba_game_id
+      attr_reader :nba_id
       attr_reader :possessions
       attr_accessor :rows
       attr_reader :visitor
 
-      def initialize(home: Persistent::Team.new(key: :home), nba_game_id: nil, visitor: Persistent::Team.new(key: :visitor))
+      def initialize(home: Persistent::Team.new(key: :home), nba_id: nil, visitor: Persistent::Team.new(key: :visitor))
         @errors = []
         @home = home.merge(key: :home)
-        @nba_game_id = nba_game_id
+        @nba_id = nba_id
         @possessions = [ Persistent::Possession.new ]
         @rows = []
         @visitor = visitor.merge(key: :visitor)

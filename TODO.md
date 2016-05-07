@@ -1,4 +1,4 @@
- * Rename nba_game_id to nba_id
+ * Rename nba_id to nba_id
  * GamePlay#play! should only accept Play key, not a Play?
  * Use better Rspec predicate matchers
  * Sample:Schedule

@@ -12,16 +12,16 @@ require "play_by_play/repository"
 module PlayByPlay
   module Sample
     module Game
-      def self.new_game(nba_game_id, visitor_abbreviation, home_abbreviation)
+      def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
         Persistent::Game.new(
           home: Persistent::Team.new(abbreviation: home_abbreviation),
-          nba_game_id: nba_game_id,
+          nba_id: nba_id,
           visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
         )
       end
 
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
-        json = read_json(path, game.nba_game_id)
+        json = read_json(path, game.nba_id)
         game = parse(game, json, invalid_state_error)
         repository.save_game(game)
         repository.save_plays game.plays
@@ -29,8 +29,8 @@ module PlayByPlay
         game
       end
 
-      def self.read_json(path, nba_game_id)
-        JSON.parse(File.read("#{path}/#{nba_game_id}.json"))
+      def self.read_json(path, nba_id)
+        JSON.parse(File.read("#{path}/#{nba_id}.json"))
       end
 
       def self.parse(game, json, invalid_state_error = true)
@@ -65,7 +65,7 @@ module PlayByPlay
           end
         end
 
-        PlayByPlay.logger.info(sample_game: :parse, nba_game_id: game.nba_game_id, errors: game.errors)
+        PlayByPlay.logger.info(sample_game: :parse, nba_id: game.nba_id, errors: game.errors)
 
         game
       end
@@ -84,7 +84,7 @@ module PlayByPlay
           row.eventmsgactiontype = 2
         end
 
-        if row.game.nba_game_id == "0021400009" && row.eventnum == 393
+        if row.game.nba_id == "0021400009" && row.eventnum == 393
           row.eventmsgactiontype = 7
         end
 

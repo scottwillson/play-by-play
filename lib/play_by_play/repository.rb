@@ -60,7 +60,7 @@ module PlayByPlay
       game.id = @db[:games].insert(
         errors: game.errors,
         error_eventnum: game.error_eventnum,
-        nba_game_id: game.nba_game_id,
+        nba_id: game.nba_id,
         home_team_name: game.home.name,
         visitor_team_name: game.visitor.name
       )
@@ -70,8 +70,8 @@ module PlayByPlay
       @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
     end
 
-    def rows(nba_game_id)
-      game_id = @db[:games].where(nba_game_id: nba_game_id).first[:id]
+    def rows(nba_id)
+      game_id = @db[:games].where(nba_id: nba_id).first[:id]
       @db[:rows].where(game_id: game_id).all
     end
 
@@ -243,10 +243,10 @@ module PlayByPlay
         String :errors
         Integer :error_eventnum
         String :home_team_name
-        String :nba_game_id
+        String :nba_id
         String :visitor_team_name
         index :error_eventnum
-        index :nba_game_id
+        index :nba_id
       end
 
       @db.send(create_table_method, :conferences) do

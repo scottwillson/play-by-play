@@ -128,7 +128,7 @@ module PlayByPlay
       end
 
       def game_id=(value)
-        @nba_game_id = value
+        @nba_id = value
       end
 
       def clear_path_foul?
@@ -147,8 +147,8 @@ module PlayByPlay
         fg_miss? || ft_miss?
       end
 
-      def nba_game_id
-        @nba_game_id
+      def nba_id
+        @nba_id
       end
 
       def next_row

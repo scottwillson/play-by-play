@@ -18,7 +18,7 @@ module PlayByPlay
           expect(game.error_eventnum).to be_nil
           expect(game.errors).to eq([])
           expect(game.id).to_not be_nil
-          expect(game.nba_game_id).to eq("0021400001")
+          expect(game.nba_id).to eq("0021400001")
           expect(game.rows.size).to eq(512)
         end
       end

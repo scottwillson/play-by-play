@@ -16,8 +16,8 @@ render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
       <IndexRoute component={Games} />
-      <Route path="games/:nba_game_id/:eventnum" component={Game} />
-      <Route path="games/:nba_game_id" component={Game} />
+      <Route path="games/:nba_id/:eventnum" component={Game} />
+      <Route path="games/:nba_id" component={Game} />
     </Route>
   </Router>
 ), document.getElementById('app'));

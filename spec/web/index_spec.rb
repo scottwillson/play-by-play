@@ -6,7 +6,7 @@ RSpec.describe "index page", web: true, js: true do
     repository = Capybara.app.repository
     repository.reset!
 
-    file = PlayByPlay::Persistent::Game.new(nba_game_id: "0021400014")
+    file = PlayByPlay::Persistent::Game.new(nba_id: "0021400014")
     file.error_eventnum = 291
     repository.save_game file
 
