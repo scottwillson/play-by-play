@@ -224,30 +224,6 @@ module PlayByPlay
 
     def create_tables(reset = false)
       create_table_method = reset ? :create_table! : :create_table?
-      @db.send(create_table_method, :plays) do
-        primary_key :id
-        Boolean :and_one, default: false
-        Boolean :assisted, default: false
-        Boolean :clear_path, default: false
-        Boolean :flagrant, default: false
-        Boolean :intentional, default: false
-        Integer :point_value
-        String :possession_key, null: false
-        String :team
-        String :type
-        index :possession_key
-      end
-
-      @db.send(create_table_method, :games) do
-        primary_key :id
-        String :errors
-        Integer :error_eventnum
-        String :home_team_name
-        String :nba_id
-        String :visitor_team_name
-        index :error_eventnum
-        index :nba_id
-      end
 
       @db.send(create_table_method, :conferences) do
         primary_key :id
@@ -261,15 +237,34 @@ module PlayByPlay
         Integer :conference_id
       end
 
+      @db.send(create_table_method, :games) do
+        primary_key :id
+        String :errors
+        Integer :error_eventnum
+        String :home_team_name
+        String :nba_id
+        String :visitor_team_name
+        index :error_eventnum
+        index :nba_id
+      end
+
       @db.send(create_table_method, :leagues) do
         primary_key :id
         String :name
       end
 
-      @db.send(create_table_method, :teams) do
+      @db.send(create_table_method, :plays) do
         primary_key :id
-        String :name
-        Integer :division_id
+        Boolean :and_one, default: false
+        Boolean :assisted, default: false
+        Boolean :clear_path, default: false
+        Boolean :flagrant, default: false
+        Boolean :intentional, default: false
+        Integer :point_value
+        String :possession_key, null: false
+        String :team
+        String :type
+        index :possession_key
       end
 
       @db.send(create_table_method, :rows) do
@@ -310,6 +305,12 @@ module PlayByPlay
         String :wctimestring
         index :game_id
         index :play_id
+      end
+
+      @db.send(create_table_method, :teams) do
+        primary_key :id
+        String :name
+        Integer :division_id
       end
     end
   end
