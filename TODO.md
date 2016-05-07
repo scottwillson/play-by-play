@@ -1,3 +1,4 @@
+ * Update SB schema names and Repository method names
  * GamePlay#play! should only accept Play key, not a Play?
  * Use better Rspec predicate matchers
  * Sample:Schedule

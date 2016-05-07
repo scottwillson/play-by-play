@@ -9,7 +9,7 @@ module PlayByPlay
         days = Dir.glob("#{path}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json").map do |file_path|
           json = JSON.parse(File.read(file_path))
           day = Day.parse(json)
-          day.games.each { |game| game.import(path, repository: repository, invalid_state_error: invalid_state_error) }
+          day.games.each { |game| Game.import(game, path, repository: repository, invalid_state_error: invalid_state_error) }
           day
         end
         Persistent::Season.new days: days

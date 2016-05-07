@@ -56,13 +56,13 @@ module PlayByPlay
       }
     end
 
-    def save_sample_game(file)
-      @db[:sample_games].insert(
-        errors: file.errors,
-        error_eventnum: file.error_eventnum,
-        nba_game_id: file.nba_game_id,
-        home_team_name: file.home_team_name,
-        visitor_team_name: file.visitor_team_name
+    def save_sample_game(game)
+      game.id = @db[:sample_games].insert(
+        errors: game.errors,
+        error_eventnum: game.error_eventnum,
+        nba_game_id: game.nba_game_id,
+        home_team_name: game.home.name,
+        visitor_team_name: game.visitor.name
       )
     end
 
@@ -162,7 +162,7 @@ module PlayByPlay
     end
 
     def sample_league
-      league = Sample::League.new(id: @db[:sample_leagues].first[:id])
+      league = Persistent::League.new(id: @db[:sample_leagues].first[:id])
 
       # TODO use a join!
       @db[:sample_conferences].where(sample_league_id: league.id).each do |conference_attributes|

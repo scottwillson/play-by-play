@@ -1,12 +1,12 @@
 require "spec_helper"
-require "play_by_play/sample/game"
+require "play_by_play/persistent/game"
 
 RSpec.describe "index page", web: true, js: true do
   before do
     repository = Capybara.app.repository
     repository.reset!
 
-    file = PlayByPlay::Sample::Game.new("0021400014", "GSW", "POR")
+    file = PlayByPlay::Persistent::Game.new(nba_game_id: "0021400014")
     file.error_eventnum = 291
     repository.save_sample_game file
 

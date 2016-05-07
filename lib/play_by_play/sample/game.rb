@@ -33,7 +33,7 @@ module PlayByPlay
         JSON.parse(File.read("#{path}/#{nba_game_id}.json"))
       end
 
-      def self.parse(json, game, invalid_state_error = true)
+      def self.parse(game, json, invalid_state_error = true)
         add_rows(game, json, json["resultSets"].first["headers"])
 
         game.rows.each do |row|
