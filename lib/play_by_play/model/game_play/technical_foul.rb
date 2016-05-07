@@ -13,7 +13,7 @@ module PlayByPlay
 
         if possession.pending_free_throws?
           attributes
-        elsif play.flagarant?
+        elsif play.flagrant?
           attributes.merge(next_team: possession.other_team(play.team))
         else
           attributes.merge(next_team: possession.team)

@@ -103,7 +103,7 @@ module PlayByPlay
         [ 1, 3, 5, 6, 9, 25, 27, 28 ].include?(eventmsgactiontype)
       end
 
-      def flagarant?
+      def flagrant?
         foul? && eventmsgactiontype == 14
       end
 
@@ -350,7 +350,7 @@ module PlayByPlay
           assisted: assist?,
           away_from_play: away_from_play?,
           clear_path: clear_path_foul?,
-          flagarant: flagarant?,
+          flagrant: flagrant?,
           intentional: intentional?,
           point_value: point_value,
           seconds: seconds,

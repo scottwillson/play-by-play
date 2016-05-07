@@ -49,7 +49,7 @@ module PlayByPlay
         and_one: play_attributes[:and_one] || false,
         assisted: play_attributes[:assisted] || false,
         clear_path: play_attributes[:clear_path] || false,
-        flagarant: play_attributes[:flagarant] || false,
+        flagrant: play_attributes[:flagrant] || false,
         intentional: play_attributes[:intentional] || false,
         point_value: play_attributes[:point_value],
         type: key.to_s
@@ -229,7 +229,7 @@ module PlayByPlay
         Boolean :and_one, default: false
         Boolean :assisted, default: false
         Boolean :clear_path, default: false
-        Boolean :flagarant, default: false
+        Boolean :flagrant, default: false
         Boolean :intentional, default: false
         Integer :point_value
         String :possession_key, null: false

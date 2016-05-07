@@ -47,7 +47,7 @@ module PlayByPlay
         it "assigns possession after multiple technicals" do
           possession = Possession.new(team: :home)
 
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :defense, flagarant: true ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :defense, flagrant: true ])
           expect(possession.technical_free_throws).to eq([ :home, :home ])
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
@@ -80,7 +80,7 @@ module PlayByPlay
           expect(possession.ball_in_play?).to eq(false)
         end
 
-        it "assigns possession after dead ball flagarant foul" do
+        it "assigns possession after dead ball flagrant foul" do
           possession = Possession.new(team: :visitor, home: Team.new(key: :home, period_personal_fouls: 6))
 
           possession = GamePlay.play!(possession, [ :personal_foul, team: :defense ])
@@ -100,7 +100,7 @@ module PlayByPlay
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
 
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :defense, flagarant: true ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :defense, flagrant: true ])
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
           expect(possession.next_team).to eq(:home)

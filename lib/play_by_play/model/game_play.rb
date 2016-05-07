@@ -61,7 +61,7 @@ module PlayByPlay
         new_fts = possession.technical_free_throws.dup
         new_fts << possession.other_team(play.team)
 
-        if play.flagarant?
+        if play.flagrant?
           new_fts << possession.other_team(play.team)
         end
 

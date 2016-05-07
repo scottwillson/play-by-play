@@ -25,7 +25,7 @@ module PlayByPlay
       attr_reader :assisted
       attr_reader :away_from_play
       attr_reader :clear_path
-      attr_reader :flagarant
+      attr_reader :flagrant
       attr_reader :intentional
       attr_reader :point_value
       attr_reader :seconds
@@ -38,7 +38,7 @@ module PlayByPlay
         assisted: false,
         away_from_play: false,
         clear_path: false,
-        flagarant: false,
+        flagrant: false,
         intentional: false,
         point_value: 2,
         seconds: 7,
@@ -49,7 +49,7 @@ module PlayByPlay
         @assisted = assisted
         @away_from_play = away_from_play
         @clear_path = clear_path
-        @flagarant = flagarant
+        @flagrant = flagrant
         @intentional = intentional
         @point_value = point_value
         @seconds = seconds
@@ -71,8 +71,8 @@ module PlayByPlay
         clear_path
       end
 
-      def flagarant?
-        flagarant
+      def flagrant?
+        flagrant
       end
 
       def intentional?
@@ -96,7 +96,7 @@ module PlayByPlay
         @attributes = @attributes.merge(away_from_play: true) if away_from_play?
         @attributes = @attributes.merge(assisted: true) if assisted
         @attributes = @attributes.merge(clear_path: true) if clear_path?
-        @attributes = @attributes.merge(flagarant: true) if flagarant?
+        @attributes = @attributes.merge(flagrant: true) if flagrant?
         @attributes = @attributes.merge(intentional: true) if intentional?
 
         if team && [ :jump_ball, :jump_ball_out_of_bounds, :personal_foul, :rebound, :team_rebound, :technical_foul ].include?(type)
