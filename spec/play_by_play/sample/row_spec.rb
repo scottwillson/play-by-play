@@ -1,12 +1,12 @@
 require "spec_helper"
-require "play_by_play/sample/game"
-require "play_by_play/sample/row"
 require "play_by_play/model/possession"
+require "play_by_play/persistent/game"
+require "play_by_play/sample/row"
 
 module PlayByPlay
   module Sample
     RSpec.describe Row do
-      let(:row) { Row.new(Game.new("0021400001", "ORL", "NOP"), []) }
+      let(:row) { Row.new(Persistent::Game.new, [], []) }
 
       describe ".description" do
         it "concatenates description fields" do
@@ -82,9 +82,8 @@ module PlayByPlay
 
       describe ".seconds_remaining" do
         it "parses time string" do
-          file = Game.new("0021400001", "ORL", "NOP")
-          file.headers = %w( pctimestring )
-          row = Row.new(file, [ "5:12" ])
+          file = Game.new_game("0021400001", "ORL", "NOP")
+          row = Row.new(file, %w( pctimestring ), [ "5:12" ])
           expect(row.seconds_remaining).to eq(312)
         end
       end
@@ -92,9 +91,8 @@ module PlayByPlay
       describe ".play_team" do
         context "defense technical foul" do
           it "is :defense" do
-            file = Game.new("0021400001", "ORL", "NOP")
-            file.headers = %w( eventmsgtype eventmsgactiontype person1type )
-            row = Row.new(file, [ 6, 267, 5 ])
+            game = Game.new_game("0021400001", "ORL", "NOP")
+            row = Row.new(game, %w( eventmsgtype eventmsgactiontype person1type ), [ 6, 267, 5 ])
             row.possession = Model::Possession.new(team: :home)
             expect(row.play_team).to eq(:defense)
           end

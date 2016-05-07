@@ -5,6 +5,7 @@ module PlayByPlay
     class Team < Model::Team
       attr_accessor :id
 
+      attr_reader :abbreviation
       attr_reader :division_id
       attr_reader :games
       attr_reader :name
@@ -13,6 +14,7 @@ module PlayByPlay
         @games = []
 
         attributes = attributes.dup
+        @abbreviation = attributes.delete(:abbreviation)
         @division_id = attributes.delete(:division_id)
         @id = attributes.delete(:id)
         @name = attributes.delete(:name)

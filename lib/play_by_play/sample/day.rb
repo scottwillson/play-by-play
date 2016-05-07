@@ -15,7 +15,7 @@ module PlayByPlay
       def self.parse_row(row)
         visitor = row[5][%r{/(\w\w\w)}, 1]
         home = row[5][%r{/\w\w\w(\w\w\w)}, 1]
-        Sample::Game.new(row[2], visitor, home)
+        Sample::Game.new_game row[2], visitor, home
       end
     end
   end

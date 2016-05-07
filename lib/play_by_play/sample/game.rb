@@ -6,98 +6,93 @@ require "play_by_play/model/possession"
 require "play_by_play/model/invalid_state_error"
 require "play_by_play/persistent/game"
 require "play_by_play/persistent/play"
+require "play_by_play/persistent/possession"
 require "play_by_play/repository"
 
 module PlayByPlay
   module Sample
-    class Game < Persistent::Game
-      attr_reader :plays
-      attr_reader :errors
-      attr_accessor :error_eventnum
-      attr_reader :nba_game_id
-      attr_accessor :headers
-      attr_reader :home_team_name
-      attr_reader :rows
-      attr_reader :visitor_team_name
-
-      def initialize(nba_game_id, visitor_team_name, home_team_name)
-        @plays = []
-        @nba_game_id = nba_game_id
-        @headers = []
-        @home_team_name = home_team_name
-        @visitor_team_name = visitor_team_name
+    module Game
+      def self.new_game(nba_game_id, visitor_abbreviation, home_abbreviation)
+        Persistent::Game.new(
+          home: Persistent::Team.new(abbreviation: home_abbreviation),
+          nba_game_id: nba_game_id,
+          visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
+        )
       end
 
-      def import(path, repository: Repository.new, invalid_state_error: true)
-        json = read_json(path)
-        game = parse(json, invalid_state_error)
-        @errors = game.errors
-        @id = repository.save_sample_game(self)
-        repository.save_sample_plays plays
-        repository.save_rows rows
-        game.errors?
+      def self.import(game, path, repository: Repository.new, invalid_state_error: true)
+        json = read_json(path, game.nba_game_id)
+        game = parse(game, json, invalid_state_error)
+        repository.save_sample_game(game)
+        repository.save_sample_plays game.plays
+        repository.save_rows game.rows
+        game
       end
 
-      def read_json(path)
+      def self.read_json(path, nba_game_id)
         JSON.parse(File.read("#{path}/#{nba_game_id}.json"))
       end
 
-      def parse(json, invalid_state_error = true)
-        @headers = json["resultSets"].first["headers"]
-        create_rows json
+      def self.parse(json, game, invalid_state_error = true)
+        add_rows(game, json, json["resultSets"].first["headers"])
 
-        possession = Model::Possession.new
-
-        rows.each do |row|
-          debug(possession, row)
-
-          next if ignore?(possession, row)
+        game.rows.each do |row|
+          debug(game.possession, row)
+          next if ignore?(game.possession, row)
 
           begin
-            row.possession = possession
+            row.possession = game.possession
             row = correct_row(row)
-            play = Persistent::Play.new(row.play_type, row.play_attributes)
+
+            play = Model::Play.new(row.play_type, row.play_attributes)
+            possession = Model::GamePlay.play!(game.possession, play)
             debug_play possession, play
-            plays << play
-            possession = Model::GamePlay.play!(possession, play)
-            validate_score!(possession, row)
-            break if possession.errors?
+
+            play = Persistent::Play.new(play.type, row.play_attributes.merge(possession: game.possession, row: row))
+            game.possession.play = play
+
+            possession = Persistent::Possession.new(possession.attributes)
+            game.possessions << possession
+
+            validate_score! game.possession, row
+            break if game.possession.errors?
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if invalid_state_error
-            self.error_eventnum = row.eventnum
+            game.error_eventnum = row.eventnum
             possession.errors << e.message
+            game.errors << e.message
             break
           end
         end
 
-        PlayByPlay.logger.info(sample_game: :parse, nba_game_id: nba_game_id, errors: possession.errors)
+        PlayByPlay.logger.info(sample_game: :parse, nba_game_id: game.nba_game_id, errors: game.errors)
 
-        possession
+        game
       end
 
       # Map JSON array to Sample::Row
-      def create_rows(json)
-        @rows = json["resultSets"].first["rowSet"].map do |json_row|
-          Row.new(self, json_row)
+      def self.add_rows(game, json, headers)
+        json["resultSets"].first["rowSet"].map do |json_row|
+          Row.new(game, headers, json_row)
         end
       end
 
       # Source data may have specific problems
       # Change to correct_play
-      def correct_row(row)
-        if row.personal_foul? && !Model::GamePlay.next_foul_in_penalty?(row.possession, row.team) && row.next_row.event == :ft
+      def self.correct_row(row)
+        if row.misidentified_shooting_foul?
           row.eventmsgactiontype = 2
         end
 
-        if nba_game_id == "0021400009" && row.eventnum == 393
+        if row.game.nba_game_id == "0021400009" && row.eventnum == 393
           row.eventmsgactiontype = 7
         end
 
         row
       end
 
-      def ignore?(possession, row)
-        uncounted_team_rebound?(possession, row) ||
+      def self.ignore?(possession, row)
+        row.uncounted_team_rebound?(possession) ||
           row.timeout? ||
           row.substitution? ||
           row.offensive_foul_turnover? ||
@@ -107,35 +102,26 @@ module PlayByPlay
           (row.jump_ball? && possession.period < 5 && possession.opening_tip)
       end
 
-      # FT miss with more FTs upcoming count as team rebounds (doesn't count in stats)
-      # Block + ball out of bounds off shooter: team rebounds
-      # Missed shot + out of bounds off other team
-      # Missed live FT  + out of bounds off other team
-      # Missed shot at end of period
-      def uncounted_team_rebound?(possession, row)
-        row.team_rebound? && (possession.free_throws? || possession.seconds_remaining == 720 || row&.previous_row&.technical_ft_miss?)
-      end
-
-      def validate_score!(possession, row)
+      def self.validate_score!(possession, row)
         score = "#{possession.visitor.points} - #{possession.home.points}"
         if row.score && row.score != score
           raise Model::InvalidStateError, "row score #{row.score} does not match possession score #{score}"
         end
       end
 
-      def find_play_by_eventnum!(eventnum)
-        play = plays.detect { |p| p.row.eventnum == eventnum }
+      def self.find_play_by_eventnum!(game, eventnum)
+        play = game.plays.detect { |p| p.row.eventnum == eventnum }
         raise(ArgumentError, "No play with eventnum #{eventnum}") unless play
         play
       end
 
-      def debug(possession, row)
+      def self.debug(possession, row)
         return unless PlayByPlay.logger.debug?
         PlayByPlay.logger.debug possession.to_h
         PlayByPlay.logger.debug row
       end
 
-      def debug_play(possession, model_play)
+      def self.debug_play(possession, model_play)
         return unless PlayByPlay.logger.debug?
         PlayByPlay.logger.debug possession.key => model_play.key
       end

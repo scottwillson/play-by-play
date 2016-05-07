@@ -59,8 +59,9 @@ module PlayByPlay
       attr_accessor :visitordescription
       attr_accessor :wctimestring
 
-      def initialize(game, json)
+      def initialize(game, headers, json)
         @game = game
+        @game.rows << self
 
         json.each.with_index do |cell, index|
           send "#{headers[index].downcase}=", cell
@@ -130,10 +131,6 @@ module PlayByPlay
         @nba_game_id = value
       end
 
-      def headers
-        game.headers
-      end
-
       def clear_path_foul?
         foul? && eventmsgactiontype == 9
       end
@@ -167,6 +164,10 @@ module PlayByPlay
 
       def offensive_foul_turnover?
         turnover? && (eventmsgactiontype == 5 || eventmsgactiontype == 37)
+      end
+
+      def misidentified_shooting_foul?
+        personal_foul? && !Model::GamePlay.next_foul_in_penalty?(possession, team) && next_row.event == :ft
       end
 
       def period_end?
@@ -292,6 +293,15 @@ module PlayByPlay
         event == :turnover
       end
 
+      # FT miss with more FTs upcoming count as team rebounds (doesn't count in stats)
+      # Block + ball out of bounds off shooter: team rebounds
+      # Missed shot + out of bounds off other team
+      # Missed live FT  + out of bounds off other team
+      # Missed shot at end of period
+      def uncounted_team_rebound?(possession)
+        team_rebound? && (possession.free_throws? || possession.seconds_remaining == 720 || previous_row&.technical_ft_miss?)
+      end
+
       def play_type
         if start_of_game?
           return nil
@@ -343,8 +353,6 @@ module PlayByPlay
           flagarant: flagarant?,
           intentional: intentional?,
           point_value: point_value,
-          possession: possession,
-          row: self,
           seconds: seconds,
           team: play_team
         }

@@ -241,10 +241,10 @@ module PlayByPlay
 
       @db.send(create_table_method, :sample_games) do
         primary_key :id
-        Integer :nba_game_id
         String :errors
         Integer :error_eventnum
         String :home_team_name
+        String :nba_game_id
         String :visitor_team_name
         index :error_eventnum
         index :nba_game_id
