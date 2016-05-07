@@ -23,8 +23,8 @@ module PlayByPlay
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
         json = read_json(path, game.nba_game_id)
         game = parse(game, json, invalid_state_error)
-        repository.save_sample_game(game)
-        repository.save_sample_plays game.plays
+        repository.save_game(game)
+        repository.save_plays game.plays
         repository.save_rows game.rows
         game
       end

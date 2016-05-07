@@ -11,7 +11,7 @@ module PlayByPlay
           repository.reset!
 
           league = League.import("spec/data", 2014, repository: repository)
-          expect(repository.sample_league?).to be_truthy
+          expect(repository.league?).to be_truthy
           expect(league.conferences.size).to eq(2)
           expect(league.conferences[0].divisions.size).to eq(3)
           expect(league.conferences[1].divisions.size).to eq(3)
@@ -28,7 +28,7 @@ module PlayByPlay
           expect(portland).to_not eq(nil)
           expect(league.teams.size).to eq(30)
 
-          league = repository.sample_league
+          league = repository.league
 
           portland = league.conferences
             .detect { |conference| conference.name == "Western Conference" }

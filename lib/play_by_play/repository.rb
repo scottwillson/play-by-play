@@ -21,15 +21,15 @@ module PlayByPlay
         play_attributes = play.last
       end
 
-      query = sample_play_query(play_attributes, play.first, possession_key)
-      @db[:sample_plays].where(query).count
+      query = play_query(play_attributes, play.first, possession_key)
+      @db[:plays].where(query).count
     end
 
-    def save_sample_plays(plays)
-      plays.each { |play| save_sample_play(play) }
+    def save_plays(plays)
+      plays.each { |play| save_play(play) }
     end
 
-    def save_sample_play(play)
+    def save_play(play)
       play = Persistent::Play.from_hash(play)
       play_attributes = {}
 
@@ -37,12 +37,12 @@ module PlayByPlay
         play_attributes = play.key.last
       end
 
-      query = sample_play_query(play_attributes, play.key.first, play.possession_key)
-      id = @db[:sample_plays].insert(query)
+      query = play_query(play_attributes, play.key.first, play.possession_key)
+      id = @db[:plays].insert(query)
       update_row(play.row, id)
     end
 
-    def sample_play_query(play_attributes, key, possession_key)
+    def play_query(play_attributes, key, possession_key)
       {
         possession_key: possession_key.to_s,
         team: play_attributes[:team]&.to_s,
@@ -56,8 +56,8 @@ module PlayByPlay
       }
     end
 
-    def save_sample_game(game)
-      game.id = @db[:sample_games].insert(
+    def save_game(game)
+      game.id = @db[:games].insert(
         errors: game.errors,
         error_eventnum: game.error_eventnum,
         nba_game_id: game.nba_game_id,
@@ -66,19 +66,19 @@ module PlayByPlay
       )
     end
 
-    def sample_games(page = 1)
-      @db[:sample_games].exclude(error_eventnum: nil).paginate(page, 20).all
+    def games(page = 1)
+      @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
     end
 
     def rows(nba_game_id)
-      sample_game_id = @db[:sample_games].where(nba_game_id: nba_game_id).first[:id]
-      @db[:rows].where(sample_game_id: sample_game_id).all
+      game_id = @db[:games].where(nba_game_id: nba_game_id).first[:id]
+      @db[:rows].where(game_id: game_id).all
     end
 
     def save_rows(rows)
       columns = [
         :play_id,
-        :sample_game_id,
+        :game_id,
         :eventmsgactiontype,
         :eventmsgtype,
         :eventnum,
@@ -161,19 +161,19 @@ module PlayByPlay
       true
     end
 
-    def sample_league
-      league = Persistent::League.new(id: @db[:sample_leagues].first[:id])
+    def league
+      league = Persistent::League.new(id: @db[:leagues].first[:id])
 
       # TODO use a join!
-      @db[:sample_conferences].where(sample_league_id: league.id).each do |conference_attributes|
+      @db[:conferences].where(league_id: league.id).each do |conference_attributes|
         conference = Persistent::Conference.new(id: conference_attributes[:id], name: conference_attributes[:name], league_id: league.id)
         league.conferences << conference
 
-        @db[:sample_divisions].where(sample_conference_id: conference.id).each do |division_attributes|
+        @db[:divisions].where(conference_id: conference.id).each do |division_attributes|
           division = Persistent::Division.new(id: division_attributes[:id], name: division_attributes[:name], conference_id: conference.id)
           conference.divisions << division
 
-          @db[:sample_teams].where(sample_division_id: division.id).each do |team_attributes|
+          @db[:teams].where(division_id: division.id).each do |team_attributes|
             team = Persistent::Team.new(id: team_attributes[:id], name: team_attributes[:name], division_id: division.id)
             division.teams << team
           end
@@ -183,18 +183,18 @@ module PlayByPlay
       league
     end
 
-    def sample_league?
-      @db[:sample_leagues].first != nil
+    def league?
+      @db[:leagues].first != nil
     end
 
-    def save_sample_league(league)
-      league.id = @db[:sample_leagues].insert
+    def save_league(league)
+      league.id = @db[:leagues].insert
       league.conferences.each do |conference|
-        conference.id = @db[:sample_conferences].insert(sample_league_id: league.id, name: conference.name)
+        conference.id = @db[:conferences].insert(league_id: league.id, name: conference.name)
         conference.divisions.each do |division|
-          division.id = @db[:sample_divisions].insert(sample_conference_id: conference.id, name: division.name)
+          division.id = @db[:divisions].insert(conference_id: conference.id, name: division.name)
           division.teams.each do |team|
-            team.id = @db[:sample_teams].insert(sample_division_id: division.id, name: team.name)
+            team.id = @db[:teams].insert(division_id: division.id, name: team.name)
           end
         end
       end
@@ -202,13 +202,13 @@ module PlayByPlay
     end
 
     def reset!
-      if @db.table_exists?(:sample_plays)
-        @db[:sample_conferences].truncate
-        @db[:sample_divisions].truncate
-        @db[:sample_leagues].truncate
-        @db[:sample_teams].truncate
-        @db[:sample_plays].truncate
-        @db[:sample_games].truncate
+      if @db.table_exists?(:plays)
+        @db[:conferences].truncate
+        @db[:divisions].truncate
+        @db[:leagues].truncate
+        @db[:teams].truncate
+        @db[:plays].truncate
+        @db[:games].truncate
         @db[:rows].truncate
       else
         create!
@@ -225,7 +225,7 @@ module PlayByPlay
 
     def create_tables(reset = false)
       create_table_method = reset ? :create_table! : :create_table?
-      @db.send(create_table_method, :sample_plays) do
+      @db.send(create_table_method, :plays) do
         primary_key :id
         Boolean :and_one, default: false
         Boolean :assisted, default: false
@@ -239,7 +239,7 @@ module PlayByPlay
         index :possession_key
       end
 
-      @db.send(create_table_method, :sample_games) do
+      @db.send(create_table_method, :games) do
         primary_key :id
         String :errors
         Integer :error_eventnum
@@ -250,32 +250,32 @@ module PlayByPlay
         index :nba_game_id
       end
 
-      @db.send(create_table_method, :sample_conferences) do
+      @db.send(create_table_method, :conferences) do
         primary_key :id
         String :name
-        Integer :sample_league_id
+        Integer :league_id
       end
 
-      @db.send(create_table_method, :sample_divisions) do
+      @db.send(create_table_method, :divisions) do
         primary_key :id
         String :name
-        Integer :sample_conference_id
+        Integer :conference_id
       end
 
-      @db.send(create_table_method, :sample_leagues) do
+      @db.send(create_table_method, :leagues) do
         primary_key :id
         String :name
       end
 
-      @db.send(create_table_method, :sample_teams) do
+      @db.send(create_table_method, :teams) do
         primary_key :id
         String :name
-        Integer :sample_division_id
+        Integer :division_id
       end
 
       @db.send(create_table_method, :rows) do
         primary_key :id
-        Integer :sample_game_id
+        Integer :game_id
         Integer :play_id
         Integer :eventmsgactiontype
         Integer :eventmsgtype
@@ -309,7 +309,7 @@ module PlayByPlay
         Integer :scoremargin
         String :visitordescription
         String :wctimestring
-        index :sample_game_id
+        index :game_id
         index :play_id
       end
     end

@@ -11,14 +11,14 @@ module PlayByPlay
         it "returns instances of PlayProbability", database: true do
           repository = Repository.new
           repository.reset!
-          repository.save_sample_play({} => [ :jump_ball, team: :visitor ])
-          repository.save_sample_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
-          repository.save_sample_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
-          repository.save_sample_play({ ball_in_play: true } => [ :rebound, team: :defense ])
-          repository.save_sample_play({ team: :visitor } => [ :fg, point_value: 3, assisted: true ])
-          repository.save_sample_play({ team: :home }    => [ :fg, point_value: 3, assisted: true ])
-          repository.save_sample_play({ team: :visitor } => [ :fg, point_value: 3, assisted: true ])
-          repository.save_sample_play({ team: :visitor } => [ :fg, point_value: 3 ])
+          repository.save_play({} => [ :jump_ball, team: :visitor ])
+          repository.save_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
+          repository.save_play({ ball_in_play: true } => [ :personal_foul, team: :defense ])
+          repository.save_play({ ball_in_play: true } => [ :rebound, team: :defense ])
+          repository.save_play({ team: :visitor } => [ :fg, point_value: 3, assisted: true ])
+          repository.save_play({ team: :home }    => [ :fg, point_value: 3, assisted: true ])
+          repository.save_play({ team: :visitor } => [ :fg, point_value: 3, assisted: true ])
+          repository.save_play({ team: :visitor } => [ :fg, point_value: 3 ])
 
           play_probability_distribution = Sample::PlayProbabilityDistribution.new(repository)
           possession = Model::Possession.new(ball_in_play: true)

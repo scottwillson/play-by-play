@@ -22,7 +22,7 @@ module PlayByPlay
           end
         end
 
-        @id = repository.save_sample_league(league)
+        @id = repository.save_league(league)
 
         league
       end

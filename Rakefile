@@ -30,8 +30,8 @@ namespace :play do
   task :season do
     repository = PlayByPlay::Repository.new
     repository.create
-    if repository.sample_league?
-      args[:league] = PlayByPlay::Simulation::League.new_from_sample(repository.sample_league)
+    if repository.league?
+      args[:league] = PlayByPlay::Simulation::League.new_from_sample(repository.league)
     end
 
     teams_count = ENV["TEAMS"]&.to_i || 30
