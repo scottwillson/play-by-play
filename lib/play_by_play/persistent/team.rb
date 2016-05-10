@@ -21,6 +21,19 @@ module PlayByPlay
         super attributes
       end
 
+      def attributes
+        @attributes ||= {
+          abbreviation: abbreviation,
+          division_id: division_id,
+          id: id,
+          key: key,
+          name: name,
+          period_personal_fouls: period_personal_fouls,
+          personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
+          points: points
+        }
+      end
+
       def wins
         games.select { |game| game.winner == self }.size
       end
@@ -30,7 +43,7 @@ module PlayByPlay
       end
 
       def inspect
-        "#<PlayByPlay::Persistent::Team #{name}>"
+        "#<PlayByPlay::Persistent::Team #{id} #{name} #{abbreviation} #{key}>"
       end
 
       def to_s

@@ -3,6 +3,8 @@ require "play_by_play/persistent/play"
 
 module PlayByPlay
   class Repository
+    attr_reader :environment
+
     def initialize(environment = PlayByPlay.environment)
       @environment = environment
 
@@ -40,6 +42,7 @@ module PlayByPlay
       query = play_query(play_attributes, play.key.first, play.possession_key)
       id = @db[:plays].insert(query)
       update_row(play.row, id)
+      update_possession(play.possession, id)
     end
 
     def play_query(play_attributes, key, possession_key)
@@ -56,18 +59,64 @@ module PlayByPlay
       }
     end
 
+    def save_possessions(game)
+      game.possessions.each do |possession|
+        possession.game_id = game.id
+        save_possession possession
+      end
+    end
+
+    def save_possession(possession)
+      possession.id = @db[:possessions].insert(game_id: possession.game_id, play_id: possession.play_id)
+    end
+
+    def update_possession(possession, play_id)
+      return unless possession && play_id
+      @db[:possessions].where(id: possession.id).update(play_id: play_id)
+      true
+    end
+
     def save_game(game)
       game.id = @db[:games].insert(
         errors: game.errors,
         error_eventnum: game.error_eventnum,
-        home_team_id: game.home.id,
+        home_id: game.home.id,
         nba_id: game.nba_id,
-        visitor_team_id: game.visitor.id
+        visitor_id: game.visitor.id
       )
+
+      save_possessions game
+
+      true
+    end
+
+    def game(id)
+      attributes = @db[:games].where(id: id).first
+
+      attributes[:home] = team(attributes[:home_id])
+      attributes[:visitor] = team(attributes[:visitor_id])
+
+      Persistent::Game.new attributes
     end
 
     def games(page = 1)
       @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
+    end
+
+    def game_possessions(game_id)
+      @db[:possessions].where(game_id: game_id).map do |attributes|
+        Persistent::Possession.new(attributes)
+      end
+    end
+
+    def game_plays(game_id)
+      @db[:plays].join(:possessions, play_id: :id).where(possessions__game_id: game_id).map do |attributes|
+        attributes.delete(:game_id)
+        attributes.delete(:play_id)
+        attributes.delete(:possession_key)
+        type = attributes.delete(:type)
+        Persistent::Play.new(type.to_sym, attributes)
+      end
     end
 
     def rows(nba_id)
@@ -161,6 +210,31 @@ module PlayByPlay
       true
     end
 
+    def team(id)
+      return unless id
+      Persistent::Team.new @db[:teams].where(id: id).first
+    end
+
+    def create_team(team)
+      raise(ArgumentError, "team cannot be nil") unless team
+      raise(ArgumentError, "team must have name or abbreviation") if team.abbreviation.nil? && team.name.nil?
+      return team if team.id
+
+      attributes = @db[:teams].where(abbreviation: team.abbreviation, name: team.name).first
+      return Persistent::Team.new(attributes) if attributes
+
+      save_team team
+    end
+
+    def save_team(team)
+      id = @db[:teams].insert(
+        abbreviation: team.abbreviation,
+        name: team.name
+      )
+      team.id = id
+      team
+    end
+
     def league
       league = Persistent::League.new(id: @db[:leagues].first[:id])
 
@@ -241,13 +315,13 @@ module PlayByPlay
         primary_key :id
         String :errors
         Integer :error_eventnum
-        Integer :home_team_id
+        Integer :home_id
         String :nba_id
-        Integer :visitor_team_id
+        Integer :visitor_id
         index :error_eventnum
-        index :home_team_id
+        index :home_id
         index :nba_id
-        index :visitor_team_id
+        index :visitor_id
       end
 
       @db.send(create_table_method, :leagues) do
@@ -267,6 +341,14 @@ module PlayByPlay
         String :team
         String :type
         index :possession_key
+      end
+
+      @db.send(create_table_method, :possessions) do
+        primary_key :id
+        Integer :game_id, null: false
+        Integer :play_id
+        index :game_id
+        index :play_id
       end
 
       @db.send(create_table_method, :rows) do
@@ -311,8 +393,10 @@ module PlayByPlay
 
       @db.send(create_table_method, :teams) do
         primary_key :id
+        String :abbreviation
         String :name
         Integer :division_id
+        index :abbreviation
       end
     end
   end

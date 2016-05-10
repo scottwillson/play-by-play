@@ -4,14 +4,16 @@ require "play_by_play/model/possession"
 module PlayByPlay
   module Persistent
     class Play  < Model::Play
+      attr_accessor :id
       attr_reader :possession
+      attr_reader :possession_id
       attr_reader :row
 
       # { team: :visitor } => [ :fg, point_value: 3 ]
       def self.from_hash(hash)
         return hash unless hash.is_a?(Hash)
 
-        possession = Model::Possession.new(hash.keys.first)
+        possession = Persistent::Possession.new(hash.keys.first)
         play_attributes = hash.values.first.dup
         type = play_attributes.shift
         play_attributes = play_attributes.first || {}
@@ -22,10 +24,24 @@ module PlayByPlay
       def initialize(type, *attributes)
         attributes = attributes.first.dup
 
+        @id = attributes.delete(:id)
+        @possession_id = attributes.delete(:possession_id)
         @possession = attributes.delete(:possession)
         @row = attributes.delete(:row)
 
         super type, attributes
+      end
+
+      def possession=(value)
+        @possession = value
+        @possession_id = value&.id
+      end
+
+      def possession_id=(value)
+        @possession_id = value
+        if @possession&.id != value
+          @possession = nil
+        end
       end
     end
   end

@@ -13,13 +13,16 @@ module PlayByPlay
           game = Game.new_game("0021400001", "ORL", "NOP")
           game = Game.import(game, "spec/data", repository: repository)
 
+          expect(game.errors).to eq([])
+          expect(game.error_eventnum).to be_nil
           expect(repository.count_plays(nil, [ :jump_ball, team: :home ])).to eq(1)
           expect(repository.count_plays(:team, [ :fg ])).to eq(32)
-          expect(game.error_eventnum).to be_nil
-          expect(game.errors).to eq([])
           expect(game.id).to_not be_nil
           expect(game.nba_id).to eq("0021400001")
           expect(game.rows.size).to eq(512)
+
+          expect(repository.game_possessions(game.id).size).to eq(426)
+          expect(repository.game_plays(game.id).size).to eq(425)
         end
       end
 

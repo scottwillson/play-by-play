@@ -23,7 +23,8 @@ module PlayByPlay
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
         json = read_json(path, game.nba_id)
         game = parse(game, json, invalid_state_error)
-        repository.save_game(game)
+        save_teams game, repository
+        repository.save_game game
         repository.save_plays game.plays
         repository.save_rows game.rows
         game
@@ -59,7 +60,6 @@ module PlayByPlay
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if invalid_state_error
             game.error_eventnum = row.eventnum
-            possession.errors << e.message
             game.errors << e.message
             break
           end
@@ -113,6 +113,11 @@ module PlayByPlay
         play = game.plays.detect { |p| p.row.eventnum == eventnum }
         raise(ArgumentError, "No play with eventnum #{eventnum}") unless play
         play
+      end
+
+      def self.save_teams(game, repository)
+        game.home = repository.create_team(game.home)
+        game.visitor = repository.create_team(game.visitor)
       end
 
       def self.debug(possession, row)
