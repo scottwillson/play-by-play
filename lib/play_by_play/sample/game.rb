@@ -25,7 +25,6 @@ module PlayByPlay
         game = parse(game, json, invalid_state_error)
         save_teams game, repository
         repository.save_game game
-        repository.save_plays game.plays
         repository.save_rows game.rows
         game
       end
@@ -45,15 +44,8 @@ module PlayByPlay
             row.possession = game.possession
             row = correct_row(row)
 
-            play = Model::Play.new(row.play_type, row.play_attributes)
-            possession = Model::GamePlay.play!(game.possession, play)
-            debug_play possession, play
-
-            play = Persistent::Play.new(play.type, row.play_attributes.merge(possession: game.possession, row: row))
-            game.possession.play = play
-
-            possession = Persistent::Possession.new(possession.attributes)
-            game.possessions << possession
+            play = play!(game, row.play_type, row.play_attributes)
+            play.row = row
 
             validate_score! game.possession, row
             break if game.possession.errors?
@@ -68,6 +60,19 @@ module PlayByPlay
         PlayByPlay.logger.info(sample_game: :parse, nba_id: game.nba_id, errors: game.errors)
 
         game
+      end
+
+      def self.play!(game, play_type, play_attributes = {})
+        play = Model::Play.new(play_type, play_attributes)
+        possession = Model::GamePlay.play!(game.possession, play)
+        debug_play possession, play
+
+        play = Persistent::Play.new(play_type, play_attributes.merge(possession: game.possession))
+        game.possession.play = play
+
+        possession = Persistent::Possession.new(possession.attributes)
+        game.possessions << possession
+        play
       end
 
       # Map JSON array to Sample::Row

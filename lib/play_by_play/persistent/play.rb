@@ -5,9 +5,9 @@ module PlayByPlay
   module Persistent
     class Play  < Model::Play
       attr_accessor :id
+      attr_accessor :row
       attr_reader :possession
       attr_reader :possession_id
-      attr_reader :row
 
       # { team: :visitor } => [ :fg, point_value: 3 ]
       def self.from_hash(hash)

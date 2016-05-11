@@ -51,6 +51,7 @@ module PlayByPlay
         team: play_attributes[:team]&.to_s,
         and_one: play_attributes[:and_one] || false,
         assisted: play_attributes[:assisted] || false,
+        away_from_play: play_attributes[:away_from_play] || false,
         clear_path: play_attributes[:clear_path] || false,
         flagrant: play_attributes[:flagrant] || false,
         intentional: play_attributes[:intentional] || false,
@@ -86,6 +87,7 @@ module PlayByPlay
       )
 
       save_possessions game
+      save_plays game.plays
 
       true
     end
@@ -332,6 +334,7 @@ module PlayByPlay
       @db.send(create_table_method, :plays) do
         primary_key :id
         Boolean :and_one, default: false
+        Boolean :away_from_play, default: false
         Boolean :assisted, default: false
         Boolean :clear_path, default: false
         Boolean :flagrant, default: false
