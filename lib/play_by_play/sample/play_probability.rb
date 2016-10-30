@@ -8,6 +8,10 @@ module PlayByPlay
         @play = play
         @probability = probability
       end
+
+      def to_s
+        "#<Sample::PlayProbability #{probability} #{play}>"
+      end      
     end
   end
 end
