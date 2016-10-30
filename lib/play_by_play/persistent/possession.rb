@@ -56,7 +56,7 @@ module PlayByPlay
       end
 
       def to_s
-        "#<PlayByPlay::Persistent::Possession #{key}>"
+        "#<PlayByPlay::Persistent::Possession #{key} #{id}>"
       end
     end
   end
