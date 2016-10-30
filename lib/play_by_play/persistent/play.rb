@@ -33,11 +33,13 @@ module PlayByPlay
       end
 
       def possession=(value)
+        return unless value
         @possession = value
         @possession_id = value&.id
       end
 
       def possession_id=(value)
+        return unless value
         @possession_id = value
         if @possession&.id != value
           @possession = nil
