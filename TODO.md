@@ -1,3 +1,4 @@
+ * integrate setup_development.sql
  * Use better Rspec predicate matchers
  * Sample:Schedule
  * Test season simulation with database
@@ -27,3 +28,4 @@
  * Freeze new models
  * Code called in Rake tasks shouldn't need setup
  * use a join in Repository#league
+ * add bin/setup

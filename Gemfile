@@ -5,7 +5,8 @@ gem "rack"
 gem "sequel"
 gem "sinatra"
 gem "sinatra-contrib"
-gem "sqlite3"
+gem "pg"
+gem "sequel_pg"
 
 group :development do
   gem "rubocop"

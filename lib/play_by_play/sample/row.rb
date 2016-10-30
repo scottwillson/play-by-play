@@ -206,6 +206,10 @@ module PlayByPlay
         game.rows
       end
 
+      def scoremargin
+        @scoremargin.to_i
+      end
+
       def seconds
         if next_row&.period_end?
           possession.seconds_remaining

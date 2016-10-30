@@ -1,3 +1,4 @@
+require "pg"
 require "sequel"
 require "play_by_play/persistent/play"
 
@@ -9,9 +10,9 @@ module PlayByPlay
       @environment = environment
 
       if environment == :test
-        @db = ::Sequel.sqlite
+        @db = ::Sequel.connect("postgres://localhost/play_by_play_test")
       else
-        @db = ::Sequel.connect("sqlite://play_by_play_development.db")
+        @db = ::Sequel.connect("postgres://localhost/play_by_play_development")
       end
 
       @db.extension :pagination
