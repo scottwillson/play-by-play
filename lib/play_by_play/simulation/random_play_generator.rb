@@ -14,7 +14,7 @@ module PlayByPlay
         probabilities = @play_probability_distribution.for(possession)
         aggregate_probabilty = probabilities.map(&:probability).reduce(:+)
 
-        validate! probabilities, random_number, aggregate_probabilty
+        validate! probabilities, random_number, aggregate_probabilty, possession
 
         r = random_number * aggregate_probabilty
         previous_probability = 0
@@ -29,10 +29,10 @@ module PlayByPlay
         raise StandardError, "Did not find play for #{r} in #{probabilities} total #{aggregate_probabilty}"
       end
 
-      def validate!(probabilities, random_number, aggregate_probabilty)
+      def validate!(probabilities, random_number, aggregate_probabilty, possession)
         raise(ArgumentError, "random must be positive number less than 1, but was: #{random_number}") if random_number < 0 || random_number >= 1
         raise(ArgumentError, "probabilities cannot be empty") if probabilities.empty?
-        raise(ArgumentError, "At least one PlayProbability must be greater than 0") if aggregate_probabilty == 0
+        raise(ArgumentError, "At least one PlayProbability must be greater than 0 for #{possession}") if aggregate_probabilty == 0
       end
     end
   end
