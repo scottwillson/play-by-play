@@ -8,13 +8,13 @@ module PlayByPlay
 
         db.send(create_table_method, :conferences) do
           primary_key :id
-          String :name
+          String :name, unique: true
           Integer :league_id
         end
 
         db.send(create_table_method, :divisions) do
           primary_key :id
-          String :name
+          String :name, unique: true
           Integer :conference_id
         end
 
@@ -23,7 +23,7 @@ module PlayByPlay
           String :errors
           Integer :error_eventnum
           Integer :home_id
-          String :nba_id
+          String :nba_id, unique: true
           Integer :visitor_id
           index :error_eventnum
           index :home_id
@@ -33,7 +33,7 @@ module PlayByPlay
 
         db.send(create_table_method, :leagues) do
           primary_key :id
-          String :name
+          String :name, unique: true
         end
 
         db.send(create_table_method, :plays) do
@@ -114,8 +114,8 @@ module PlayByPlay
 
         db.send(create_table_method, :teams) do
           primary_key :id
-          String :abbreviation
-          String :name
+          String :abbreviation, unique: true
+          String :name, unique: true
           Integer :division_id
           index :abbreviation
         end
