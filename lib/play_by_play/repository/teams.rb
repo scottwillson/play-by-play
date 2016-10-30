@@ -3,15 +3,6 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Teams < Base
-      def find(id)
-        return unless id
-        Persistent::Team.new @db[:teams].where(id: id).first
-      end
-
-      def find_by_abbrevation(abbreviation)
-        Persistent::Team.new @db[:teams].where(abbreviation: abbreviation).first
-      end
-
       def create(team)
         raise(ArgumentError, "team cannot be nil") unless team
         raise(ArgumentError, "team must have name or abbreviation") if team.abbreviation.nil? && team.name.nil?
@@ -21,6 +12,23 @@ module PlayByPlay
         return Persistent::Team.new(attributes) if attributes
 
         save team
+      end
+
+      def find(id)
+        return unless id
+        Persistent::Team.new @db[:teams].where(id: id).first
+      end
+
+      def find_by_abbrevation(abbreviation)
+        attributes = @db[:teams].where(abbreviation: abbreviation).first
+
+        if attributes
+          Persistent::Team.new attributes
+        end
+      end
+
+      def find_or_create(team)
+        find_by_abbrevation(team.abbreviation) || create(team)
       end
 
       def save(team)

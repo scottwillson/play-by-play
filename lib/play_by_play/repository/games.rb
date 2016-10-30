@@ -3,6 +3,12 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Games < Base
+      def exists?(nba_id)
+        return false if nba_id.nil?
+
+        !@db[:games].where(nba_id: nba_id).empty?
+      end
+
       def save_possessions(game)
         game.possessions.each do |possession|
           possession.game = game
@@ -11,8 +17,10 @@ module PlayByPlay
       end
 
       def save(game)
-        game.home = repository.teams.create(game.home)
-        game.visitor = repository.teams.create(game.visitor)
+        return false if exists?(game.nba_id)
+
+        game.home = repository.teams.find_or_create(game.home)
+        game.visitor = repository.teams.find_or_create(game.visitor)
 
         game.id = @db[:games].insert(
           errors: game.errors,

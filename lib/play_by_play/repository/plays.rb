@@ -4,6 +4,15 @@ module PlayByPlay
   module RepositoryModule
     class Plays < Base
       def count(possession, defense_id, home_id, offense_id, visitor_id, play)
+        raise(ArgumentError, "possession cannot be nil") unless possession
+        raise(ArgumentError, "defense_id cannot be nil") unless defense_id
+        raise(ArgumentError, "home_id cannot be nil") unless home_id
+        raise(ArgumentError, "offense_id cannot be nil") unless offense_id
+        raise(ArgumentError, "visitor_id cannot be nil") unless visitor_id
+        raise(ArgumentError, "play cannot be nil") unless play
+
+        p "possession: #{possession}, defense_id: #{defense_id}, home_id: #{home_id}, offense_id: #{offense_id}, visitor_id: #{visitor_id}, play: #{play}"
+
         play_attributes = {}
         if play.size > 1
           play_attributes = play.last.dup

@@ -30,7 +30,7 @@ module PlayByPlay
           season = Season.play!(season: season, repository: Mock::Repository.new)
           expect(season.games.all? { |game| game.possession.game_over? }).to be true
           expect(season.games.all?(&:winner)).to be true
-          expect(season.teams.any? { |team| team.games.size > 0 }).to be true
+          expect(season.teams.none? { |team| team.games.empty? }).to be true
           expect(season.teams.any? { |team| team.wins > 0 }).to be true
           expect(season.teams.any? { |team| team.losses > 0 }).to be true
         end

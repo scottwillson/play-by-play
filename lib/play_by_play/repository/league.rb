@@ -25,7 +25,7 @@ module PlayByPlay
       end
 
       def exists?
-        @db[:leagues].first != nil
+        !@db[:leagues].empty?
       end
 
       def save(league)
