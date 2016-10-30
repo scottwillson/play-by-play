@@ -1,3 +1,5 @@
+/* eslint global-require: 0 */
+
 'use strict';
 
 const path = require('path');
@@ -18,7 +20,7 @@ const env = envFromArgs(args);
 process.env.REACT_WEBPACK_ENV = env;
 
 function buildConfig(wantedEnv) {
-  if (!wantedEnv || allowedEnvs.indexOf(wantedEnv) == -1) {
+  if (!wantedEnv || allowedEnvs.indexOf(wantedEnv) === -1) {
     throw `'${wantedEnv}' not in ${allowedEnvs}`;
   }
 
