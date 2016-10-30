@@ -16,7 +16,9 @@ task default: [ "play:game" ]
 namespace :play do
   desc "Play a single sample game"
   task :game do
-    unless File.exist?("play_by_play_development.db")
+    repository = PlayByPlay::Repository.new
+    repository.create
+    unless repository.league?
       Rake::Task["import:season"].invoke
     end
 
