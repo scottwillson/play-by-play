@@ -1,7 +1,7 @@
 module PlayByPlay
   module Model
     module GamePlay
-      def self.ft_miss(possession, play)
+      def self.ft_miss(possession, _)
         attributes = decrement_free_throws(possession)
 
         if possession.last_free_throw? && possession.next_team

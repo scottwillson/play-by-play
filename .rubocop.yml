@@ -25,11 +25,20 @@ Metrics/ParameterLists:
 Metrics/PerceivedComplexity:
   Max: 12
 
+Style/ConditionalAssignment:
+  Enabled: false
+
 Style/Documentation:
   Enabled: false
 
+Style/EmptyElse:
+  Severity: warning
+
 Style/FrozenStringLiteralComment:
   Enabled: false
+
+Style/IfUnlessModifier:
+  Severity: warning
 
 Style/SpaceInsideBrackets:
   Enabled: false
