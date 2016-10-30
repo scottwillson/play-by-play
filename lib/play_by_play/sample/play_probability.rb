@@ -11,7 +11,7 @@ module PlayByPlay
 
       def to_s
         "#<Sample::PlayProbability #{probability} #{play}>"
-      end      
+      end
     end
   end
 end
