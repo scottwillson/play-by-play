@@ -16,15 +16,15 @@ module PlayByPlay
 
           expect(game.errors).to eq([])
           expect(game.error_eventnum).to be_nil
-          expect(repository.count_plays(Model::Possession.new, nil, game.home_id, nil, game.visitor_id, [ :jump_ball, team: :home ])).to eq(1)
-          expect(repository.count_plays(Model::Possession.new(team: :visitor), game.home_id, game.home_id, game.visitor_id, game.visitor_id, [ :fg ])).to eq(14)
-          expect(repository.count_plays(Model::Possession.new(team: :home), game.visitor_id, game.home_id, game.home_id, game.visitor_id, [ :fg ])).to eq(19)
+          expect(repository.plays.count(Model::Possession.new, nil, game.home_id, nil, game.visitor_id, [ :jump_ball, team: :home ])).to eq(1)
+          expect(repository.plays.count(Model::Possession.new(team: :visitor), game.home_id, game.home_id, game.visitor_id, game.visitor_id, [ :fg ])).to eq(14)
+          expect(repository.plays.count(Model::Possession.new(team: :home), game.visitor_id, game.home_id, game.home_id, game.visitor_id, [ :fg ])).to eq(19)
           expect(game.id).to_not be_nil
           expect(game.nba_id).to eq("0021400001")
           expect(game.rows.size).to eq(512)
 
-          expect(repository.game_possessions(game.id).size).to eq(426)
-          expect(repository.game_plays(game.id).size).to eq(425)
+          expect(repository.games.possessions(game.id).size).to eq(426)
+          expect(repository.games.plays(game.id).size).to eq(425)
         end
       end
 

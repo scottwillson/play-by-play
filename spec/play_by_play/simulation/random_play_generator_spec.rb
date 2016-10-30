@@ -22,7 +22,7 @@ module PlayByPlay
           it "always chooses the play" do
             play = [ :jump_ball, team: :home ]
             repository.reset!
-            repository.save_play({} => play)
+            repository.plays.save({} => play)
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new
@@ -35,8 +35,8 @@ module PlayByPlay
         context "two equal choices" do
           it "chooses equally" do
             repository.reset!
-            repository.save_play({} => [ :jump_ball, team: :home ])
-            repository.save_play({} => [ :jump_ball, team: :home ])
+            repository.plays.save({} => [ :jump_ball, team: :home ])
+            repository.plays.save({} => [ :jump_ball, team: :home ])
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new

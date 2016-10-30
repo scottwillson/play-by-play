@@ -3,11 +3,11 @@ require "play_by_play/repository"
 
 module PlayByPlay
   RSpec.describe Repository do
-    describe "#games" do
+    describe "#games.all" do
       it "returns array", database: true do
         repository = Repository.new
         repository.reset!
-        expect(repository.games).to eq([])
+        expect(repository.games.all).to eq([])
       end
     end
 
@@ -15,7 +15,7 @@ module PlayByPlay
       it "checks for sample league in database", database: true do
         repository = Repository.new
         repository.reset!
-        expect(repository.league?).to be(false)
+        expect(repository.league.exists?).to be(false)
       end
     end
   end

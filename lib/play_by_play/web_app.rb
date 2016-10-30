@@ -16,11 +16,11 @@ module PlayByPlay
     get "/games.json" do
       page = (params["page"] || 1).to_i
       page = 1 if page < 1
-      json repository.games(page)
+      json repository.games.all(page)
     end
 
     get "/games/:nba_id.json" do |nba_id|
-      json repository.rows(nba_id)
+      json repository.games.rows(nba_id)
     end
 
     def repository

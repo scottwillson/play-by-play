@@ -11,7 +11,7 @@ module PlayByPlay
           repository.reset!
 
           league = League.import("spec/data", 2014, repository: repository)
-          expect(repository.league?).to be_truthy
+          expect(repository.league.exists?).to be_truthy
           expect(league.conferences.size).to eq(2)
           expect(league.conferences[0].divisions.size).to eq(3)
           expect(league.conferences[1].divisions.size).to eq(3)
@@ -19,23 +19,23 @@ module PlayByPlay
           expect(league.conferences[1].divisions[2].teams.size).to eq(5)
 
           portland = league.conferences
-            .detect { |conference| conference.name == "Western Conference" }
-            .divisions
-            .detect { |division| division.name == "Northwest" }
-            .teams
-            .detect { |team| team.name == "Portland Trail Blazers" }
+                           .detect { |conference| conference.name == "Western Conference" }
+                           .divisions
+                           .detect { |division| division.name == "Northwest" }
+                           .teams
+                           .detect { |team| team.name == "Portland Trail Blazers" }
 
           expect(portland).to_not eq(nil)
           expect(league.teams.size).to eq(30)
 
-          league = repository.league
+          league = repository.league.find
 
           portland = league.conferences
-            .detect { |conference| conference.name == "Western Conference" }
-            .divisions
-            .detect { |division| division.name == "Northwest" }
-            .teams
-            .detect { |team| team.name == "Portland Trail Blazers" }
+                           .detect { |conference| conference.name == "Western Conference" }
+                           .divisions
+                           .detect { |division| division.name == "Northwest" }
+                           .teams
+                           .detect { |team| team.name == "Portland Trail Blazers" }
 
           expect(portland).to_not eq(nil)
 

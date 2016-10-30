@@ -7,13 +7,13 @@ RSpec.describe "index page", web: true, js: true do
     repository = Capybara.app.repository
     repository.reset!
 
-    file = PlayByPlay::Persistent::Game.new(
+    game = PlayByPlay::Persistent::Game.new(
       nba_id: "0021400014",
       home: PlayByPlay::Persistent::Team.new(abbreviation: "CLE"),
       visitor: PlayByPlay::Persistent::Team.new(abbreviation: "GSW")
     )
-    file.error_eventnum = 291
-    repository.save_game file
+    game.error_eventnum = 291
+    repository.games.save game
 
     spawn "npm run dist:test", chdir: "web"
     Process.wait

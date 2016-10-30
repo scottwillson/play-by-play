@@ -24,9 +24,9 @@ module PlayByPlay
 
           repository = Repository.new
           repository.reset!
-          repository.save_game sample_game
+          repository.games.save sample_game
 
-          game = Persistent::Game.new(home: repository.team(sample_game.home.id), visitor: repository.team(sample_game.visitor.id))
+          game = Persistent::Game.new(home: repository.teams.find(sample_game.home.id), visitor: repository.teams.find(sample_game.visitor.id))
           play_probability_distribution = Sample::PlayProbabilityDistribution.new(repository)
 
           possession = Persistent::Possession.new(game: game)

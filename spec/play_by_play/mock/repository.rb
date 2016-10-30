@@ -3,35 +3,44 @@ require "play_by_play/persistent/play"
 module PlayByPlay
   module Mock
     class Repository
-      attr_reader :sample_plays
-
       def initialize
-        @sample_plays = []
-        save_play({} => [ :jump_ball, team: :visitor ])
-        save_play({ team: :visitor } => [ :fg ])
-        save_play({ team: :visitor } => [ :fg ])
-        save_play({ team: :visitor } => [ :fg, point_value: 3 ])
-        save_play({ team: :home } => [ :fg_miss ])
-        save_play({ team: :visitor } => [ :fg_miss ])
-        save_play({ team: :home } => [ :fg_miss ])
-        save_play({ team: :visitor } => [ :fg_miss ])
-        save_play({ team: :visitor } => [ :steal ])
-        save_play({ ball_in_play: true } => [ :rebound, team: :offense ])
-        save_play({ ball_in_play: true } => [ :rebound, team: :defense ])
-        save_play({ ball_in_play: true } => [ :rebound, team: :defense ])
-        save_play({ ball_in_play: true } => [ :rebound, team: :defense ])
+        plays.save({} => [ :jump_ball, team: :visitor ])
+        plays.save({ team: :visitor } => [ :fg ])
+        plays.save({ team: :visitor } => [ :fg ])
+        plays.save({ team: :visitor } => [ :fg, point_value: 3 ])
+        plays.save({ team: :home } => [ :fg_miss ])
+        plays.save({ team: :visitor } => [ :fg_miss ])
+        plays.save({ team: :home } => [ :fg_miss ])
+        plays.save({ team: :visitor } => [ :fg_miss ])
+        plays.save({ team: :visitor } => [ :steal ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :offense ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
       end
 
-      def count_plays(possession, defense_id, home_id, offense_id, visitor_id, play)
-        sample_plays.count { |a| a.possession_key == possession.key && a.key == play }
-      end
-
-      def save_play(hash)
-        sample_plays << Persistent::Play.from_hash(hash)
+      def plays
+        @plays ||= Plays.new
       end
 
       def reset!
-        @sample_plays = []
+        plays.sample_plays = []
+      end
+
+      class Plays
+        attr_accessor :sample_plays
+
+        def initialize
+          @sample_plays = []
+        end
+
+        def count(possession, defense_id, home_id, offense_id, visitor_id, play)
+          sample_plays.count { |a| a.possession_key == possession.key && a.key == play }
+        end
+
+        def save(hash)
+          sample_plays << Persistent::Play.from_hash(hash)
+        end
       end
     end
   end
