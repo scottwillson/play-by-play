@@ -25,8 +25,8 @@ module PlayByPlay
         attributes = attributes.first.dup
 
         @id = attributes.delete(:id)
-        @possession_id = attributes.delete(:possession_id)
-        @possession = attributes.delete(:possession)
+        self.possession_id = attributes.delete(:possession_id)
+        self.possession = attributes.delete(:possession)
         @row = attributes.delete(:row)
 
         super type, attributes

@@ -29,14 +29,14 @@ module PlayByPlay
 
         @errors = errors
         @error_eventnum = error_eventnum
-        self.home = home.merge(key: :home)
         self.home_id = home_id
+        self.home = home.merge(key: :home)
         @id = id
         @nba_id = nba_id
         @possessions = [ Persistent::Possession.new ]
         @rows = []
-        self.visitor = visitor.merge(key: :visitor)
         self.visitor_id = visitor_id
+        self.visitor = visitor.merge(key: :visitor)
 
         raise(ArgumentError, "Vistor team cannot be nil") if @visitor.nil?
         raise(ArgumentError, "Home team cannot be nil") if @home.nil?
