@@ -281,11 +281,12 @@ module PlayByPlay
       if @db.table_exists?(:plays)
         @db[:conferences].truncate
         @db[:divisions].truncate
-        @db[:leagues].truncate
-        @db[:teams].truncate
-        @db[:plays].truncate
         @db[:games].truncate
+        @db[:leagues].truncate
+        @db[:plays].truncate
+        @db[:possessions].truncate
         @db[:rows].truncate
+        @db[:teams].truncate
       else
         create!
       end
@@ -333,26 +334,38 @@ module PlayByPlay
       end
 
       @db.send(create_table_method, :plays) do
-        primary_key :id
-        Boolean :and_one, default: false
-        Boolean :away_from_play, default: false
-        Boolean :assisted, default: false
-        Boolean :clear_path, default: false
-        Boolean :flagrant, default: false
-        Boolean :intentional, default: false
+        Boolean :and_one, default: false, null: false
+        Boolean :assisted, default: false, null: false
+        Boolean :away_from_play, default: false, null: false
+        Boolean :clear_path, default: false, null: false
+        Boolean :flagrant, default: false, null: false
+        Boolean :intentional, default: false, null: false
         Integer :point_value
-        String :possession_key, null: false
+        Integer :possession_id, null: false
         String :team
         String :type
-        index :possession_key
+        index :possession_id
       end
 
       @db.send(create_table_method, :possessions) do
         primary_key :id
+        Boolean :ball_in_play, default: false, null: false
+        Integer :defense_id
+        Boolean :free_throws, default: false, null: false
         Integer :game_id, null: false
-        Integer :play_id
+        Integer :home_id, null: false
+        String :next_team
+        String :offense
+        Integer :offense_id
+        String :opening_tip
+        Integer :period, null: false
+        Integer :seconds_remaining, null: false
+        Boolean :team, default: false, null: false
+        Boolean :technical_free_throws, default: false, null: false
+        Integer :visitor_id, null: false
         index :game_id
-        index :play_id
+        index :home_id
+        index :visitor_id
       end
 
       @db.send(create_table_method, :rows) do
