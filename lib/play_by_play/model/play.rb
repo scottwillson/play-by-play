@@ -67,12 +67,31 @@ module PlayByPlay
         assisted
       end
 
+      def attributes
+        @attributes ||= create_attributes
+      end
+
       def away_from_play?
         away_from_play
       end
 
       def clear_path?
         clear_path
+      end
+
+      def create_attributes
+        attributes = {}
+
+        attributes[:and_one] = true if and_one?
+        attributes[:assisted] = true if assisted?
+        attributes[:away_from_play] = true if away_from_play?
+        attributes[:clear_path] = true if clear_path?
+        attributes[:flagrant] = true if flagrant?
+        attributes[:intentional] = true if intentional?
+        attributes[:point_value] = point_value if point_value == 3
+        attributes[:team] = team if set_team?
+
+        attributes
       end
 
       def flagrant?
@@ -83,43 +102,24 @@ module PlayByPlay
         intentional
       end
 
-      def possession_key
-        possession.key
-      end
-
-      def validate!
-        raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
-      end
-
-      def attributes
-        return @attributes if @attributes
-
-        @attributes = {}
-        @attributes = @attributes.merge(and_one: true) if and_one?
-        @attributes = @attributes.merge(assisted: true) if assisted?
-        @attributes = @attributes.merge(away_from_play: true) if away_from_play?
-        @attributes = @attributes.merge(clear_path: true) if clear_path?
-        @attributes = @attributes.merge(flagrant: true) if flagrant?
-        @attributes = @attributes.merge(intentional: true) if intentional?
-        @attributes = @attributes.merge(point_value: point_value) if point_value == 3
-
-        if team && [ :jump_ball, :jump_ball_out_of_bounds, :personal_foul, :rebound, :team_rebound, :technical_foul ].include?(type)
-          @attributes = @attributes.merge(team: team)
-        end
-
-        if team && type == :turnover
-          @attributes = @attributes.merge(team: team)
-        end
-
-        @attributes
-      end
-
       def key
         if attributes.empty?
           [ type ]
         else
           [ type, attributes ]
         end
+      end
+
+      def possession_key
+        possession.key
+      end
+
+      def set_team?
+        team && [ :jump_ball, :jump_ball_out_of_bounds, :personal_foul, :rebound, :team_rebound, :technical_foul, :turnover ].include?(type)
+      end
+
+      def validate!
+        raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
       end
     end
   end

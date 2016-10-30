@@ -40,6 +40,9 @@ Style/FrozenStringLiteralComment:
 Style/IfUnlessModifier:
   Severity: warning
 
+Style/NegatedIf:
+  Severity: warning
+
 Style/SpaceInsideBrackets:
   Enabled: false
 
