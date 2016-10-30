@@ -82,14 +82,14 @@ module PlayByPlay
       def create_attributes
         attributes = {}
 
-        attributes[:and_one] = true if and_one?
-        attributes[:assisted] = true if assisted?
-        attributes[:away_from_play] = true if away_from_play?
-        attributes[:clear_path] = true if clear_path?
-        attributes[:flagrant] = true if flagrant?
-        attributes[:intentional] = true if intentional?
+        attributes[:and_one] = true            if and_one?
+        attributes[:assisted] = true           if assisted?
+        attributes[:away_from_play] = true     if away_from_play?
+        attributes[:clear_path] = true         if clear_path?
+        attributes[:flagrant] = true           if flagrant?
+        attributes[:intentional] = true        if intentional?
         attributes[:point_value] = point_value if point_value == 3
-        attributes[:team] = team if set_team?
+        attributes[:team] = team               if set_team?
 
         attributes
       end

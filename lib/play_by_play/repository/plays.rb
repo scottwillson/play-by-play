@@ -12,16 +12,16 @@ module PlayByPlay
         play_team = play_attributes.delete(:team)
 
         query = db[:plays]
-          .join(:possessions, id: :possession_id)
-          .where(
-            and_one: play_attributes[:and_one] || false,
-            assisted: play_attributes[:assisted] || false,
-            away_from_play: play_attributes[:away_from_play] || false,
-            clear_path: play_attributes[:clear_path] || false,
-            flagrant: play_attributes[:flagrant] || false,
-            intentional: play_attributes[:intentional] || false,
-            type: play.first.to_s
-          )
+                .join(:possessions, id: :possession_id)
+                .where(
+                  and_one:        play_attributes[:and_one] || false,
+                  assisted:       play_attributes[:assisted] || false,
+                  away_from_play: play_attributes[:away_from_play] || false,
+                  clear_path:     play_attributes[:clear_path] || false,
+                  flagrant:       play_attributes[:flagrant] || false,
+                  intentional:    play_attributes[:intentional] || false,
+                  type:           play.first.to_s
+                )
 
         if play_attributes[:point_value]
           query = query.where(point_value: play_attributes[:point_value])

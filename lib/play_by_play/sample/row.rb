@@ -35,6 +35,7 @@ module PlayByPlay
       attr_accessor :person2type
       attr_accessor :person3type
       attr_accessor :game
+      attr_accessor :nba_id
       attr_accessor :player1_id
       attr_accessor :player1_name
       attr_accessor :player1_team_abbreviation
@@ -145,10 +146,6 @@ module PlayByPlay
 
       def miss?
         fg_miss? || ft_miss?
-      end
-
-      def nba_id
-        @nba_id
       end
 
       def next_row
@@ -398,9 +395,7 @@ module PlayByPlay
       def to_s
         instance_variables
           .reject { |v| [ :@game, :@next_row, :@previous_row, :@possession ].include?(v) }
-            .map do |v|
-              [ v, send(v.to_s.gsub("@", "")) ]
-          end
+          .map { |v| [ v, send(v.to_s.delete("@")) ] }
           .to_h
           .inspect
       end

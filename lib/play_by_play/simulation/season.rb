@@ -54,10 +54,10 @@ module PlayByPlay
 
       def self.create_games(season, day, scheduled_games_per_teams_count, number_of_games)
         teams = season.teams.select { |team| team.games.size < scheduled_games_per_teams_count }
-                  .shuffle
-                  .sort_by { |team| team.games.size }
+                      .shuffle
+                      .sort_by { |team| team.games.size }
 
-        raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.size == 0
+        raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.empty?
         raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{scheduled_games_per_teams_count} games") if teams.size == 1
 
         if number_of_games > teams.size / 2
@@ -65,7 +65,7 @@ module PlayByPlay
         end
 
         number_of_games.times do
-          raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.size == 0
+          raise(Model::InvalidStateError, "All teams have played #{scheduled_games_per_teams_count} games") if teams.empty?
           raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{scheduled_games_per_teams_count} games") if teams.size == 1
           home = teams.pop
           visitor = teams.pop

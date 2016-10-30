@@ -53,7 +53,7 @@ module PlayByPlay
           [ :technical_foul, flagrant: true, team: :defense ],
           [ :technical_foul, flagrant: true, team: :offense ],
           [ :turnover ],
-          ],
+        ],
         ball_in_play: [
           [ :offensive_foul ],
           [ :period_end ],

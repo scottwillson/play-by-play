@@ -246,15 +246,7 @@ module PlayByPlay
 
       def validate!
         # API used incorrectly. Raise exception.
-        raise(ArgumentError, "free_throws must be an Enumerable but are #{free_throws.class}") unless free_throws.is_a?(Enumerable)
-        raise(ArgumentError, "technical_free_throws must be an Enumerable but are #{technical_free_throws.class}") unless technical_free_throws.is_a?(Enumerable)
-        raise(ArgumentError, "free_throws must all be :home or :visitor but are #{free_throws}") unless free_throws.all? { |ft| ft == :home || ft == :visitor }
-        raise(ArgumentError, "technical_free_throws must all be :home or :visitor but are #{technical_free_throws}") unless technical_free_throws.all? { |ft| ft == :home || ft == :visitor }
-        raise(ArgumentError, "next_team must be nil, visitor, or home but was #{next_team.class} #{next_team}") unless valid_team?(next_team)
-        raise(ArgumentError, "offense must be nil, visitor, or home but was #{offense.class} #{offense}") unless valid_team?(offense)
-        raise(ArgumentError, "team must be nil, visitor, or home but was #{team.class} #{team}") unless valid_team?(team)
-        raise(ArgumentError, "visitor must be Team") unless visitor.is_a?(Team)
-        raise(ArgumentError, "home must be Team") unless home.is_a?(Team)
+        validate_arguments!
 
         unless PlayMatrix.possession_key?(key)
           return [ "Possession key #{key} not found in #{PlayMatrix.possession_keys.join(', ')}" ]
@@ -283,6 +275,18 @@ module PlayByPlay
         if seconds_remaining < 0
           raise InvalidStateError, "seconds_remaining must be >= 0 but is #{seconds_remaining}"
         end
+      end
+
+      def validate_arguments!
+        raise(ArgumentError, "free_throws must be an Enumerable but are #{free_throws.class}") unless free_throws.is_a?(Enumerable)
+        raise(ArgumentError, "technical_free_throws must be an Enumerable but are #{technical_free_throws.class}") unless technical_free_throws.is_a?(Enumerable)
+        raise(ArgumentError, "free_throws must all be :home or :visitor but are #{free_throws}") unless free_throws.all? { |ft| ft == :home || ft == :visitor }
+        raise(ArgumentError, "technical_free_throws must all be :home or :visitor but are #{technical_free_throws}") unless technical_free_throws.all? { |ft| ft == :home || ft == :visitor }
+        raise(ArgumentError, "next_team must be nil, visitor, or home but was #{next_team.class} #{next_team}") unless valid_team?(next_team)
+        raise(ArgumentError, "offense must be nil, visitor, or home but was #{offense.class} #{offense}") unless valid_team?(offense)
+        raise(ArgumentError, "team must be nil, visitor, or home but was #{team.class} #{team}") unless valid_team?(team)
+        raise(ArgumentError, "visitor must be Team") unless visitor.is_a?(Team)
+        raise(ArgumentError, "home must be Team") unless home.is_a?(Team)
       end
 
       def valid_team?(team)

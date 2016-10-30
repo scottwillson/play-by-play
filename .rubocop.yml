@@ -2,7 +2,7 @@ AllCops:
   TargetRubyVersion: 2.3
 
 Metrics/AbcSize:
-  Max: 30
+  Max: 40
 
 Metrics/ClassLength:
   Max: 300
@@ -38,6 +38,9 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/IfUnlessModifier:
+  Severity: warning
+
+Style/GuardClause:
   Severity: warning
 
 Style/NegatedIf:
