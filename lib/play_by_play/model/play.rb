@@ -63,6 +63,10 @@ module PlayByPlay
         and_one
       end
 
+      def assisted?
+        assisted
+      end
+
       def away_from_play?
         away_from_play
       end
