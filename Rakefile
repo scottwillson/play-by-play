@@ -22,7 +22,12 @@ namespace :play do
       Rake::Task["import:season"].invoke
     end
 
-    game = PlayByPlay::Persistent::Game.new
+    repository = PlayByPlay::Repository.new
+
+    visitor = repository.team_by_abbrevation(ENV["VISITOR_TEAM"] || "ORL")
+    home = repository.team_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
+
+    game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
     possession = PlayByPlay::Simulation::Game.play!(game)
     view = PlayByPlay::Views::Possession.new(possession)
     puts view
@@ -68,7 +73,7 @@ end
 namespace :import do
   desc "Import historical play by play file into database"
   task :game do
-    PlayByPlay::Repository.new.create
+    PlayByPlay::Repository.new.create!
     game_id = ENV["GAME_ID"] || "0021400001"
     game = PlayByPlay::Sample::Game.new_game(game_id, "ORL", "NOP")
     dir = ENV["DIR"] || "spec/data"

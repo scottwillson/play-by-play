@@ -10,43 +10,45 @@ module PlayByPlay
     RSpec.describe PlayProbabilityDistribution do
       describe ".for" do
         it "returns instances of PlayProbability", database: true do
-          game = Game.new_game("001", "GSW", "POR")
+          sample_game = Game.new_game("001", "GSW", "POR")
 
-          Game.play! game, :jump_ball, team: :visitor
-          Game.play! game, :personal_foul, team: :defense
-          Game.play! game, :personal_foul, team: :defense
-          Game.play! game, :fg, point_value: 3, assisted: true
-          Game.play! game, :fg, point_value: 3, assisted: true
-          Game.play! game, :fg, point_value: 3, assisted: true
-          Game.play! game, :fg_miss
-          Game.play! game, :rebound, team: :defense
-          Game.play! game, :fg, point_value: 3
+          Game.play! sample_game, :jump_ball, team: :visitor
+          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
+          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
+          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
+          Game.play! sample_game, :fg, point_value: 3, assisted: true # home
+          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
+          Game.play! sample_game, :fg_miss # home
+          Game.play! sample_game, :rebound, team: :defense # visitor
+          Game.play! sample_game, :fg, point_value: 3 # visitor
 
           repository = Repository.new
           repository.reset!
-          repository.save_game game
+          repository.save_game sample_game
 
+          game = Persistent::Game.new(home: repository.team(sample_game.home.id), visitor: repository.team(sample_game.visitor.id))
           play_probability_distribution = Sample::PlayProbabilityDistribution.new(repository)
-          possession = Model::Possession.new(ball_in_play: true)
 
+          possession = Persistent::Possession.new(game: game)
+          expect(possession.key).to be_nil
+          possession_play_probability_distribution = play_probability_distribution.for(game.possession)
+          expect(possession_play_probability_distribution.size).to eq(12)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1 ] + [ 0 ] * 11)
+
+          possession = Persistent::Possession.new(game: game, ball_in_play: true)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
           expect(possession_play_probability_distribution.size).to eq(13)
           expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1 ] + [ 0 ] * 12)
 
-          possession = Model::Possession.new
-          possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(12)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1 ] + [ 0 ] * 11)
-
-          possession = Model::Possession.new(team: :visitor)
+          possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :visitor, team: :visitor)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
           expect(possession_play_probability_distribution.size).to eq(27)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 3, 2, 1, 1 ] + [ 0 ] * 23)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 2, 2, 1, 1 ] + [ 0 ] * 22)
 
-          possession = Model::Possession.new(team: :home)
+          possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :home, team: :home)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
           expect(possession_play_probability_distribution.size).to eq(27)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 3, 2, 1, 1 ] + [ 0 ] * 23)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1, 1 ] + [ 0 ] * 24)
         end
       end
     end

@@ -33,7 +33,7 @@ module PlayByPlay
         self.home = home.merge(key: :home)
         @id = id
         @nba_id = nba_id
-        @possessions = [ Persistent::Possession.new ]
+        @possessions = [ Persistent::Possession.new(game: self) ]
         @rows = []
         self.visitor_id = visitor_id
         self.visitor = visitor.merge(key: :visitor)

@@ -1,5 +1,6 @@
 require "spec_helper"
 require "json"
+require "play_by_play/model/possession"
 require "play_by_play/sample/game"
 
 module PlayByPlay
@@ -15,8 +16,9 @@ module PlayByPlay
 
           expect(game.errors).to eq([])
           expect(game.error_eventnum).to be_nil
-          expect(repository.count_plays(nil, [ :jump_ball, team: :home ])).to eq(1)
-          expect(repository.count_plays(:team, [ :fg ])).to eq(32)
+          expect(repository.count_plays(Model::Possession.new, nil, game.home_id, nil, game.visitor_id, [ :jump_ball, team: :home ])).to eq(1)
+          expect(repository.count_plays(Model::Possession.new(team: :visitor), game.home_id, game.home_id, game.visitor_id, game.visitor_id, [ :fg ])).to eq(14)
+          expect(repository.count_plays(Model::Possession.new(team: :home), game.visitor_id, game.home_id, game.home_id, game.visitor_id, [ :fg ])).to eq(19)
           expect(game.id).to_not be_nil
           expect(game.nba_id).to eq("0021400001")
           expect(game.rows.size).to eq(512)

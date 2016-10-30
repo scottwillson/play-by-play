@@ -22,8 +22,8 @@ module PlayByPlay
         save_play({ ball_in_play: true } => [ :rebound, team: :defense ])
       end
 
-      def count_plays(possession_key, play)
-        sample_plays.count { |a| a.possession_key == possession_key && a.key == play }
+      def count_plays(possession, defense_id, home_id, offense_id, visitor_id, play)
+        sample_plays.count { |a| a.possession_key == possession.key && a.key == play }
       end
 
       def save_play(hash)

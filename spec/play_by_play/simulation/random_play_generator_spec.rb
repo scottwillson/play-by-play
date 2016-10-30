@@ -1,6 +1,6 @@
 require "spec_helper"
 require "play_by_play/mock/repository"
-require "play_by_play/model/possession"
+require "play_by_play/persistent/game"
 require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay
@@ -11,7 +11,8 @@ module PlayByPlay
       describe ".choose_play" do
         it "returns an Play" do
           generator = RandomPlayGenerator.new(repository)
-          play = generator.new_play(Model::Possession.new)
+          game = Persistent::Game.new
+          play = generator.new_play(game.possession)
           expect(play).to_not be(nil)
         end
       end
@@ -24,10 +25,10 @@ module PlayByPlay
             repository.save_play({} => play)
             generator = RandomPlayGenerator.new(repository)
 
-            possession = Model::Possession.new
-            expect(generator.new_play(possession, 0)).to eq(play)
-            expect(generator.new_play(possession, 0.5)).to eq(play)
-            expect(generator.new_play(possession, 0.999999)).to eq(play)
+            game = Persistent::Game.new
+            expect(generator.new_play(game.possession, 0)).to eq(play)
+            expect(generator.new_play(game.possession, 0.5)).to eq(play)
+            expect(generator.new_play(game.possession, 0.999999)).to eq(play)
           end
         end
 
@@ -38,19 +39,19 @@ module PlayByPlay
             repository.save_play({} => [ :jump_ball, team: :home ])
             generator = RandomPlayGenerator.new(repository)
 
-            possession = Model::Possession.new
-            expect(generator.new_play(possession, 0)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(possession, 0.49999)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(possession, 0.5)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(possession, 0.9999)).to eq([ :jump_ball, team: :home ])
+            game = Persistent::Game.new
+            expect(generator.new_play(game.possession, 0)).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.49999)).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.5)).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.9999)).to eq([ :jump_ball, team: :home ])
           end
         end
 
         context "no choices" do
           it "raises an exception" do
             repository.reset!
-            possession = Model::Possession.new
-            expect { RandomPlayGenerator.new(repository).new_play(possession, 0.5) }.to raise_error(ArgumentError)
+            game = Persistent::Game.new
+            expect { RandomPlayGenerator.new(repository).new_play(game.possession, 0.5) }.to raise_error(ArgumentError)
           end
         end
       end

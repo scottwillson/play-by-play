@@ -369,7 +369,7 @@ module PlayByPlay
         conference.divisions.each do |division|
           division.id = @db[:divisions].insert(conference_id: conference.id, name: division.name)
           division.teams.each do |team|
-            team.id = @db[:teams].insert(division_id: division.id, name: team.name)
+            team.id = @db[:teams].insert(division_id: division.id, name: team.name, abbreviation: team.abbreviation)
           end
         end
       end
@@ -433,6 +433,7 @@ module PlayByPlay
       end
 
       @db.send(create_table_method, :plays) do
+        primary_key :id
         Boolean :and_one, default: false, null: false
         Boolean :assisted, default: false, null: false
         Boolean :away_from_play, default: false, null: false

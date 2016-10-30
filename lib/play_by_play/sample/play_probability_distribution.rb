@@ -8,30 +8,68 @@ module PlayByPlay
 
       def initialize(repository = nil)
         @repository = repository
-        @play_probability_distribution = Hash.new { |hash, possession_key| hash[possession_key] = fetch_play_probability_distribution(possession_key) }
+        @play_probability_distribution = Hash.new do |hash, key|
+          hash[key] = fetch_play_probability_distribution(key)
+        end
       end
 
       def for(possession)
         if possession.seconds_remaining > 24 || possession.free_throws? || possession.technical_free_throws?
-          play_probability_distribution[possession.key].reject { |ap| ap.play == [ :period_end ] }
+          play_probability_distribution[Key.new(possession)].reject { |ap| ap.play == [ :period_end ] }
         elsif possession.seconds_remaining == 0
           [ PlayProbability.new(1, [ :period_end ]) ]
         else
-          play_probability_distribution[possession.key]
+          play_probability_distribution[Key.new(possession)]
         end
       end
 
-      def fetch_play_probability_distribution(possession_key)
-        puts("====== #{possession_key} =====") if debug?
-        Model::PlayMatrix::accessible_plays(possession_key).map do |play|
-          count = @repository.count_plays(possession_key, play)
-          puts("#{count}   #{play}") if debug?
-          PlayProbability.new(count, play)
+      def fetch_play_probability_distribution(key)
+        # p "=== #{key.possession.key} ==="
+        Model::PlayMatrix.accessible_plays(key.possession.key).map do |play|
+          count = @repository.count_plays(key.possession, key.defense_id, key.home_id, key.offense_id, key.visitor_id, play)
+          # p("#{count} #{play}")
+          PlayProbability.new count, play
         end
       end
 
-      def debug?
-        ENV["DEBUG"]
+      class Key
+        attr_reader :defense_id
+        attr_reader :home_id
+        attr_reader :offense_id
+        attr_reader :possession
+        attr_reader :visitor_id
+
+        def initialize(possession)
+          @defense_id = possession.defense_id
+          @home_id = possession.game.home_id
+          @offense_id = possession.offense_id
+          @possession = possession
+          @visitor_id = possession.game.visitor_id
+        end
+
+        def ==(other)
+          self.class == other&.class && other.values == values
+        end
+
+        alias eql? ==
+
+        def values
+          [
+            possession.defense_id,
+            possession.game.home_id,
+            possession.offense_id,
+            possession.key,
+            possession.game.visitor_id
+          ]
+        end
+
+        def hash
+          @hash ||= values.hash
+        end
+
+        def to_s
+          values
+        end
       end
     end
   end

@@ -17,7 +17,7 @@ module PlayByPlay
             division = Persistent::Division.new(name: division_node["name"])
             conference.divisions << division
             division_node["standings"]["entries"].each do |team_node|
-              division.teams << Persistent::Team.new(name: team_node["team"]["displayName"])
+              division.teams << Persistent::Team.new(name: team_node["team"]["displayName"], abbreviation: team_node["team"]["abbreviation"])
             end
           end
         end
