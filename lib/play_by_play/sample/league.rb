@@ -17,7 +17,7 @@ module PlayByPlay
             division = Persistent::Division.new(name: division_node["name"])
             conference.divisions << division
             division_node["standings"]["entries"].each do |team_node|
-              division.teams << Persistent::Team.new(name: team_node["team"]["displayName"], abbreviation: team_node["team"]["abbreviation"])
+              division.teams << Persistent::Team.new(name: team_node["team"]["displayName"], abbreviation: abbreviation(team_node))
             end
           end
         end
@@ -25,6 +25,27 @@ module PlayByPlay
         @id = repository.league.save(league)
 
         league
+      end
+
+      def self.abbreviation(node)
+        abbreviation = node["team"]["abbreviation"]
+
+        case abbreviation
+        when "GS"
+          "GSW"
+        when "SA"
+          "SAS"
+        when "NO"
+          "NOP"
+        when "NY"
+          "NYK"
+        when "WSH"
+          "WAS"
+        when "UTAH"
+          "UTA"
+        else
+          abbreviation
+        end
       end
     end
   end
