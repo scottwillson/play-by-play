@@ -51,7 +51,7 @@ module PlayByPlay
         @clear_path = clear_path
         @flagrant = flagrant
         @intentional = intentional
-        @point_value = point_value
+        @point_value = point_value || 2
         @seconds = seconds
         @team = team
         @type = type
