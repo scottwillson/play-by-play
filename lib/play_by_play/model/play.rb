@@ -95,13 +95,13 @@ module PlayByPlay
         return @attributes if @attributes
 
         @attributes = {}
-        @attributes = @attributes.merge(point_value: point_value) if point_value == 3
         @attributes = @attributes.merge(and_one: true) if and_one?
+        @attributes = @attributes.merge(assisted: true) if assisted?
         @attributes = @attributes.merge(away_from_play: true) if away_from_play?
-        @attributes = @attributes.merge(assisted: true) if assisted
         @attributes = @attributes.merge(clear_path: true) if clear_path?
         @attributes = @attributes.merge(flagrant: true) if flagrant?
         @attributes = @attributes.merge(intentional: true) if intentional?
+        @attributes = @attributes.merge(point_value: point_value) if point_value == 3
 
         if team && [ :jump_ball, :jump_ball_out_of_bounds, :personal_foul, :rebound, :team_rebound, :technical_foul ].include?(type)
           @attributes = @attributes.merge(team: team)
