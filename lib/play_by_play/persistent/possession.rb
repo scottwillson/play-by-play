@@ -31,6 +31,15 @@ module PlayByPlay
         )
       end
 
+      def defense_id
+        case offense
+        when :home
+          game.visitor.id
+        when :visitor
+          game.home.id
+        end
+      end
+
       def game=(value)
         @game = value
         @game_id = value&.id
@@ -40,6 +49,15 @@ module PlayByPlay
         @game_id = value
         if @game_id != @game&.id
           @game = nil
+        end
+      end
+
+      def offense_id
+        case offense
+        when :home
+          game.home.id
+        when :visitor
+          game.visitor.id
         end
       end
 
