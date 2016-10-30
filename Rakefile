@@ -38,7 +38,7 @@ namespace :play do
     repository = PlayByPlay::Repository.new
     repository.create
     if repository.league.exists?
-      league = PlayByPlay::Simulation::League.new_from_sample(repository.league)
+      league = PlayByPlay::Simulation::League.new_from_sample(repository.league.find)
     else
       teams_count = ENV["TEAMS"]&.to_i || 30
       league = PlayByPlay::Simulation::League.new_random(teams_count)
@@ -82,7 +82,7 @@ namespace :import do
 
   desc "Import season into database"
   task :season do
-    PlayByPlay::Repository.new.create!
+    PlayByPlay::Repository.new.create
     dir = ENV["DIR"] || "spec/data"
     PlayByPlay::Sample::Season.import dir, invalid_state_error: ENV["DEBUG"]
   end
