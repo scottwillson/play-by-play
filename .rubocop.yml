@@ -2,7 +2,7 @@ AllCops:
   TargetRubyVersion: 2.3
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 30
 
 Metrics/ClassLength:
   Max: 300
@@ -21,6 +21,9 @@ Metrics/ModuleLength:
 
 Metrics/ParameterLists:
   CountKeywordArgs: false
+
+Metrics/PerceivedComplexity:
+  Max: 12
 
 Style/Documentation:
   Enabled: false

@@ -3,7 +3,7 @@ require "play_by_play/model/possession"
 
 module PlayByPlay
   module Persistent
-    class Play  < Model::Play
+    class Play < Model::Play
       attr_accessor :id
       attr_accessor :row
       attr_reader :possession
