@@ -11,8 +11,9 @@ module PlayByPlay
     module Game
       def self.play!(game, random_play_generator = RandomPlayGenerator.new(PlayByPlay::Repository.new))
         until game.possession.game_over?
+          # print "#{game.possession.period} #{game.possession.seconds_remaining} #{game.visitor.name} #{game.possession.visitor.points} #{game.home.name} #{game.possession.home.points} #{game.possession.team} (#{game.possession.offense})"
           play = random_play_generator.new_play(game.possession)
-          # p "#{game.possession.period} #{game.possession.seconds_remaining} #{game.visitor.name} #{game.possession.visitor.points} #{game.home.name} #{game.possession.home.points} #{play}"
+          # p play
           game.possessions << Model::GamePlay.play!(game.possession, play)
 
           if game.possessions.size > 3_000
