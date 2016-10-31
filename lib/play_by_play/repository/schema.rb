@@ -49,6 +49,9 @@ module PlayByPlay
           String :team
           String :type
           index :possession_id
+          index :team
+          index :type
+          index [ :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :team ]
         end
 
         db.send(create_table_method, :possessions) do
@@ -67,9 +70,12 @@ module PlayByPlay
           Boolean :team, default: false, null: false
           Boolean :technical_free_throws, default: false, null: false
           Integer :visitor_id, null: false
+          index :defense_id
           index :game_id
           index :home_id
+          index :offense_id
           index :visitor_id
+          index [ :technical_free_throws, :free_throws, :team, :ball_in_play, :seconds_remaining, :home_id, :visitor_id ]
         end
 
         db.send(create_table_method, :rows) do

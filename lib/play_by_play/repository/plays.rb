@@ -65,7 +65,7 @@ module PlayByPlay
           query = query.where(plays__team: play_attributes[:team].to_s)
         end
 
-        # puts(query.sql) if rand < 0.001
+        # puts(query.sql) if rand < 0.1
 
         query.count
       end

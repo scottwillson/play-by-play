@@ -31,3 +31,5 @@
  * add bin/setup
  * test rake tasks
  * add logging
+ * optimize play count query with a single pre-calculated key column
+ * cache play count query (if not already)
