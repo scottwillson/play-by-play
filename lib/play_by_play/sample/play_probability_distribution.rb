@@ -16,7 +16,7 @@ module PlayByPlay
       def for(possession)
         if possession.seconds_remaining > 24 || possession.free_throws? || possession.technical_free_throws?
           play_probability_distribution[Key.new(possession)].reject { |ap| ap.play == [ :period_end ] }
-        elsif possession.seconds_remaining == 0
+        elsif possession.seconds_remaining.zero?
           [ PlayProbability.new(1, [ :period_end ]) ]
         else
           play_probability_distribution[Key.new(possession)]
