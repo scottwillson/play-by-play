@@ -78,7 +78,9 @@ module PlayByPlay
 
       def self.play_day!(day, random_play_generator)
         day.games.each do |game|
-          Simulation::Game.play! game, random_play_generator
+          possession = Simulation::Game.play! game, random_play_generator
+          view = PlayByPlay::Views::Possession.new(possession)
+          # puts view
         end
       end
     end

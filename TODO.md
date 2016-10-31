@@ -29,3 +29,5 @@
  * Code called in Rake tasks shouldn't need setup
  * use a join in Repository#league
  * add bin/setup
+ * test rake tasks
+ * add logging

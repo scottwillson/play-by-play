@@ -4,14 +4,14 @@ module PlayByPlay
   module RepositoryModule
     class Plays < Base
       def count(possession, defense_id, home_id, offense_id, visitor_id, play)
-        raise(ArgumentError, "possession cannot be nil") unless possession
-        raise(ArgumentError, "defense_id cannot be nil") unless defense_id
+        # p "possession: #{possession}, defense_id: #{defense_id}, home_id: #{home_id}, offense_id: #{offense_id}, visitor_id: #{visitor_id}, play: #{play}"
+
         raise(ArgumentError, "home_id cannot be nil") unless home_id
-        raise(ArgumentError, "offense_id cannot be nil") unless offense_id
         raise(ArgumentError, "visitor_id cannot be nil") unless visitor_id
         raise(ArgumentError, "play cannot be nil") unless play
 
-        p "possession: #{possession}, defense_id: #{defense_id}, home_id: #{home_id}, offense_id: #{offense_id}, visitor_id: #{visitor_id}, play: #{play}"
+        raise(ArgumentError, "defense_id cannot be nil") if defense_id.nil? && !offense_id.nil?
+        raise(ArgumentError, "offense_id cannot be nil") if offense_id.nil? && !defense_id.nil?
 
         play_attributes = {}
         if play.size > 1
@@ -65,7 +65,7 @@ module PlayByPlay
           query = query.where(plays__team: play_attributes[:team].to_s)
         end
 
-        # puts query.sql
+        # puts(query.sql) if rand < 0.001
 
         query.count
       end
