@@ -21,6 +21,11 @@ module PlayByPlay
       end
 
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
+        return false if repository.games.exists?(game.nba_id)
+
+        # All-Star Game
+        return false if game.nba_id == "0031400001"
+
         json = read_json(path, game.nba_id)
         game = parse(game, json, invalid_state_error)
         repository.games.save game
