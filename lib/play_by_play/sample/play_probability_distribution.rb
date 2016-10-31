@@ -24,10 +24,10 @@ module PlayByPlay
       end
 
       def fetch_play_probability_distribution(key)
-        # p "=== #{key.possession.key} ==="
+        # puts "=== #{key.to_s} ==="
         Model::PlayMatrix.accessible_plays(key.possession.key).map do |play|
           count = @repository.plays.count(key.possession, key.defense_id, key.home_id, key.offense_id, key.visitor_id, play)
-          # p("#{count} #{play}")
+          # puts "#{count} #{play}"
           PlayProbability.new count, play
         end
       end
@@ -68,7 +68,13 @@ module PlayByPlay
         end
 
         def to_s
-          values
+          {
+            defense_id: possession.defense_id,
+            home_id: possession.home_id,
+            offense_id: possession.offense_id,
+            possession_key: possession.key,
+            visitor_id: possession.visitor_id
+          }
         end
       end
     end

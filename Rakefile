@@ -18,14 +18,14 @@ namespace :play do
   task :game do
     repository = PlayByPlay::Repository.new
     repository.create
-    unless repository.league?
+    unless repository.league.exists?
       Rake::Task["import:season"].invoke
     end
 
     repository = PlayByPlay::Repository.new
 
-    visitor = repository.team_by_abbrevation(ENV["VISITOR_TEAM"] || "ORL")
-    home = repository.team_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
+    visitor = repository.teams.find_by_abbrevation(ENV["VISITOR_TEAM"] || "ORL")
+    home = repository.teams.find_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
 
     game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
     possession = PlayByPlay::Simulation::Game.play!(game)
