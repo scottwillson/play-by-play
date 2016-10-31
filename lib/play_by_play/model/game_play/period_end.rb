@@ -5,6 +5,7 @@ module PlayByPlay
         {
           ball_in_play: false,
           home: possession.home.merge(period_personal_fouls: 0, personal_foul_in_last_two_minutes: false),
+          offense: nil,
           period: next_period(possession),
           seconds_remaining: next_period_seconds_remaining(possession),
           team: next_period_team(possession),
