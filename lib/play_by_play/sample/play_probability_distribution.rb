@@ -41,10 +41,10 @@ module PlayByPlay
 
         def initialize(possession)
           @defense_id = possession.defense_id
-          @home_id = possession.game.home_id
+          @home_id = possession.home_id
           @offense_id = possession.offense_id
           @possession = possession
-          @visitor_id = possession.game.visitor_id
+          @visitor_id = possession.visitor_id
         end
 
         def ==(other)
@@ -56,10 +56,10 @@ module PlayByPlay
         def values
           [
             possession.defense_id,
-            possession.game.home_id,
+            possession.home_id,
             possession.offense_id,
             possession.key,
-            possession.game.visitor_id
+            possession.visitor_id
           ]
         end
 

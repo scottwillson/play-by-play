@@ -52,6 +52,10 @@ module PlayByPlay
         end
       end
 
+      def home_id
+        game&.home_id
+      end
+
       def offense_id
         case offense
         when :home
@@ -73,8 +77,12 @@ module PlayByPlay
         end
       end
 
+      def visitor_id
+        game&.visitor_id
+      end
+
       def to_s
-        "#<PlayByPlay::Persistent::Possession #{key} id: #{id} home_id: #{game&.home_id} visitor_id: #{game&.visitor_id} >"
+        "#<PlayByPlay::Persistent::Possession #{key} id: #{id} home_id: #{home_id} visitor_id: #{visitor_id} >"
       end
     end
   end
