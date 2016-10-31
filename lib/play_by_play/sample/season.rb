@@ -10,7 +10,13 @@ module PlayByPlay
         days = Dir.glob("#{path}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json").map do |file_path|
           json = JSON.parse(File.read(file_path))
           day = Day.parse(json)
-          day.games.each { |game| Game.import(game, path, repository: repository, invalid_state_error: invalid_state_error) }
+          day.games.each do |game|
+            begin
+              Game.import(game, path, repository: repository, invalid_state_error: invalid_state_error)
+            rescue StandardError => e
+              puts "Import error: #{e} for #{file_path}"
+            end
+          end
           day
         end
         Persistent::Season.new days: days
