@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Row = (props) => (
+const Row = props => (
   <tr>
     <td id={props.data.eventnum}>
       <a href={`http://stats.nba.com/game/#!/00${props.data.nba_id}/playbyplay/#play${props.data.eventnum}`}>{props.data.eventnum}</a>

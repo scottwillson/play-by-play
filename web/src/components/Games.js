@@ -1,6 +1,7 @@
 import request from 'superagent';
 import React from 'react';
 import GameSummary from './GameSummary';
+import { Link } from 'react-router'
 import Pagination from './Pagination';
 
 class Games extends React.Component {
@@ -17,7 +18,7 @@ class Games extends React.Component {
             <table className="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
               <thead>
                 <tr>
-                  <th>Game ID</th>
+                  <th>Game ID <Link to="/teams">Teams</Link></th>
                   <th className="mdl-data-table__cell--non-numeric">Visitor</th>
                   <th className="mdl-data-table__cell--non-numeric">Home</th>
                   <th>Error Event #</th>
