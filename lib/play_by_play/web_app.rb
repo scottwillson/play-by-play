@@ -23,6 +23,10 @@ module PlayByPlay
       json repository.games.rows(nba_id)
     end
 
+    get "/teams.json" do
+      json repository.teams.all
+    end
+
     def repository
       settings.repository
     end

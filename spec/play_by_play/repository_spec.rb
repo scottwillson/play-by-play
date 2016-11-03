@@ -18,5 +18,13 @@ module PlayByPlay
         expect(repository.league.exists?).to be(false)
       end
     end
+
+    describe "#teams.all" do
+      it "returns array", database: true do
+        repository = Repository.new
+        repository.reset!
+        expect(repository.teams.all).to eq([])
+      end
+    end
   end
 end

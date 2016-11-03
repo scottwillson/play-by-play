@@ -3,6 +3,10 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Teams < Base
+      def all
+        @db[:teams].all
+      end
+
       def create(team)
         raise(ArgumentError, "team cannot be nil") unless team
         raise(ArgumentError, "team must have name or abbreviation") if team.abbreviation.nil? && team.name.nil?
