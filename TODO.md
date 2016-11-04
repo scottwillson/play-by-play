@@ -33,3 +33,6 @@
  * add logging
  * optimize play count query with a single pre-calculated key column
  * cache play count query (if not already)
+ * remove dupe webpacking
+ * remove possessions home_id and visitor_id?
+ * combine plays and possessions DB tables?

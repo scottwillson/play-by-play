@@ -18,6 +18,10 @@ class Teams extends React.Component {
               <thead>
                 <tr>
                   <th className="mdl-data-table__cell--non-numeric">Name</th>
+                  <th>FGM</th>
+                  <th>FGA</th>
+                  <th>FG%</th>
+                  <th>Points</th>
                 </tr>
               </thead>
               <tbody>

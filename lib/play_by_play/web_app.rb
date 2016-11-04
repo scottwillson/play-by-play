@@ -24,7 +24,7 @@ module PlayByPlay
     end
 
     get "/teams.json" do
-      json repository.teams.all
+      json repository.teams.years
     end
 
     def repository
