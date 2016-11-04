@@ -9,10 +9,6 @@ module PlayByPlay
     set :repository, PlayByPlay::Repository.new
     set :public_folder, "web/dist"
 
-    get "/" do
-      send_file File.join(settings.public_folder, "index.html")
-    end
-
     get "/games.json" do
       page = (params["page"] || 1).to_i
       page = 1 if page < 1
@@ -25,6 +21,10 @@ module PlayByPlay
 
     get "/teams.json" do
       json repository.teams.years
+    end
+
+    get "/*" do
+      send_file File.join(settings.public_folder, "index.html")
     end
 
     def repository
