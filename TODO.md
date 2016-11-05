@@ -42,4 +42,4 @@
  * Collapse duplicate PlayProbabilityDistributions?
  * show team year stats by year
  * save simulation results
- * Sample:Schedule (use real schedule)
+ * Consider allowing game#day_id and day#season_id to be null to simplify testing (and change season import to backfill update these)
