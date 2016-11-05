@@ -41,6 +41,14 @@ module PlayByPlay
         end
         true
       end
+
+      def schedule(year)
+        season = repository.seasons.year(year)
+        season.league = find
+        season.days = repository.days.year(year)
+        repository.games.add_to(season)
+        season
+      end
     end
   end
 end

@@ -11,7 +11,7 @@ module PlayByPlay
       describe ".choose_play" do
         it "returns an Play" do
           generator = RandomPlayGenerator.new(repository)
-          game = Persistent::Game.new
+          game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
           play = generator.new_play(game.possession)
           expect(play).to_not be(nil)
         end
@@ -25,7 +25,7 @@ module PlayByPlay
             repository.plays.save({} => play)
             generator = RandomPlayGenerator.new(repository)
 
-            game = Persistent::Game.new
+            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             expect(generator.new_play(game.possession, 0)).to eq(play)
             expect(generator.new_play(game.possession, 0.5)).to eq(play)
             expect(generator.new_play(game.possession, 0.999999)).to eq(play)
@@ -39,7 +39,7 @@ module PlayByPlay
             repository.plays.save({} => [ :jump_ball, team: :home ])
             generator = RandomPlayGenerator.new(repository)
 
-            game = Persistent::Game.new
+            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             expect(generator.new_play(game.possession, 0)).to eq([ :jump_ball, team: :home ])
             expect(generator.new_play(game.possession, 0.49999)).to eq([ :jump_ball, team: :home ])
             expect(generator.new_play(game.possession, 0.5)).to eq([ :jump_ball, team: :home ])
@@ -50,7 +50,7 @@ module PlayByPlay
         context "no choices" do
           it "raises an exception" do
             repository.reset!
-            game = Persistent::Game.new
+            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             expect { RandomPlayGenerator.new(repository).new_play(game.possession, 0.5) }.to raise_error(ArgumentError)
           end
         end

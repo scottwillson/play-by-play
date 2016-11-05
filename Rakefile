@@ -40,6 +40,7 @@ namespace :play do
 
     scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
     seasons = ENV["SEASONS"]&.to_i || 1
+    year = ENV["YEAR"]&.to_i
 
     random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
 
@@ -51,9 +52,13 @@ namespace :play do
         league = PlayByPlay::Simulation::League.new_random(teams_count)
       end
 
-      season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
+      if year
+        season = repository.league.schedule(year)
+      else
+        season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
+      end
 
-      season = PlayByPlay::Simulation::Season.play!(season: season, repository: repository, random_play_generator: random_play_generator)
+      PlayByPlay::Simulation::Season.play!(season: season, repository: repository, random_play_generator: random_play_generator)
       view = PlayByPlay::Views::Season.new(season)
       puts view
     end

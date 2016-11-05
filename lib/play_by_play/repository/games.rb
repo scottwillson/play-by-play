@@ -3,6 +3,19 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Games < Base
+      def add_to(season)
+        @db[:games].where(day_id: season.days.map(&:id)).each do |game_attributes|
+          day = season.days.detect { |d| d.id == game_attributes[:day_id] }
+          game_attributes.delete(:id)
+          day.games << Persistent::Game.new(
+            game_attributes.merge(
+              visitor: season.league.teams.find { |t| t.id == game_attributes[:visitor_id] },
+              home: season.league.teams.find { |t| t.id == game_attributes[:home_id] }
+            )
+          )
+        end
+      end
+
       def exists?(nba_id)
         return false if nba_id.nil?
 

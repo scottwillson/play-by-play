@@ -21,9 +21,6 @@ module PlayByPlay
           end
         end
 
-        game.home.games << game
-        game.visitor.games << game
-
         game
       end
     end

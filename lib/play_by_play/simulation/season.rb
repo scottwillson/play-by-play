@@ -78,6 +78,7 @@ module PlayByPlay
 
       def self.play_day!(day, random_play_generator)
         day.games.each do |game|
+          # p "#{day.date} #{game.visitor.name} @ #{game.home.name}"
           Simulation::Game.play! game, random_play_generator
         end
       end

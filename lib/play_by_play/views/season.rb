@@ -18,7 +18,7 @@ module PlayByPlay
             strings << "-" * division.name.size
 
             division.teams.sort_by(&:losses).each do |team|
-              strings << "#{team.name} #{team.wins} #{team.losses}"
+              strings << "#{team.name} #{@season.wins(team)} #{@season.losses(team)}"
             end
           end
         end

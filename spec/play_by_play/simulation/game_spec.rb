@@ -10,7 +10,7 @@ module PlayByPlay
       describe ".play!" do
         it "plays a game" do
           random_play_generator = RandomPlayGenerator.new(Mock::Repository.new)
-          game = Persistent::Game.new
+          game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
           game = Game.play!(game, random_play_generator)
           expect(game.possession.visitor.points).to be > 0
           expect(game.possession.home.points).to be > 0

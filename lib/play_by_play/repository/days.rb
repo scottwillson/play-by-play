@@ -25,6 +25,7 @@ module PlayByPlay
           .select(:days__id, :date)
           .join(:seasons, id: :season_id)
           .where("date_part('year', seasons.start_at) = ?", year)
+          .order(:date)
           .map do |attributes|
             attributes.delete(:start_at)
             Persistent::Day.new attributes

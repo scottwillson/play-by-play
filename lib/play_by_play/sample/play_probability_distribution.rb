@@ -1,5 +1,6 @@
-require "play_by_play/sample/play_probability"
+require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/play"
+require "play_by_play/sample/play_probability"
 
 module PlayByPlay
   module Sample
@@ -62,6 +63,10 @@ module PlayByPlay
                      else
                        raise ArgumentError, "team must be :defense, :home, :offense, or :visitor but was #{team}"
                      end
+
+          if @team_id.nil?
+            raise Model::InvalidStateError, "team_id nil for team #{team} in #{possession}"
+          end
         end
 
         def ==(other)

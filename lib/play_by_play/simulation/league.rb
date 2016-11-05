@@ -38,7 +38,7 @@ module PlayByPlay
 
       def self.create_teams(teams_count)
         i = 0
-        Array.new(teams_count) { Persistent::Team.new(name: "team_#{i += 1}") }
+        Array.new(teams_count) { Persistent::Team.new(id: i, name: "team_#{i += 1}") }
       end
 
       def self.create_divisons(conference, teams)
