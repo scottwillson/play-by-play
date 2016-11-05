@@ -9,7 +9,10 @@ module PlayByPlay
         games = json["resultSets"][0]["rowSet"].map do |row|
           parse_row row
         end
-        Persistent::Day.new games: games
+
+        date = Date.strptime(json["parameters"]["GameDate"], "%m/%d/%Y")
+
+        Persistent::Day.new date: date, games: games
       end
 
       def self.parse_row(row)

@@ -28,8 +28,6 @@ module PlayByPlay
 
         json = read_json(path, game.nba_id)
         game = parse(game, json, invalid_state_error)
-        repository.games.save game
-        repository.rows.save game.rows
         game
       end
 

@@ -1,10 +1,12 @@
 require "pg"
 require "sequel"
 require "play_by_play/persistent/play"
+require "play_by_play/repository/days"
 require "play_by_play/repository/games"
 require "play_by_play/repository/league"
 require "play_by_play/repository/plays"
 require "play_by_play/repository/possessions"
+require "play_by_play/repository/seasons"
 require "play_by_play/repository/rows"
 require "play_by_play/repository/schema"
 require "play_by_play/repository/teams"
@@ -25,6 +27,10 @@ module PlayByPlay
       @db.extension :pagination
     end
 
+    def days
+      @days ||= RepositoryModule::Days.new(self, @db)
+    end
+
     def games
       @games ||= RepositoryModule::Games.new(self, @db)
     end
@@ -39,6 +45,10 @@ module PlayByPlay
 
     def possessions
       @possessions ||= RepositoryModule::Possessions.new(self, @db)
+    end
+
+    def seasons
+      @seasons ||= RepositoryModule::Seasons.new(self, @db)
     end
 
     def rows

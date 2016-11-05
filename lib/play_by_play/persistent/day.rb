@@ -6,12 +6,15 @@ module PlayByPlay
       attr_reader :games
       attr_reader :name
       attr_reader :season
+      attr_reader :season_id
 
-      def initialize(date: nil, games: [], id: nil, name: nil, season: nil)
+      def initialize(date: nil, games: [], id: nil, name: nil, season: nil, season_id: nil)
+        @date = date
         @games = games
         @id = id
         @name = name
         @season = season
+        @season_id = season_id
       end
 
       def inspect

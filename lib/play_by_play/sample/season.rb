@@ -19,7 +19,12 @@ module PlayByPlay
           end
           day
         end
-        Persistent::Season.new days: days
+
+        season = Persistent::Season.new(days: days, start_at: start_at(days))
+
+        repository.seasons.save season
+
+        season
       end
 
       def self.parse(path, invalid_state_error: true)
@@ -31,6 +36,10 @@ module PlayByPlay
             PlayByPlay::Sample::Game.parse game, json, invalid_state_error
           end
         end
+      end
+
+      def self.start_at(days)
+        days.map(&:date).min
       end
     end
   end

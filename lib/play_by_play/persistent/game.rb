@@ -4,6 +4,8 @@ require "play_by_play/persistent/team"
 module PlayByPlay
   module Persistent
     class Game
+      attr_accessor :day
+      attr_accessor :day_id
       attr_accessor :error_eventnum
       attr_accessor :home
       attr_accessor :id
@@ -17,6 +19,8 @@ module PlayByPlay
       attr_reader :visitor_id
 
       def initialize(
+        day: nil,
+        day_id: nil,
         id: nil,
         errors: [],
         error_eventnum: nil,
@@ -27,6 +31,8 @@ module PlayByPlay
         visitor_id: nil
       )
 
+        @day_id = day_id
+        @day = day
         @errors = errors
         @error_eventnum = error_eventnum
         self.home_id = home_id

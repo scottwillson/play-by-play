@@ -12,6 +12,14 @@ module PlayByPlay
           Integer :league_id
         end
 
+        db.send(create_table_method, :days) do
+          primary_key :id
+          Date :date, unique: true
+          Integer :season_id, null: false
+          index :date
+          index :season_id
+        end
+
         db.send(create_table_method, :divisions) do
           primary_key :id
           String :name, unique: true
@@ -20,11 +28,13 @@ module PlayByPlay
 
         db.send(create_table_method, :games) do
           primary_key :id
+          Integer :day_id, null: false
           String :errors
           Integer :error_eventnum
           Integer :home_id
           String :nba_id, unique: true
           Integer :visitor_id
+          index :day_id
           index :error_eventnum
           index :home_id
           index :nba_id
@@ -72,6 +82,11 @@ module PlayByPlay
           index :play_team
           index :play_type
           index [ :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :play_team ]
+        end
+
+        db.send(create_table_method, :seasons) do
+          primary_key :id
+          Date :start_at, null: false, unique: true
         end
 
         db.send(create_table_method, :rows) do
@@ -125,10 +140,12 @@ module PlayByPlay
 
       def truncate
         @db[:conferences].truncate
+        @db[:days].truncate
         @db[:divisions].truncate
         @db[:games].truncate
         @db[:leagues].truncate
         @db[:possessions].truncate
+        @db[:seasons].truncate
         @db[:rows].truncate
         @db[:teams].truncate
       end

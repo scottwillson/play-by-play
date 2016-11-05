@@ -24,9 +24,14 @@ module PlayByPlay
 
           repository = Repository.new
           repository.reset!
-          repository.games.save sample_game
 
-          game = Persistent::Game.new(home: repository.teams.find(sample_game.home.id), visitor: repository.teams.find(sample_game.visitor.id))
+          season = Persistent::Season.new(start_at: Date.today)
+          day = Persistent::Day.new(season: season)
+          season.days << day
+          day.games << sample_game
+          repository.seasons.save season
+
+          game = Persistent::Game.new(visitor: repository.teams.find_by_abbrevation("GSW"), home: repository.teams.find_by_abbrevation("POR"))
           play_probability_distribution = Sample::PlayProbabilityDistribution.new(repository)
 
           possession = Persistent::Possession.new(game: game)

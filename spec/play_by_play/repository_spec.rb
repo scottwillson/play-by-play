@@ -73,7 +73,9 @@ module PlayByPlay
         Sample::Game.play! sample_game, :rebound, team: :defense # visitor
         Sample::Game.play! sample_game, :fg, point_value: 3 # visitor
 
-        repository.games.save sample_game
+        season_id = repository.seasons.save Persistent::Season.new(start_at: Date.today)
+        day_id = repository.days.save season_id, Persistent::Day.new(season_id: season_id)
+        repository.games.save day_id, sample_game
 
         teams = repository.teams.years
         expect(teams.size).to eq(2)

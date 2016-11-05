@@ -13,7 +13,9 @@ RSpec.describe "index page", web: true, js: true do
       visitor: PlayByPlay::Persistent::Team.new(abbreviation: "GSW")
     )
     game.error_eventnum = 291
-    repository.games.save game
+    season_id = repository.seasons.save PlayByPlay::Persistent::Season.new(start_at: Date.today)
+    day_id = repository.days.save season_id, PlayByPlay::Persistent::Day.new(season_id: season_id)
+    repository.games.save day_id, game
 
     spawn "npm run dist:test", chdir: "web"
     Process.wait

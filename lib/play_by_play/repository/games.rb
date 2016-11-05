@@ -16,13 +16,14 @@ module PlayByPlay
         end
       end
 
-      def save(game)
+      def save(day_id, game)
         return false if exists?(game.nba_id)
 
         game.home = repository.teams.find_or_create(game.home)
         game.visitor = repository.teams.find_or_create(game.visitor)
 
         game.id = @db[:games].insert(
+          day_id: day_id,
           errors: game.errors,
           error_eventnum: game.error_eventnum,
           home_id: game.home.id,
@@ -31,8 +32,9 @@ module PlayByPlay
         )
 
         save_possessions game
+        repository.rows.save game.rows
 
-        true
+        game.id
       end
 
       def find(id)
@@ -46,6 +48,12 @@ module PlayByPlay
 
       def all(page = 1)
         @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
+      end
+
+      def day(day)
+        @db[:games].where(day_id: day.id).map do |attributes|
+          Persistent::Game.new attributes
+        end
       end
 
       def plays(game_id)

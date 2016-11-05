@@ -1,6 +1,8 @@
- * Use better Rspec predicate matchers
- * Sample:Schedule (use real schedule)
+ * preload probability distribution cache for season simulations
+ * do imports concurrently
+ * do simulations concurrently
  * Test season simulation with database
+ * Use better Rspec predicate matchers
  * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)
  * better favicon
@@ -16,7 +18,6 @@
  * Simulation should only consider time remaining when choosing :period_end
  * Double personal fouls shall add to a player's total, but not to the team total.
  * validate seconds_remaining when importing sample
- * do imports concurrently
  * Add view for probability distribution
  * bulk insert plays
  * Add missing FT play to 0021400052
@@ -41,3 +42,4 @@
  * Collapse duplicate PlayProbabilityDistributions?
  * show team year stats by year
  * save simulation results
+ * Sample:Schedule (use real schedule)
