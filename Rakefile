@@ -7,6 +7,7 @@ require "play_by_play/sample/game"
 require "play_by_play/sample/league"
 require "play_by_play/sample/season"
 require "play_by_play/simulation/game"
+require "play_by_play/simulation/random_play_generator"
 require "play_by_play/simulation/season"
 require "play_by_play/views/game"
 require "play_by_play/views/season"
@@ -28,28 +29,34 @@ namespace :play do
     home = repository.teams.find_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
 
     game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
-    possession = PlayByPlay::Simulation::Game.play!(game)
-    view = PlayByPlay::Views::Game.new(possession)
-    puts view
+    game = PlayByPlay::Simulation::Game.play!(game)
+    puts PlayByPlay::Views::Game.new(game)
   end
 
   desc "Simulate a season of games"
   task :season do
     repository = PlayByPlay::Repository.new
     repository.create
-    if repository.league.exists?
-      league = repository.league.find
-    else
-      teams_count = ENV["TEAMS"]&.to_i || 30
-      league = PlayByPlay::Simulation::League.new_random(teams_count)
-    end
 
     scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
-    season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
+    seasons = ENV["SEASONS"]&.to_i || 1
 
-    season = PlayByPlay::Simulation::Season.play!(season: season, repository: repository)
-    view = PlayByPlay::Views::Season.new(season)
-    puts view
+    random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
+
+    seasons.times do
+      if repository.league.exists?
+        league = repository.league.find
+      else
+        teams_count = ENV["TEAMS"]&.to_i || 30
+        league = PlayByPlay::Simulation::League.new_random(teams_count)
+      end
+
+      season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
+
+      season = PlayByPlay::Simulation::Season.play!(season: season, repository: repository, random_play_generator: random_play_generator)
+      view = PlayByPlay::Views::Season.new(season)
+      puts view
+    end
   end
 end
 
