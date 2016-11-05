@@ -1,5 +1,5 @@
  * Use better Rspec predicate matchers
- * Sample:Schedule
+ * Sample:Schedule (use real schedule)
  * Test season simulation with database
  * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)
@@ -36,3 +36,8 @@
  * remove possessions home_id and visitor_id?
  * row sorting is out of whack?
  * add progress animation to teams page
+ * Only apply other team's probabilities when they can affect outcome. E.g., other team should no affect FT%.
+ * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
+ * Collapse duplicate PlayProbabilityDistributions?
+ * show team year stats by year
+ * save simulation results

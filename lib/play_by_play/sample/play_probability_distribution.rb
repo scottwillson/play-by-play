@@ -14,37 +14,54 @@ module PlayByPlay
       end
 
       def for(possession)
-        if possession.seconds_remaining > 24 || possession.free_throws? || possession.technical_free_throws?
-          play_probability_distribution[Key.new(possession)].reject { |ap| ap.play == [ :period_end ] }
-        elsif possession.seconds_remaining.zero?
-          [ PlayProbability.new(1, [ :period_end ]) ]
+        # TODO rework
+        period_can_end = !possession.free_throws? && !possession.technical_free_throws? && possession.seconds_remaining <= 24
+
+        if period_can_end
+          if possession.seconds_remaining.zero?
+            [ PlayProbability.new(1, [ :period_end ]) ]
+          elsif possession.offense
+            play_probability_distribution[Key.new(possession, :offense)] + play_probability_distribution[Key.new(possession, :defense)]
+          else
+            play_probability_distribution[Key.new(possession, :home)] + play_probability_distribution[Key.new(possession, :visitor)]
+          end
+        elsif possession.offense
+          (play_probability_distribution[Key.new(possession, :offense)] + play_probability_distribution[Key.new(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
         else
-          play_probability_distribution[Key.new(possession)]
+          (play_probability_distribution[Key.new(possession, :home)] + play_probability_distribution[Key.new(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
         end
       end
 
       def fetch_play_probability_distribution(key)
         # puts "=== #{key.to_s} ==="
         Model::PlayMatrix.accessible_plays(key.possession.key).map do |play|
-          count = @repository.plays.count(key.possession, key.defense_id, key.home_id, key.offense_id, key.visitor_id, play)
+          count = @repository.plays.count(key.possession, key.team, key.team_id, play)
           # puts "#{count} #{play}"
           PlayProbability.new count, play
         end
       end
 
       class Key
-        attr_reader :defense_id
-        attr_reader :home_id
-        attr_reader :offense_id
         attr_reader :possession
-        attr_reader :visitor_id
+        attr_reader :team
+        attr_reader :team_id
 
-        def initialize(possession)
-          @defense_id = possession.defense_id
-          @home_id = possession.home_id
-          @offense_id = possession.offense_id
+        def initialize(possession, team)
           @possession = possession
-          @visitor_id = possession.visitor_id
+          @team = team
+
+          @team_id = case team
+                     when :defense
+                       possession.defense_id
+                     when :home
+                       possession.home_id
+                     when :offense
+                       possession.offense_id
+                     when :visitor
+                       possession.visitor_id
+                     else
+                       raise ArgumentError, "team must be :defense, :home, :offense, or :visitor but was #{team}"
+                     end
         end
 
         def ==(other)
@@ -55,11 +72,9 @@ module PlayByPlay
 
         def values
           [
-            possession.defense_id,
-            possession.home_id,
-            possession.offense_id,
             possession.key,
-            possession.visitor_id
+            team,
+            team_id
           ]
         end
 
@@ -69,11 +84,9 @@ module PlayByPlay
 
         def to_s
           {
-            defense_id: possession.defense_id,
-            home_id: possession.home_id,
-            offense_id: possession.offense_id,
             possession_key: possession.key,
-            visitor_id: possession.visitor_id
+            team: team,
+            team_id: team_id
           }
         end
       end

@@ -32,23 +32,23 @@ module PlayByPlay
           possession = Persistent::Possession.new(game: game)
           expect(possession.key).to be_nil
           possession_play_probability_distribution = play_probability_distribution.for(game.possession)
-          expect(possession_play_probability_distribution.size).to eq(12)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1 ] + [ 0 ] * 11)
+          expect(possession_play_probability_distribution.size).to eq(24)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1 ] + [ 0 ] * 22)
 
           possession = Persistent::Possession.new(game: game, ball_in_play: true)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(13)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1 ] + [ 0 ] * 12)
+          expect(possession_play_probability_distribution.size).to eq(26)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1 ] + [ 0 ] * 24)
 
           possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :visitor, team: :visitor)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(27)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 2, 2, 1, 1 ] + [ 0 ] * 22)
+          expect(possession_play_probability_distribution.size).to eq(54)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 2, 2, 2, 2, 2, 1, 1, 1, 1 ] + [ 0 ] * 44)
 
           possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :home, team: :home)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
-          expect(possession_play_probability_distribution.size).to eq(27)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1, 1 ] + [ 0 ] * 24)
+          expect(possession_play_probability_distribution.size).to eq(54)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1, 1, 1, 1, 1 ] + [ 0 ] * 48)
         end
       end
     end

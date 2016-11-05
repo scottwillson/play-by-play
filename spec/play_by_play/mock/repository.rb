@@ -34,7 +34,7 @@ module PlayByPlay
           @sample_plays = []
         end
 
-        def count(possession, defense_id, home_id, offense_id, visitor_id, play)
+        def count(possession, _, _, play)
           sample_plays.count { |a| a.possession_key == possession.key && a.key == play }
         end
 

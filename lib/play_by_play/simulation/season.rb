@@ -30,8 +30,8 @@ module PlayByPlay
         season
       end
 
-      def self.play!(season: Season.new_random, repository: Repository.new)
-        random_play_generator = RandomPlayGenerator.new(repository)
+      def self.play!(season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
+        random_play_generator = random_play_generator
         season.days.each { |day| play_day! day, random_play_generator }
         season
       end
