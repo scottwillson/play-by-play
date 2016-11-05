@@ -35,4 +35,5 @@
  * cache play count query (if not already)
  * remove dupe webpacking
  * remove possessions home_id and visitor_id?
- * combine plays and possessions DB tables?
+ * row sorting is out of whack?
+ * add progress animation to teams page

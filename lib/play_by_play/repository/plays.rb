@@ -3,6 +3,8 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Plays < Base
+      PLAY_KEYS = %i(and_one assisted away_from_play clear_path flagrant intentional point_value).freeze
+
       def count(possession, defense_id, home_id, offense_id, visitor_id, play)
         # p "possession: #{possession}, defense_id: #{defense_id}, home_id: #{home_id}, offense_id: #{offense_id}, visitor_id: #{visitor_id}, play: #{play}"
 
@@ -20,8 +22,7 @@ module PlayByPlay
 
         play_team = play_attributes.delete(:team)
 
-        query = db[:plays]
-                .join(:possessions, id: :possession_id)
+        query = db[:possessions]
                 .where(
                   and_one:        play_attributes[:and_one] || false,
                   assisted:       play_attributes[:assisted] || false,
@@ -29,7 +30,7 @@ module PlayByPlay
                   clear_path:     play_attributes[:clear_path] || false,
                   flagrant:       play_attributes[:flagrant] || false,
                   intentional:    play_attributes[:intentional] || false,
-                  type:           play.first.to_s
+                  play_type:      play.first.to_s
                 )
 
         if play_attributes[:point_value]
@@ -37,7 +38,7 @@ module PlayByPlay
         end
 
         if play_team
-          query = query.where(plays__team: play_team.to_s)
+          query = query.where(play_team: play_team.to_s)
         end
 
         if possession.technical_free_throws?
@@ -45,24 +46,24 @@ module PlayByPlay
         elsif possession.free_throws?
           query = query.where(technical_free_throws: false, free_throws: true)
         elsif possession.team?
-          query = query.where(technical_free_throws: false, free_throws: false, possessions__team: true)
+          query = query.where(technical_free_throws: false, free_throws: false, team: true)
         elsif possession.ball_in_play?
-          query = query.where(technical_free_throws: false, free_throws: false, possessions__team: false, ball_in_play: true)
+          query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: true)
         elsif !possession.seconds_remaining?
-          query = query.where(technical_free_throws: false, free_throws: false, possessions__team: false, ball_in_play: false, seconds_remaining: 0)
+          query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false, seconds_remaining: 0)
         else
-          query = query.where(technical_free_throws: false, free_throws: false, possessions__team: false, ball_in_play: false)
+          query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false)
           query = query.where("seconds_remaining > 0")
         end
 
         if possession.offense
-          query = query.where("possessions.defense_id = ? or possessions.offense_id = ?", defense_id, offense_id)
+          query = query.where("defense_id = ? or offense_id = ?", defense_id, offense_id)
         else
-          query = query.where("possessions.home_id = ? or possessions.visitor_id = ?", home_id, visitor_id)
+          query = query.where("home_id = ? or visitor_id = ?", home_id, visitor_id)
         end
 
         if play_attributes[:team]
-          query = query.where(plays__team: play_attributes[:team].to_s)
+          query = query.where(play_team: play_attributes[:team].to_s)
         end
 
         # puts(query.sql)
@@ -70,29 +71,22 @@ module PlayByPlay
         query.count
       end
 
-      def save_all(plays)
-        plays.each { |play| save(play) }
-      end
+      def add(attributes)
+        play_type = attributes.delete(:play_type)
+        play_team = attributes.delete(:play_team)
 
-      def save(play)
-        attributes = {
-          possession_id: play.possession.id,
-          team: play.team.to_s,
-          and_one: play.and_one?,
-          assisted: play.assisted?,
-          away_from_play: play.away_from_play?,
-          clear_path: play.clear_path?,
-          flagrant: play.flagrant?,
-          intentional: play.intentional?,
-          type: play.type.to_s
-        }
+        if play_type && play_type != ""
+          play_type = play_type.to_sym
 
-        if play.point_value == 3
-          attributes = attributes.merge(point_value: 3)
+          play_attributes = { team: play_team }
+          PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
+
+          attributes[:play] = Persistent::Play.new(play_type, play_attributes)
+        else
+          PLAY_KEYS.each { |key| attributes.delete(key) }
         end
 
-        play.id = db[:plays].insert(attributes)
-        repository.rows.update play.row, play.id
+        attributes
       end
     end
   end

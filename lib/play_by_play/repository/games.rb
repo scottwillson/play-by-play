@@ -31,7 +31,6 @@ module PlayByPlay
         )
 
         save_possessions game
-        repository.plays.save_all game.plays
 
         true
       end
@@ -50,17 +49,13 @@ module PlayByPlay
       end
 
       def plays(game_id)
-        @db[:plays]
-          .select(:plays__id, :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :possession_id, :plays__team, :type)
-          .join(:possessions, id: :possession_id)
-          .where(possessions__game_id: game_id)
+        @db[:possessions]
+          .select(:and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :play_team, :play_type)
+          .where(game_id: game_id)
+          .where("play_type is not null and play_type != ''")
           .map do |attributes|
-            type = attributes.delete(:type)
-            if type && type != ""
-              type = type.to_sym
-            else
-              type = nil
-            end
+            type = attributes.delete(:play_type).to_sym
+            attributes[:team] = attributes.delete(:play_team)
             Persistent::Play.new(type, attributes)
           end
       end
@@ -97,6 +92,8 @@ module PlayByPlay
           else
             attributes[:technical_free_throws] = []
           end
+
+          attributes = repository.plays.add(attributes)
 
           Persistent::Possession.new(attributes)
         end

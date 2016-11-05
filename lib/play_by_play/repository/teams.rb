@@ -46,9 +46,9 @@ module PlayByPlay
 
       def years
         all.map do |team|
-          plays = @db[:plays]
-                  .join_table(:left, :possessions, id: :possession_id)
+          plays = @db[:possessions]
                   .where(offense_id: team[:id])
+                  .where("play_type is not null and play_type != ''")
                   .all
 
           games = plays.map { |play| play[:game_id] }.uniq.size
@@ -59,13 +59,13 @@ module PlayByPlay
           team[:points] = 0
 
           if games.positive?
-            team[:fgs] = plays.select { |play| play[:type] == "fg" }.size / games.to_f
-            team[:fg_attempts] = plays.select { |play| play[:type] == "fg" || play[:type] == "fg_miss" || play[:type] == "block" }.size / games.to_f
+            team[:fgs] = plays.select { |play| play[:play_type] == "fg" }.size / games.to_f
+            team[:fg_attempts] = plays.select { |play| play[:play_type] == "fg" || play[:play_type] == "fg_miss" || play[:play_type] == "block" }.size / games.to_f
             if team[:fg_attempts].positive?
               team[:fg_percentage] = team[:fgs] / team[:fg_attempts].to_f
             end
             team[:points] = plays.inject(0) do |total, play|
-              case play[:type]
+              case play[:play_type]
               when "fg"
                 total + (play[:point_value] || 2)
               when "ft"

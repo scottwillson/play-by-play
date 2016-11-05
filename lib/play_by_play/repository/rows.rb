@@ -5,7 +5,7 @@ module PlayByPlay
     class Rows < Base
       def save(rows)
         columns = [
-          :play_id,
+          :possession_id,
           :game_id,
           :eventmsgactiontype,
           :eventmsgtype,
@@ -43,7 +43,7 @@ module PlayByPlay
 
         values = rows.map do |row|
           [
-            row.play_id,
+            row.possession_id,
             row.game.id,
             row.eventmsgactiontype,
             row.eventmsgtype,
@@ -83,9 +83,9 @@ module PlayByPlay
         db[:rows].import columns, values
       end
 
-      def update(row, play_id)
-        return unless row && play_id
-        db[:rows].where(id: row.id).update(play_id: play_id)
+      def update(row, possession_id)
+        return unless row && possession_id
+        db[:rows].where(id: row.id).update(possession_id: possession_id)
         true
       end
     end

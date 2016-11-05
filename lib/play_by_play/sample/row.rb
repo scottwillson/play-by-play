@@ -22,7 +22,7 @@ module PlayByPlay
       }.freeze
 
       attr_accessor :id
-      attr_accessor :play_id
+      attr_accessor :possession_id
       attr_accessor :eventmsgactiontype
       attr_accessor :eventmsgtype
       # *Not* in exact chronological order

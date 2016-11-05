@@ -54,7 +54,7 @@ module PlayByPlay
     end
 
     def reset!
-      if @db.table_exists?(:plays)
+      if @db.table_exists?(:possessions)
         schema.truncate
       else
         create!

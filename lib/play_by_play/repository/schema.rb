@@ -36,7 +36,7 @@ module PlayByPlay
           String :name, unique: true
         end
 
-        db.send(create_table_method, :plays) do
+        db.send(create_table_method, :possessions) do
           primary_key :id
           Boolean :and_one, default: false, null: false
           Boolean :assisted, default: false, null: false
@@ -45,17 +45,9 @@ module PlayByPlay
           Boolean :flagrant, default: false, null: false
           Boolean :intentional, default: false, null: false
           Integer :point_value
-          Integer :possession_id, null: false
-          String :team
-          String :type
-          index :possession_id
-          index :team
-          index :type
-          index [ :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :team ]
-        end
+          String :play_team
+          String :play_type
 
-        db.send(create_table_method, :possessions) do
-          primary_key :id
           Boolean :ball_in_play, default: false, null: false
           Integer :defense_id
           Boolean :free_throws, default: false, null: false
@@ -76,12 +68,16 @@ module PlayByPlay
           index :offense_id
           index :visitor_id
           index [ :technical_free_throws, :free_throws, :team, :ball_in_play, :seconds_remaining, :home_id, :visitor_id ]
+
+          index :play_team
+          index :play_type
+          index [ :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :play_team ]
         end
 
         db.send(create_table_method, :rows) do
           primary_key :id
           Integer :game_id
-          Integer :play_id
+          Integer :possession_id
           Integer :eventmsgactiontype
           Integer :eventmsgtype
           Integer :eventnum
@@ -115,7 +111,7 @@ module PlayByPlay
           String :visitordescription
           String :wctimestring
           index :game_id
-          index :play_id
+          index :possession_id
         end
 
         db.send(create_table_method, :teams) do
@@ -132,7 +128,6 @@ module PlayByPlay
         @db[:divisions].truncate
         @db[:games].truncate
         @db[:leagues].truncate
-        @db[:plays].truncate
         @db[:possessions].truncate
         @db[:rows].truncate
         @db[:teams].truncate
