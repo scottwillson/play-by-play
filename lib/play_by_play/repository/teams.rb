@@ -31,7 +31,7 @@ module PlayByPlay
         end
       end
 
-      def find_or_create(team)
+      def first_or_create(team)
         find_by_abbrevation(team.abbreviation) || create(team)
       end
 

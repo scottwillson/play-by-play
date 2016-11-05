@@ -19,8 +19,8 @@ module PlayByPlay
       def save(day_id, game)
         return false if exists?(game.nba_id)
 
-        game.home = repository.teams.find_or_create(game.home)
-        game.visitor = repository.teams.find_or_create(game.visitor)
+        game.home = repository.teams.first_or_create(game.home)
+        game.visitor = repository.teams.first_or_create(game.visitor)
 
         game.id = @db[:games].insert(
           day_id: day_id,

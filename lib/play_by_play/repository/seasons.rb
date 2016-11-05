@@ -8,6 +8,14 @@ module PlayByPlay
         Persistent::Season.new(@db[:seasons].where("date_part('year', start_at) = ?", year).first)
       end
 
+      def first_or_create(season)
+        if @db[:seasons].where("date_part('year', start_at) = ?", season.start_at.year).first
+          year season.start_at.year
+        else
+          save season
+        end
+      end
+
       def save(season)
         season_id = @db[:seasons].insert(start_at: season.start_at)
 
