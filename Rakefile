@@ -8,7 +8,7 @@ require "play_by_play/sample/league"
 require "play_by_play/sample/season"
 require "play_by_play/simulation/game"
 require "play_by_play/simulation/season"
-require "play_by_play/views/possession"
+require "play_by_play/views/game"
 require "play_by_play/views/season"
 
 task default: [ "play:game" ]
@@ -29,7 +29,7 @@ namespace :play do
 
     game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
     possession = PlayByPlay::Simulation::Game.play!(game)
-    view = PlayByPlay::Views::Possession.new(possession)
+    view = PlayByPlay::Views::Game.new(possession)
     puts view
   end
 

@@ -12,8 +12,8 @@ module PlayByPlay
           random_play_generator = RandomPlayGenerator.new(Mock::Repository.new)
           game = Persistent::Game.new
           game = Game.play!(game, random_play_generator)
-          expect(game.visitor.points).to be > 0
-          expect(game.home.points).to be > 0
+          expect(game.possession.visitor.points).to be > 0
+          expect(game.possession.home.points).to be > 0
         end
       end
     end

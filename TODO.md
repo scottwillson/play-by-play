@@ -1,4 +1,3 @@
- * integrate setup_development.sql
  * Use better Rspec predicate matchers
  * Sample:Schedule
  * Test season simulation with database

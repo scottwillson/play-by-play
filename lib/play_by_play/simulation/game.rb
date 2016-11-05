@@ -24,7 +24,7 @@ module PlayByPlay
         game.home.games << game
         game.visitor.games << game
 
-        game.possession
+        game
       end
     end
   end

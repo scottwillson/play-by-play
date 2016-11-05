@@ -15,7 +15,7 @@ module PlayByPlay
             conference.divisions << division
 
             @db[:teams].where(division_id: division.id).each do |team_attributes|
-              team = Persistent::Team.new(id: team_attributes[:id], name: team_attributes[:name], division_id: division.id)
+              team = Persistent::Team.new(id: team_attributes[:id], abbreviation: team_attributes[:abbreviation], name: team_attributes[:name], division_id: division.id)
               division.teams << team
             end
           end

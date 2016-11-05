@@ -46,6 +46,16 @@ module PlayByPlay
         "#<PlayByPlay::Persistent::Team #{id} #{name} #{abbreviation} #{key}>"
       end
 
+      def ==(other)
+        return false unless self.class == other.class
+
+        if id
+          id == other.id
+        else
+          super
+        end
+      end
+
       def to_s
         name.to_s
       end
