@@ -5,12 +5,10 @@ require "play_by_play/sample/play_probability"
 module PlayByPlay
   module Sample
     class PlayProbabilityDistribution
-      attr_accessor :play_probability_distribution
-
       def initialize(repository = nil)
         @repository = repository
-        @play_probability_distribution = Hash.new do |hash, key|
-          hash[key] = fetch_play_probability_distribution(key)
+        @distribution = Hash.new do |hash, key|
+          hash[key] = fetch_distribution(key)
         end
       end
 
@@ -21,18 +19,18 @@ module PlayByPlay
           if possession.seconds_remaining.zero?
             [ PlayProbability.new(1, [ :period_end ]) ]
           elsif possession.offense
-            play_probability_distribution[Key.new_from_possession(possession, :offense)] + play_probability_distribution[Key.new_from_possession(possession, :defense)]
+            @distribution[Key.new_from_possession(possession, :offense)] + @distribution[Key.new_from_possession(possession, :defense)]
           else
-            play_probability_distribution[Key.new_from_possession(possession, :home)] + play_probability_distribution[Key.new_from_possession(possession, :visitor)]
+            @distribution[Key.new_from_possession(possession, :home)] + @distribution[Key.new_from_possession(possession, :visitor)]
           end
         elsif possession.offense
-          (play_probability_distribution[Key.new_from_possession(possession, :offense)] + play_probability_distribution[Key.new_from_possession(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
+          (@distribution[Key.new_from_possession(possession, :offense)] + @distribution[Key.new_from_possession(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
         else
-          (play_probability_distribution[Key.new_from_possession(possession, :home)] + play_probability_distribution[Key.new_from_possession(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
+          (@distribution[Key.new_from_possession(possession, :home)] + @distribution[Key.new_from_possession(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
         end
       end
 
-      def fetch_play_probability_distribution(key)
+      def fetch_distribution(key)
         # puts "=== #{key.to_s} ==="
         Model::PlayMatrix.accessible_plays(key.possession_key).map do |play|
           count = @repository.plays.count(key.possession_key, key.team, key.team_id, play)
@@ -46,14 +44,14 @@ module PlayByPlay
         %i(ball_in_play free_throws team technical_free_throws).each do |possession_key|
           %i(defense offense).each do |team|
             team_ids.each do |team_id|
-              play_probability_distribution[Key.new(possession_key, team, team_id)]
+              @distribution[Key.new(possession_key, team, team_id)]
             end
           end
         end
 
         %i(home visitor).each do |team|
           team_ids.each do |team_id|
-            play_probability_distribution[Key.new(nil, team, team_id)]
+            @distribution[Key.new(nil, team, team_id)]
           end
         end
       end
