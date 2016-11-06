@@ -5,11 +5,11 @@ module PlayByPlay
     class Plays < Base
       PLAY_KEYS = %i(and_one assisted away_from_play clear_path flagrant intentional point_value).freeze
 
-      def count(possession, team, team_id, play)
+      def count(possession_key, team, team_id, play)
         raise(ArgumentError, "play cannot be nil") unless play
-        raise(ArgumentError, "possession cannot be nil") unless possession
         raise(ArgumentError, "team cannot be nil") unless team
         raise(ArgumentError, "team_id cannot be nil") unless team_id
+        raise(ArgumentError, "possession_key must be nil or a symbol, but was #{possession_key}") unless possession_key.nil? || possession_key.is_a?(Symbol)
 
         play_attributes = {}
         if play.size > 1
@@ -36,15 +36,16 @@ module PlayByPlay
           query = query.where(play_team: play_team.to_s)
         end
 
-        if possession.technical_free_throws?
+        case possession_key
+        when :technical_free_throws
           query = query.where(technical_free_throws: true)
-        elsif possession.free_throws?
+        when :free_throws
           query = query.where(technical_free_throws: false, free_throws: true)
-        elsif possession.team?
+        when :team
           query = query.where(technical_free_throws: false, free_throws: false, team: true)
-        elsif possession.ball_in_play?
+        when :ball_in_play
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: true)
-        elsif !possession.seconds_remaining?
+        when :seconds_remaining
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false, seconds_remaining: 0)
         else
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false)

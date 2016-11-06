@@ -43,6 +43,7 @@ namespace :play do
     year = ENV["YEAR"]&.to_i
 
     random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
+    random_play_generator.play_probability_distribution.pre_fetch!
 
     seasons.times do
       if repository.league.exists?

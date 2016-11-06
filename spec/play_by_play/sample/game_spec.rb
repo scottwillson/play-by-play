@@ -20,14 +20,14 @@ module PlayByPlay
           expect(game.errors).to eq([])
           expect(game.error_eventnum).to be_nil
 
-          expect(repository.plays.count(Model::Possession.new, :home, game.home_id, [ :jump_ball, team: :home ])).to eq(1)
-          expect(repository.plays.count(Model::Possession.new, :visitor, game.visitor_id, [ :jump_ball, team: :home ])).to eq(1)
+          expect(repository.plays.count(nil, :home, game.home_id, [ :jump_ball, team: :home ])).to eq(1)
+          expect(repository.plays.count(nil, :visitor, game.visitor_id, [ :jump_ball, team: :home ])).to eq(1)
 
-          expect(repository.plays.count(Model::Possession.new(team: :visitor), :offense, game.visitor_id, [ :fg ])).to eq(14)
-          expect(repository.plays.count(Model::Possession.new(team: :visitor), :defense, game.home_id, [ :fg ])).to eq(14)
+          expect(repository.plays.count(:team, :offense, game.visitor_id, [ :fg ])).to eq(14)
+          expect(repository.plays.count(:team, :defense, game.home_id, [ :fg ])).to eq(14)
 
-          expect(repository.plays.count(Model::Possession.new(team: :home), :offense, game.home_id, [ :fg ])).to eq(19)
-          expect(repository.plays.count(Model::Possession.new(team: :home), :defense, game.visitor_id, [ :fg ])).to eq(19)
+          expect(repository.plays.count(:team, :offense, game.home_id, [ :fg ])).to eq(19)
+          expect(repository.plays.count(:team, :defense, game.visitor_id, [ :fg ])).to eq(19)
 
           expect(game.id).to_not be_nil
           expect(game.nba_id).to eq("0021400001")

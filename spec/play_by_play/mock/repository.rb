@@ -34,8 +34,8 @@ module PlayByPlay
           @sample_plays = []
         end
 
-        def count(possession, _, _, play)
-          sample_plays.count { |a| a.possession_key == possession.key && a.key == play }
+        def count(possession_key, _, _, play)
+          sample_plays.count { |a| a.possession_key == possession_key && a.key == play }
         end
 
         def save(hash)

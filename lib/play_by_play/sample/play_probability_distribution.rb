@@ -15,57 +15,86 @@ module PlayByPlay
       end
 
       def for(possession)
-        # TODO rework
         period_can_end = !possession.free_throws? && !possession.technical_free_throws? && possession.seconds_remaining <= 24
 
         if period_can_end
           if possession.seconds_remaining.zero?
             [ PlayProbability.new(1, [ :period_end ]) ]
           elsif possession.offense
-            play_probability_distribution[Key.new(possession, :offense)] + play_probability_distribution[Key.new(possession, :defense)]
+            play_probability_distribution[Key.new_from_possession(possession, :offense)] + play_probability_distribution[Key.new_from_possession(possession, :defense)]
           else
-            play_probability_distribution[Key.new(possession, :home)] + play_probability_distribution[Key.new(possession, :visitor)]
+            play_probability_distribution[Key.new_from_possession(possession, :home)] + play_probability_distribution[Key.new_from_possession(possession, :visitor)]
           end
         elsif possession.offense
-          (play_probability_distribution[Key.new(possession, :offense)] + play_probability_distribution[Key.new(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
+          (play_probability_distribution[Key.new_from_possession(possession, :offense)] + play_probability_distribution[Key.new_from_possession(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
         else
-          (play_probability_distribution[Key.new(possession, :home)] + play_probability_distribution[Key.new(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
+          (play_probability_distribution[Key.new_from_possession(possession, :home)] + play_probability_distribution[Key.new_from_possession(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
         end
       end
 
       def fetch_play_probability_distribution(key)
         # puts "=== #{key.to_s} ==="
-        Model::PlayMatrix.accessible_plays(key.possession.key).map do |play|
-          count = @repository.plays.count(key.possession, key.team, key.team_id, play)
+        Model::PlayMatrix.accessible_plays(key.possession_key).map do |play|
+          count = @repository.plays.count(key.possession_key, key.team, key.team_id, play)
           # puts "#{count} #{play}"
           PlayProbability.new count, play
         end
       end
 
+      def pre_fetch!
+        team_ids = @repository.teams.all.map { |team| team[:id] }
+        %i(ball_in_play free_throws team technical_free_throws).each do |possession_key|
+          %i(defense offense).each do |team|
+            team_ids.each do |team_id|
+              play_probability_distribution[Key.new(possession_key, team, team_id)]
+            end
+          end
+        end
+
+        %i(home visitor).each do |team|
+          team_ids.each do |team_id|
+            play_probability_distribution[Key.new(nil, team, team_id)]
+          end
+        end
+      end
+
       class Key
-        attr_reader :possession
+        attr_reader :possession_key
         attr_reader :team
         attr_reader :team_id
 
-        def initialize(possession, team)
-          @possession = possession
-          @team = team
+        def self.new_from_possession(possession, team)
+          if possession.nil?
+            raise ArgumentError, "possession nil for team #{team}"
+          end
 
-          @team_id = case team
-                     when :defense
-                       possession.defense_id
-                     when :home
-                       possession.home_id
-                     when :offense
-                       possession.offense_id
-                     when :visitor
-                       possession.visitor_id
-                     else
-                       raise ArgumentError, "team must be :defense, :home, :offense, or :visitor but was #{team}"
-                     end
+          team_id = case team
+                    when :defense
+                      possession.defense_id
+                    when :home
+                      possession.home_id
+                    when :offense
+                      possession.offense_id
+                    when :visitor
+                      possession.visitor_id
+                    else
+                      raise ArgumentError, "team must be :defense, :home, :offense, or :visitor but was #{team}"
+                    end
+
+          if team_id.nil?
+            raise Model::InvalidStateError, "team_id nil for team #{team} in #{possession}"
+          end
+
+          new possession.key, team, team_id
+        end
+
+        def initialize(possession_key, team, team_id)
+          @possession_key = possession_key
+          @team = team
+          @team_id = team_id
 
           if @team_id.nil?
-            raise Model::InvalidStateError, "team_id nil for team #{team} in #{possession}"
+            raise Model::InvalidStateError, "team_id nil for team #{team} in #{possession_key}"
           end
         end
 
@@ -77,7 +106,7 @@ module PlayByPlay
 
         def values
           [
-            possession.key,
+            possession_key,
             team,
             team_id
           ]
@@ -89,7 +118,7 @@ module PlayByPlay
 
         def to_s
           {
-            possession_key: possession.key,
+            possession_key: possession_key,
             team: team,
             team_id: team_id
           }
