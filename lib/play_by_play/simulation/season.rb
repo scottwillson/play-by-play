@@ -32,7 +32,9 @@ module PlayByPlay
 
       def self.play!(season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
         random_play_generator = random_play_generator
-        season.days.each { |day| play_day! day, random_play_generator }
+        season.days
+              .map { |day| play_day! day, random_play_generator }
+              .each(&:join)
         season
       end
 
@@ -77,9 +79,10 @@ module PlayByPlay
       end
 
       def self.play_day!(day, random_play_generator)
-        day.games.each do |game|
-          # p "#{day.date} #{game.visitor.name} @ #{game.home.name}"
-          Simulation::Game.play! game, random_play_generator
+        Thread.new do
+          day.games.each do |game|
+            Simulation::Game.play! game, random_play_generator
+          end
         end
       end
     end
