@@ -46,9 +46,7 @@ module PlayByPlay
         repository.teams.create(team)
 
         teams = repository.teams.years
-        expect(teams.size).to eq(1)
-        expect(teams[0][:name]).to eq("Portland Trail Blazers")
-        expect(teams[0][:points]).to eq(0)
+        expect(teams.size).to eq(0)
       end
 
       it "returns array with aggregate stats", database: true do

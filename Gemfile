@@ -7,6 +7,7 @@ gem "sinatra"
 gem "sinatra-contrib"
 gem "pg"
 gem "sequel_pg"
+gem "text-table"
 
 group :development do
   gem "rubocop"

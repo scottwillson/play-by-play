@@ -41,7 +41,7 @@ module PlayByPlay
         flagrant: false,
         intentional: false,
         point_value: 2,
-        seconds: 7,
+        seconds: 7.7,
         team: nil
       )
 

@@ -1,6 +1,7 @@
- * preload probability distribution cache for season simulations
+ * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
+   * bad FGs counts: fixed, need tests
+   * OPP FGs FG% is OK
  * do imports concurrently
- * do simulations concurrently
  * Test season simulation with database
  * Use better Rspec predicate matchers
  * Refactor season simulation to be more like Redux
@@ -38,10 +39,10 @@
  * row sorting is out of whack?
  * add progress animation to teams page
  * Only apply other team's probabilities when they can affect outcome. E.g., other team should no affect FT%.
- * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
  * Collapse duplicate PlayProbabilityDistributions?
  * show team year stats by year
  * save simulation results
  * Consider allowing game#day_id and day#season_id to be null to simplify testing (and change season import to backfill update these)
  * DB FKs?
  * Refactor PlayProbabilityDistribution, especially `#for`
+ * sort team stats table

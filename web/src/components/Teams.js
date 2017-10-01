@@ -21,7 +21,25 @@ class Teams extends React.Component {
                   <th>FGM</th>
                   <th>FGA</th>
                   <th>FG%</th>
+                  <th>3FGM</th>
+                  <th>3FGA</th>
+                  <th>3FG%</th>
+                  <th>FT</th>
+                  <th>FTA</th>
+                  <th>FT%</th>
+                  <th>AST</th>
+                  <th>TO</th>
+                  <th>STL</th>
+                  <th>BLK</th>
+                  <th>OPP FGM</th>
+                  <th>OPP FGA</th>
+                  <th>OPP FG%</th>
+                  <th>OPP 3FGM</th>
+                  <th>OPP 3FGA</th>
+                  <th>OPP 3FG%</th>
                   <th>Points</th>
+                  <th>OPP Points</th>
+                  <th>+/-</th>
                 </tr>
               </thead>
               <tbody>

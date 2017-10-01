@@ -11,6 +11,7 @@ require "play_by_play/simulation/random_play_generator"
 require "play_by_play/simulation/season"
 require "play_by_play/views/game"
 require "play_by_play/views/season"
+require "play_by_play/views/teams"
 
 task default: [ "play:game" ]
 
@@ -28,9 +29,12 @@ namespace :play do
     visitor = repository.teams.find_by_abbrevation(ENV["VISITOR_TEAM"] || "ORL")
     home = repository.teams.find_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
 
-    game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
-    game = PlayByPlay::Simulation::Game.play!(game)
-    puts PlayByPlay::Views::Game.new(game)
+    (ENV["TIMES"]&.to_i || 1).times do
+      game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
+      game = PlayByPlay::Simulation::Game.play!(game)
+      puts PlayByPlay::Views::Game.new(game)
+      puts
+    end
   end
 
   desc "Simulate a season of games"
@@ -38,6 +42,7 @@ namespace :play do
     repository = PlayByPlay::Repository.new
     repository.create
 
+    days = ENV["DAYS"]&.to_i
     scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
     seasons = ENV["SEASONS"]&.to_i || 1
     year = ENV["YEAR"]&.to_i
@@ -59,8 +64,11 @@ namespace :play do
         season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
       end
 
-      PlayByPlay::Simulation::Season.play!(season: season, repository: repository, random_play_generator: random_play_generator)
+      PlayByPlay::Simulation::Season.play!(days: days, season: season, repository: repository, random_play_generator: random_play_generator)
       view = PlayByPlay::Views::Season.new(season)
+      puts view
+
+      view = PlayByPlay::Views::Teams.new(season)
       puts view
     end
   end
@@ -112,6 +120,36 @@ namespace :repository do
   task :recreate do
     `bin/setup`
     PlayByPlay::Repository.new.create!
+  end
+end
+
+namespace :sample do
+  desc "Show counts for POSSESSION, TEAM, TEAM_ID"
+  task :distribution do
+    repository = PlayByPlay::Repository.new
+
+    possession_key = ENV["POSSESSION"].to_sym
+    team = ENV["TEAM"].to_sym
+    team_id = ENV["TEAM_ID"].to_i
+
+    total_plays = PlayByPlay::Model::PlayMatrix.accessible_plays(possession_key).inject(0) do |total, play|
+      total + repository.plays.count(possession_key, team, team_id, play)
+    end
+
+    fg = 0
+    fg_miss = 0
+    PlayByPlay::Model::PlayMatrix.accessible_plays(possession_key).each do |play|
+      count = repository.plays.count(possession_key, team, team_id, play)
+      if play.first == :fg
+        fg = fg + count
+      end
+      if play.first == :fg_miss || play.first == :block
+        fg_miss = fg_miss + count
+      end
+      puts "#{format "%.1f", count * 100 / total_plays.to_f}   #{play}"
+    end
+
+    puts "#{fg}/#{fg_miss + fg} #{fg/(fg + fg_miss).to_f}"
   end
 end
 

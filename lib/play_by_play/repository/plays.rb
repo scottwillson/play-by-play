@@ -24,6 +24,7 @@ module PlayByPlay
                   clear_path:     play_attributes[:clear_path] || false,
                   flagrant:       play_attributes[:flagrant] || false,
                   intentional:    play_attributes[:intentional] || false,
+                  point_value:    play_attributes[:point_value],
                   play_type:      play.first.to_s
                 )
 
@@ -53,10 +54,6 @@ module PlayByPlay
         end
 
         query = query.where("#{team}_id = ?", team_id)
-
-        if play_attributes[:team]
-          query = query.where(play_team: play_attributes[:team].to_s)
-        end
 
         # puts(query.sql)
 

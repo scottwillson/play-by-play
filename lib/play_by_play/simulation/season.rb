@@ -30,11 +30,19 @@ module PlayByPlay
         season
       end
 
-      def self.play!(season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
+      def self.play!(days: nil, season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
         random_play_generator = random_play_generator
-        season.days
-              .map { |day| play_day! day, random_play_generator }
-              .each(&:join)
+
+        if days
+          days = season.days[0, days]
+        else
+          days = season.days
+        end
+
+        days
+          .map { |day| play_day! day, random_play_generator }
+          .each(&:join)
+
         season
       end
 

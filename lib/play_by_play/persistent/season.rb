@@ -23,6 +23,10 @@ module PlayByPlay
         games.select { |game| game.loser == team }.size
       end
 
+      def team(id)
+        teams.find { |team| team.id == id }
+      end
+
       def teams
         @league.teams
       end

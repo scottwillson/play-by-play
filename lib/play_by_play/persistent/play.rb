@@ -9,6 +9,17 @@ module PlayByPlay
       attr_reader :possession
       attr_reader :possession_id
 
+      # [ :fg, point_value: 3 ]
+      def self.from_array(array)
+        type = array.first
+        attributes = if array.size > 1
+                       array.last
+                     else
+                       {}
+                     end
+        Play.new type, attributes
+      end
+
       # { team: :visitor } => [ :fg, point_value: 3 ]
       def self.from_hash(hash)
         return hash unless hash.is_a?(Hash)

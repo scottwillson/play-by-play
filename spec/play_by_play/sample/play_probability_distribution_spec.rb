@@ -48,12 +48,12 @@ module PlayByPlay
           possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :visitor, team: :visitor)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
           expect(possession_play_probability_distribution.size).to eq(54)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 2, 2, 2, 2, 2, 1, 1, 1, 1 ] + [ 0 ] * 44)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 2, 2, 2, 2, 1, 1 ] + [ 0 ] * 48)
 
           possession = Persistent::Possession.new(game: game, ball_in_play: true, offense: :home, team: :home)
           possession_play_probability_distribution = play_probability_distribution.for(possession)
           expect(possession_play_probability_distribution.size).to eq(54)
-          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1, 1, 1, 1, 1 ] + [ 0 ] * 48)
+          expect(possession_play_probability_distribution.map(&:probability)).to match_array([ 1, 1, 1, 1 ] + [ 0 ] * 50)
         end
       end
     end

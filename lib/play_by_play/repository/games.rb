@@ -7,12 +7,14 @@ module PlayByPlay
         @db[:games].where(day_id: season.days.map(&:id)).each do |game_attributes|
           day = season.days.detect { |d| d.id == game_attributes[:day_id] }
           game_attributes.delete(:id)
-          day.games << Persistent::Game.new(
-            game_attributes.merge(
-              visitor: season.league.teams.find { |t| t.id == game_attributes[:visitor_id] },
-              home: season.league.teams.find { |t| t.id == game_attributes[:home_id] }
-            )
-          )
+
+          visitor = season.team(game_attributes[:visitor_id])
+          home = season.team(game_attributes[:home_id])
+          game = Persistent::Game.new(game_attributes.merge(visitor: visitor, home: home))
+
+          day.games << game
+          visitor.games << game
+          home.games << game
         end
       end
 

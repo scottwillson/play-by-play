@@ -76,6 +76,10 @@ module PlayByPlay
         end
       end
 
+      def over?
+        possession.game_over?
+      end
+
       def plays
         possessions.map(&:play).compact
       end
