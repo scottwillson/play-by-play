@@ -13,7 +13,7 @@ module PlayByPlay
 
           game = Game.new_game("0021400001", "ORL", "NOP")
           game = Game.import(game, "spec/data", repository: repository)
-          season_id = repository.seasons.save Persistent::Season.new(start_at: Date.today)
+          season_id = repository.seasons.save Persistent::Season.new_sample
           day_id = repository.days.save season_id, Persistent::Day.new(season_id: season_id)
           repository.games.save day_id, game
 

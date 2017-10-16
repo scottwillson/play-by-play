@@ -16,7 +16,7 @@ module PlayByPlay
 
         raise(Model::InvalidStateError, "scheduled_games_per_teams_count must be even but was #[scheduled_games_per_teams_count]") if scheduled_games_per_teams_count.odd?
 
-        season = Persistent::Season.new(league: league)
+        season = Persistent::Season.new_simulation(league: league)
 
         scheduled_games_count = season.teams.size * (scheduled_games_per_teams_count / 2)
         create_days season, scheduled_games_count, scheduled_games_per_teams_count

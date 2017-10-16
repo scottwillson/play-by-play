@@ -24,6 +24,8 @@ module PlayByPlay
 
           games = repository.games.day(days.first)
           expect(games.size).to eq(3)
+
+          expect(season.source).to eq("sample")
         end
       end
     end

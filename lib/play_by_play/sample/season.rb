@@ -20,7 +20,7 @@ module PlayByPlay
           day
         end
 
-        season = Persistent::Season.new(days: days, start_at: start_at(days))
+        season = Persistent::Season.new(days: days, source: "sample", start_at: start_at(days))
 
         repository.seasons.save season
 

@@ -33,6 +33,7 @@ module PlayByPlay
           expect(season.teams.none? { |team| team.games.empty? }).to be true
           expect(season.teams.any? { |team| team.wins > 0 }).to be true
           expect(season.teams.any? { |team| team.losses > 0 }).to be true
+          expect(season.source).to eq("simulation")
         end
       end
     end

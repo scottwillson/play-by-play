@@ -25,7 +25,7 @@ module PlayByPlay
           repository = Repository.new
           repository.reset!
 
-          season = Persistent::Season.new(start_at: Date.today)
+          season = Persistent::Season.new_sample
           day = Persistent::Day.new(season: season)
           season.days << day
           day.games << sample_game

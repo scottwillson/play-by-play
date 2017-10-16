@@ -86,7 +86,10 @@ module PlayByPlay
 
         db.send(create_table_method, :seasons) do
           primary_key :id
-          Date :start_at, null: false, unique: true
+          String :source, null: false
+          Date :start_at, null: false
+          index :source
+          index :start_at
         end
 
         db.send(create_table_method, :rows) do
