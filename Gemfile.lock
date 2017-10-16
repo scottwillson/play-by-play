@@ -33,7 +33,7 @@ GEM
       cliver (~> 0.3.1)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
-    puma (3.6.0)
+    puma (3.10.0)
     rack (1.6.4)
     rack-protection (1.5.3)
       rack
@@ -103,4 +103,4 @@ DEPENDENCIES
   text-table
 
 BUNDLED WITH
-   1.11.2
+   1.15.3
