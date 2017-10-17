@@ -14,6 +14,8 @@ module PlayByPlay
       def self.new_random(league: League.new_random(30), scheduled_games_per_teams_count: 82)
         scheduled_games_per_teams_count = scheduled_games_per_teams_count.to_i
 
+        PlayByPlay.logger.debug(simulation_season: :new_random, begin: Time.now)
+
         raise(Model::InvalidStateError, "scheduled_games_per_teams_count must be even but was #[scheduled_games_per_teams_count]") if scheduled_games_per_teams_count.odd?
 
         season = Persistent::Season.new_simulation(league: league)
@@ -27,10 +29,14 @@ module PlayByPlay
           end
         end
 
+        PlayByPlay.logger.debug(simulation_season: :new_random, end: Time.now)
+
         season
       end
 
       def self.play!(days: nil, season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
+        PlayByPlay.logger.debug(simulation_season: :play!, begin: Time.now)
+
         random_play_generator = random_play_generator
 
         if days
@@ -42,6 +48,8 @@ module PlayByPlay
         days
           .map { |day| play_day! day, random_play_generator }
           .each(&:join)
+
+        PlayByPlay.logger.debug(simulation_season: :play!, end: Time.now)
 
         season
       end

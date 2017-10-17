@@ -11,6 +11,15 @@ module PlayByPlay
   module Simulation
     module Game
       def self.play!(game, random_play_generator = RandomPlayGenerator.new(PlayByPlay::Repository.new))
+        PlayByPlay.logger.debug(
+          simulation_game: :play!,
+          date: game.day&.date,
+          game_id: game.id,
+          home: game.home.abbreviation,
+          visitor: game.visitor.abbreviation,
+          begin: Time.now
+        )
+
         until game.possession.game_over?
           play = random_play_generator.new_play(game.possession)
           possession = Model::GamePlay.play!(game.possession, play)
@@ -24,6 +33,12 @@ module PlayByPlay
             raise Model::InvalidStateError, "Game not over after #{game.possessions.size} plays"
           end
         end
+
+        PlayByPlay.logger.debug(
+          simulation_game: :play!,
+          game_id: game.id,
+          end: Time.now
+        )
 
         game
       end
