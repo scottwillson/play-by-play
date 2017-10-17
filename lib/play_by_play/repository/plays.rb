@@ -53,7 +53,11 @@ module PlayByPlay
           query = query.where("seconds_remaining > 0")
         end
 
-        query = query.where("#{team}_id = ?", team_id)
+        query = query.where("possessions.#{team}_id = ?", team_id)
+                     .where("source = ?", "sample")
+                     .join(:games, id: :game_id)
+                     .join(:days, id: :day_id)
+                     .join(:seasons, id: :season_id)
 
         # puts(query.sql)
 
