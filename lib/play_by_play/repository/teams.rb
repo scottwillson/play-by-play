@@ -48,7 +48,8 @@ module PlayByPlay
         all.map do |team|
           plays = @db[:possessions]
                   .where(offense_id: team[:id])
-                  .where("play_type is not null and play_type != ''")
+                  .exclude(play_type: nil)
+                  .exclude(play_type: "")
                   .all
 
           games = plays.map { |play| play[:game_id] }.uniq.size
@@ -98,7 +99,8 @@ module PlayByPlay
 
           plays = @db[:possessions]
                   .where(defense_id: team[:id])
-                  .where("play_type is not null and play_type != ''")
+                  .exclude(play_type: nil)
+                  .exclude(play_type: "")
                   .all
 
           games = plays.map { |play| play[:game_id] }.uniq.size

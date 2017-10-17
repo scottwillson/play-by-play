@@ -16,7 +16,7 @@ module PlayByPlay
       end
 
       def year(year)
-        attributes = @db[:seasons].where("date_part('year', start_at) = ?", year).first
+        attributes = @db[:seasons].where(Sequel.lit("date_part('year', start_at) = ?", year)).first
         if attributes
           Persistent::Season.new attributes
         end

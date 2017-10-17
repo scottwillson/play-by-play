@@ -50,11 +50,11 @@ module PlayByPlay
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false, seconds_remaining: 0)
         else
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false)
-          query = query.where("seconds_remaining > 0")
+          query = query.where{seconds_remaining > 0}
         end
 
-        query = query.where("possessions.#{team}_id = ?", team_id)
-                     .where("source = ?", "sample")
+        query = query.where(Sequel.lit("possessions.#{team}_id = ?", team_id))
+                     .where(source: "sample")
                      .join(:games, id: :game_id)
                      .join(:days, id: :day_id)
                      .join(:seasons, id: :season_id)

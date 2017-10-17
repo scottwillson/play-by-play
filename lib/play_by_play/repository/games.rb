@@ -75,7 +75,8 @@ module PlayByPlay
         @db[:possessions]
           .select(:and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :play_team, :play_type)
           .where(game_id: game_id)
-          .where("play_type is not null and play_type != ''")
+          .exclude(play_type: nil)
+          .exclude(play_type: "")
           .map do |attributes|
             type = attributes.delete(:play_type).to_sym
             attributes[:team] = attributes.delete(:play_team)
