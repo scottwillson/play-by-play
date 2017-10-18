@@ -84,5 +84,25 @@ module PlayByPlay
         expect(teams[1][:points]).to eq(3)
       end
     end
+
+    describe "#plays.count" do
+      it "counts sample possessions only" do
+        repository = Repository.new
+        repository.reset!
+
+        season = Persistent::Season.new_sample
+        season_id = repository.seasons.save(season)
+
+        day = Persistent::Day.new
+        day_id = repository.days.save(season_id, day)
+
+        sample_game = Sample::Game.new_game("001", "GSW", "POR")
+        possession = Persistent::Possession.new(game: sample_game)
+
+        Persistent::Play.new(:jump_ball, team: :home, possession: possession)
+
+        repository.games.save day_id, sample_game
+      end
+    end
   end
 end

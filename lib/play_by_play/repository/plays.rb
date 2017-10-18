@@ -55,11 +55,8 @@ module PlayByPlay
 
         query = query.where(Sequel.lit("possessions.#{team}_id = ?", team_id))
                      .where(source: "sample")
-                     .join(:games, id: :game_id)
-                     .join(:days, id: :day_id)
-                     .join(:seasons, id: :season_id)
 
-        # puts(query.sql)
+        # PlayByPlay.logger.debug(repository_plays: :count, sql: query.sql)
 
         query.count
       end

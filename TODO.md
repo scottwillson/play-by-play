@@ -46,3 +46,7 @@
  * DB FKs?
  * Refactor PlayProbabilityDistribution, especially `#for`
  * sort team stats table
+ * Break out persistent tests
+ * Add persistent game spec factory method
+ * add default for Day and maybe Season to allow just calling .new
+ * add default for source(s)

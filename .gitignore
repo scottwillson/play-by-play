@@ -13,9 +13,7 @@
 /checkouts
 /classes
 /target
-data
-data/days
-data/games
+/data
 node_modules
 node_modules
 npm-debug.log
