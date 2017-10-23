@@ -7,7 +7,7 @@
  * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)
  * better favicon
- * change model initialize to *attribute?
+ * change model initialize to star-attribute?
  * cache attributes?
  * rebound must come after miss. Need to validate?
  * recovered blocks are always rebounds?
@@ -50,3 +50,4 @@
  * Add persistent game spec factory method
  * add default for Day and maybe Season to allow just calling .new
  * add default for source(s)
+ * play should be required to add possession

@@ -8,6 +8,7 @@ module PlayByPlay
         season_id = year(season.start_at.year)&.id ||
                     @db[:seasons].insert(source: season.source, start_at: season.start_at)
 
+
         season.days.each do |day|
           repository.days.save season_id, day
         end

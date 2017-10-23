@@ -56,7 +56,7 @@ module PlayByPlay
         query = query.where(Sequel.lit("possessions.#{team}_id = ?", team_id))
                      .where(source: "sample")
 
-        # PlayByPlay.logger.debug(repository_plays: :count, sql: query.sql)
+        PlayByPlay.logger.debug(repository_plays: :count, sql: query.sql) if PlayByPlay.logger.debug?
 
         query.count
       end

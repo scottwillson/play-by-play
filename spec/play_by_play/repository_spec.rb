@@ -59,7 +59,10 @@ module PlayByPlay
         golden_state = Persistent::Team.new(abbreviation: "GSW", name: "Golden State Warriors")
         repository.teams.create(golden_state)
 
+        season = Sample::Season.new_persistent
+        day = Persistent::Day.new(season: season)
         sample_game = Sample::Game.new_game("001", "GSW", "POR")
+        sample_game.day = day
 
         Sample::Game.play! sample_game, :jump_ball, team: :visitor
         Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
@@ -71,9 +74,7 @@ module PlayByPlay
         Sample::Game.play! sample_game, :rebound, team: :defense # visitor
         Sample::Game.play! sample_game, :fg, point_value: 3 # visitor
 
-        season_id = repository.seasons.save Persistent::Season.new_sample
-        day_id = repository.days.save season_id, Persistent::Day.new(season_id: season_id)
-        repository.games.save day_id, sample_game
+        repository.seasons.save season
 
         teams = repository.teams.years
         expect(teams.size).to eq(2)
@@ -90,18 +91,25 @@ module PlayByPlay
         repository = Repository.new
         repository.reset!
 
-        season = Persistent::Season.new_sample
-        season_id = repository.seasons.save(season)
+        season = Sample::Season.new_persistent
+        day = Persistent::Day.new(season: season)
+        game = Sample::Game.new_game("001", "GSW", "POR")
+        game.day = day
+        Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first)
+        repository.seasons.save season
 
-        day = Persistent::Day.new
-        day_id = repository.days.save(season_id, day)
+        home_team = repository.teams.find_by_abbrevation("POR")
+        visitor_team = repository.teams.find_by_abbrevation("GSW")
 
-        sample_game = Sample::Game.new_game("001", "GSW", "POR")
-        possession = Persistent::Possession.new(game: sample_game)
+        season = Simulation::Season.new_persistent
+        day = Persistent::Day.new(season: season)
+        game = Persistent::Game.new(day: day, home: home_team, visitor: visitor_team)
+        game.day = day
+        Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first)
+        repository.seasons.save season
 
-        Persistent::Play.new(:jump_ball, team: :home, possession: possession)
-
-        repository.games.save day_id, sample_game
+        count = repository.plays.count(nil, :home, home_team.id, [ :jump_ball, team: :home ])
+        expect(count).to eq(1)
       end
     end
   end

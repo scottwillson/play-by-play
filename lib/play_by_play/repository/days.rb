@@ -13,8 +13,10 @@ module PlayByPlay
 
       def save(season_id, day)
         day_id = first_by_date(day.date)&.id || @db[:days].insert(date: day.date, season_id: season_id)
+        day.id = day_id
+
         day.games.each do |game|
-          repository.games.save day_id, game
+          repository.games.save game
         end
 
         day_id

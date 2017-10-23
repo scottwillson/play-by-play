@@ -9,15 +9,16 @@ RSpec.describe "teams index page", web: true, js: true do
     repository = Capybara.app.repository
     repository.reset!
 
+    season = PlayByPlay::Sample::Season.new_persistent
+    day = PlayByPlay::Persistent::Day.new(season: season)
     game = PlayByPlay::Persistent::Game.new(
+      day: day,
       nba_id: "0021400014",
       home: PlayByPlay::Persistent::Team.new(abbreviation: "CLE"),
       visitor: PlayByPlay::Persistent::Team.new(abbreviation: "GSW")
     )
     game.error_eventnum = 291
-    season_id = repository.seasons.save PlayByPlay::Persistent::Season.new_sample
-    day_id = repository.days.save season_id, PlayByPlay::Persistent::Day.new(season_id: season_id)
-    repository.games.save day_id, game
+    repository.seasons.save season
 
     spawn "npm run dist:test", chdir: "web"
     Process.wait

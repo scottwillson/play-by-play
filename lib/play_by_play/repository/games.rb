@@ -26,19 +26,18 @@ module PlayByPlay
 
       def save_possessions(game)
         game.possessions.each do |possession|
-          possession.game = game
           repository.possessions.save possession
         end
       end
 
-      def save(day_id, game)
+      def save(game)
         return false if exists?(game.nba_id)
 
         game.home = repository.teams.first_or_create(game.home)
         game.visitor = repository.teams.first_or_create(game.visitor)
 
         game.id = @db[:games].insert(
-          day_id: day_id,
+          day_id: game.day.id,
           errors: game.errors,
           error_eventnum: game.error_eventnum,
           home_id: game.home.id,
@@ -89,6 +88,7 @@ module PlayByPlay
           attributes.delete(:defense_id)
           attributes.delete(:home_id)
           attributes.delete(:offense_id)
+          attributes.delete(:source)
           attributes.delete(:visitor_id)
 
           [ :next_team, :offense, :opening_tip ].each do |key|

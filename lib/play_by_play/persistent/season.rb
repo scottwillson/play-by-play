@@ -9,28 +9,21 @@ module PlayByPlay
       attr_accessor :source
       attr_reader :start_at
 
-      def self.new_sample(**args)
-        raise(ArgumentError("source must be unspecified")) if args[:source]
-        raise(ArgumentError("start_at must be unspecified")) if args[:start_at]
-        args[:source] = "sample"
-        args[:start_at] = Date.today
-        self.new args
-      end
-
-      def self.new_simulation(**args)
-        raise(ArgumentError("source must be unspecified")) if args[:source]
-        raise(ArgumentError("start_at must be unspecified")) if args[:start_at]
-        args[:source] = "simulation"
-        args[:start_at] = Date.today
-        self.new args
-      end
-
-      def initialize(days: [], id: nil, league: League.new, source: nil, start_at: nil)
-        @days = days
+      def initialize(days: [], id: nil, league: League.new, source: nil, start_at: Date.today)
+        self.days = days
         @id = id
         @league = league
         @source = source
         @start_at = start_at
+
+        validate!
+      end
+
+      def days=(days)
+        days.each do |day|
+          day.season = self
+        end
+        @days = days
       end
 
       def games
@@ -51,6 +44,11 @@ module PlayByPlay
 
       def wins(team)
         games.select { |game| game.winner == team }.size
+      end
+
+      def validate!
+        raise(ArgumentError, "source must sample or simulation") unless [ "sample", "simulation" ].include?(source)
+        raise(ArgumentError, "start_at cannot be nil") if start_at.nil?
       end
     end
   end

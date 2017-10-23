@@ -69,6 +69,7 @@ module PlayByPlay
           String :opening_tip
           Integer :period, null: false
           Integer :seconds_remaining, null: false
+          String :source, null: false
           Boolean :team, default: false, null: false
           Boolean :technical_free_throws, default: false, null: false
           Integer :visitor_id, null: false

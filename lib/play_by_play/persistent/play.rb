@@ -36,24 +36,25 @@ module PlayByPlay
         attributes = attributes.first.dup
 
         @id = attributes.delete(:id)
-        self.possession_id = attributes.delete(:possession_id)
         self.possession = attributes.delete(:possession)
+        self.possession_id = attributes.delete(:possession_id)
         @row = attributes.delete(:row)
 
         super type, attributes
       end
 
-      def possession=(value)
-        return unless value
-        @possession = value
-        @possession_id = value&.id
+      def possession=(possession)
+        return unless possession
+        @possession = possession
+        @possession_id = possession&.id
+        possession.play = self
+        possession
       end
 
       def possession_id=(value)
-        return unless value
         @possession_id = value
-        if @possession&.id != value
-          @possession = nil
+        if @possession && value != @possession.id
+          raise ArgumentError, "Can't set possession_id to #{value} with possession already set with ID #{value}"
         end
       end
     end

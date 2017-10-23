@@ -10,11 +10,23 @@ module PlayByPlay
 
       def initialize(date: nil, games: [], id: nil, name: nil, season: nil, season_id: nil)
         @date = date
-        @games = games
+        self.games = games
         @id = id
         @name = name
-        @season = season
+        self.season = season
         @season_id = season_id
+      end
+
+      def games=(games)
+        games.each do |game|
+          game.day = self
+        end
+        @games = games
+      end
+
+      def season=(season)
+        season.days << self if season&.days
+        @season = season
       end
 
       def inspect

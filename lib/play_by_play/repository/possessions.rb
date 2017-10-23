@@ -16,6 +16,7 @@ module PlayByPlay
           opening_tip: possession.opening_tip.to_s,
           period: possession.period,
           seconds_remaining: possession.seconds_remaining,
+          source: possession.game.source,
           team: possession.team?,
           technical_free_throws: possession.technical_free_throws?,
           visitor_id: possession.game.visitor_id

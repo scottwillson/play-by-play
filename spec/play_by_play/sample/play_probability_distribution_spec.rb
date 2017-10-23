@@ -25,10 +25,9 @@ module PlayByPlay
           repository = Repository.new
           repository.reset!
 
-          season = Persistent::Season.new_sample
+          season = Sample::Season.new_persistent
           day = Persistent::Day.new(season: season)
-          season.days << day
-          day.games << sample_game
+          sample_game.day = day
           repository.seasons.save season
 
           game = Persistent::Game.new(visitor: repository.teams.find_by_abbrevation("GSW"), home: repository.teams.find_by_abbrevation("POR"))

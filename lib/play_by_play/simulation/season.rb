@@ -11,6 +11,12 @@ require "play_by_play/simulation/random_play_generator"
 module PlayByPlay
   module Simulation
     module Season
+      def self.new_persistent(**args)
+        raise(ArgumentError("source must be unspecified")) if args[:source]
+        args[:source] = "simulation"
+        Persistent::Season.new args
+      end
+
       def self.new_random(league: League.new_random(30), scheduled_games_per_teams_count: 82)
         scheduled_games_per_teams_count = scheduled_games_per_teams_count.to_i
 
@@ -18,7 +24,7 @@ module PlayByPlay
 
         raise(Model::InvalidStateError, "scheduled_games_per_teams_count must be even but was #[scheduled_games_per_teams_count]") if scheduled_games_per_teams_count.odd?
 
-        season = Persistent::Season.new_simulation(league: league)
+        season = new_persistent(league: league)
 
         scheduled_games_count = season.teams.size * (scheduled_games_per_teams_count / 2)
         create_days season, scheduled_games_count, scheduled_games_per_teams_count
@@ -65,7 +71,6 @@ module PlayByPlay
           end
 
           day = Persistent::Day.new(date: date += 1, season: season)
-          season.days << day
           create_games season, day, scheduled_games_per_teams_count, number_of_games
         end
       end
@@ -87,8 +92,7 @@ module PlayByPlay
           raise(Model::InvalidStateError, "Only #{teams.first.name} has played fewer than #{scheduled_games_per_teams_count} games") if teams.size == 1
           home = teams.pop
           visitor = teams.pop
-          game = Persistent::Game.new(home: home, visitor: visitor)
-          day.games << game
+          game = Persistent::Game.new(day: day, home: home, visitor: visitor)
           home.games << game
           visitor.games << game
         end

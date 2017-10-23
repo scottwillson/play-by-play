@@ -5,9 +5,7 @@ module PlayByPlay
     class Possession < Model::Possession
       attr_accessor :game
       attr_accessor :id
-      attr_accessor :game_id
       attr_accessor :play
-      attr_accessor :play_id
 
       def initialize(attributes = {})
         attributes = attributes.dup
@@ -45,10 +43,15 @@ module PlayByPlay
         @game_id = value&.id
       end
 
+      def game_id
+        @game&.id || @game_id
+      end
+
       def game_id=(value)
+        return unless value
         @game_id = value
-        if @game_id != @game&.id
-          @game = nil
+        if @game && value != @game.id
+          raise ArgumentError, "Can't set game_id to #{value} with game already set with ID #{@game.id}"
         end
       end
 
@@ -70,10 +73,14 @@ module PlayByPlay
         @play_id = value&.id
       end
 
+      def play_id
+        @play&.id || @play_id
+      end
+
       def play_id=(value)
         @play_id = value
-        if @play_id != @play&.id
-          @play = nil
+        if @play && value != @play.id
+          raise ArgumentError, "Can't set play_id to #{value} with play already set with ID #{value}"
         end
       end
 

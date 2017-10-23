@@ -4,14 +4,14 @@ require "play_by_play/persistent/team"
 module PlayByPlay
   module Persistent
     class Game
-      attr_accessor :day
-      attr_accessor :day_id
       attr_accessor :error_eventnum
       attr_accessor :home
       attr_accessor :id
       attr_accessor :rows
       attr_accessor :visitor
 
+      attr_reader :day
+      attr_reader :day_id
       attr_reader :errors
       attr_reader :home_id
       attr_reader :nba_id
@@ -31,8 +31,8 @@ module PlayByPlay
         visitor_id: nil
       )
 
-        @day_id = day_id
-        @day = day
+        self.day_id = day_id
+        self.day = day
         @errors = errors
         @error_eventnum = error_eventnum
         self.home_id = home_id
@@ -47,6 +47,21 @@ module PlayByPlay
         raise(ArgumentError, "Vistor team cannot be nil") if @visitor.nil?
         raise(ArgumentError, "Home team cannot be nil") if @home.nil?
         raise(Model::InvalidStateError, "Team cannot play itself. Visitor: #{@visitor}, home: #{@home}") if @home == @visitor
+      end
+
+      def day=(day)
+        if day&.games && !day.games.include?(self)
+          day.games << self
+        end
+        @day_id = day&.id
+        @day = day
+      end
+
+      def day_id=(value)
+        @day_id = value
+        if @day&.id != value
+          @day = nil
+        end
       end
 
       def home
@@ -86,6 +101,14 @@ module PlayByPlay
 
       def possession
         possessions.last
+      end
+
+      def season
+        day&.season
+      end
+
+      def source
+        season&.source
       end
 
       def visitor

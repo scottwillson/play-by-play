@@ -6,6 +6,12 @@ require "play_by_play/sample/game"
 module PlayByPlay
   module Sample
     module Season
+      def self.new_persistent(**args)
+        raise(ArgumentError("source must be unspecified")) if args[:source]
+        args[:source] = "sample"
+        Persistent::Season.new args
+      end
+
       def self.import(path, repository: Repository.new, invalid_state_error: true)
         days = Dir.glob("#{path}/[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9].json").map do |file_path|
           json = JSON.parse(File.read(file_path))
@@ -20,7 +26,7 @@ module PlayByPlay
           day
         end
 
-        season = Persistent::Season.new(days: days, source: "sample", start_at: start_at(days))
+        season = Season.new_persistent(days: days, start_at: start_at(days))
 
         repository.seasons.save season
 
