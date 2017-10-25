@@ -3,7 +3,7 @@ require "logger"
 module PlayByPlay
   @logger = nil
   @environment = nil
-  
+
   def self.environment
     @environment = ENV["RACK_ENV"]&.to_sym || :development
   end
@@ -23,7 +23,7 @@ module PlayByPlay
       logger.level = :info
     end
 
-    logger.formatter = proc do |severity, datetime, progname, msg|
+    logger.formatter = proc do |severity, datetime, _, msg|
       "severity: #{severity}, timestamp: #{datetime.utc}, #{msg}\n"
     end
 

@@ -70,6 +70,8 @@ namespace :play do
 
       view = PlayByPlay::Views::Teams.new(season)
       puts view
+
+      repository.seasons.save season
     end
   end
 end

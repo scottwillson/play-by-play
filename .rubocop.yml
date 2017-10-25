@@ -1,6 +1,12 @@
 AllCops:
   TargetRubyVersion: 2.4
 
+Layout/SpaceInsideArrayPercentLiteral:
+  Enabled: false
+
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+  
 Metrics/AbcSize:
   Max: 40
 
