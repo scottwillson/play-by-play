@@ -4,41 +4,41 @@ module PlayByPlay
   module RepositoryModule
     class Rows < Base
       def save(rows)
-        columns = [
-          :possession_id,
-          :game_id,
-          :eventmsgactiontype,
-          :eventmsgtype,
-          :eventnum,
-          :homedescription,
-          :neutraldescription,
-          :pctimestring,
-          :period,
-          :person1type,
-          :person2type,
-          :person3type,
-          :player1_id,
-          :player1_name,
-          :player1_team_abbreviation,
-          :player1_team_city,
-          :player1_team_id,
-          :player1_team_nickname,
-          :player2_id,
-          :player2_name,
-          :player2_team_abbreviation,
-          :player2_team_city,
-          :player2_team_id,
-          :player2_team_nickname,
-          :player3_id,
-          :player3_name,
-          :player3_team_abbreviation,
-          :player3_team_city,
-          :player3_team_id,
-          :player3_team_nickname,
-          :score,
-          :scoremargin,
-          :visitordescription,
-          :wctimestring
+        columns = %i[
+          possession_id
+          game_id
+          eventmsgactiontype
+          eventmsgtype
+          eventnum
+          homedescription
+          neutraldescription
+          pctimestring
+          period
+          person1type
+          person2type
+          person3type
+          player1_id
+          player1_name
+          player1_team_abbreviation
+          player1_team_city
+          player1_team_id
+          player1_team_nickname
+          player2_id
+          player2_name
+          player2_team_abbreviation
+          player2_team_city
+          player2_team_id
+          player2_team_nickname
+          player3_id
+          player3_name
+          player3_team_abbreviation
+          player3_team_city
+          player3_team_id
+          player3_team_nickname
+          score
+          scoremargin
+          visitordescription
+          wctimestring
         ]
 
         values = rows.map do |row|

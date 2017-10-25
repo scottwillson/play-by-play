@@ -20,9 +20,8 @@ namespace :play do
   task :game do
     repository = PlayByPlay::Repository.new
     repository.create
-    unless repository.league.exists?
-      Rake::Task["import:season"].invoke
-    end
+
+    Rake::Task["import:season"].invoke unless repository.league.exists?
 
     repository = PlayByPlay::Repository.new
 
@@ -71,7 +70,7 @@ namespace :play do
       view = PlayByPlay::Views::Teams.new(season)
       puts view
 
-      repository.seasons.save season
+      repository.seasons.create season
     end
   end
 end
@@ -143,15 +142,15 @@ namespace :sample do
     PlayByPlay::Model::PlayMatrix.accessible_plays(possession_key).each do |play|
       count = repository.plays.count(possession_key, team, team_id, play)
       if play.first == :fg
-        fg = fg + count
+        fg += count
       end
       if play.first == :fg_miss || play.first == :block
-        fg_miss = fg_miss + count
+        fg_miss += count
       end
-      puts "#{format "%.1f", count * 100 / total_plays.to_f}   #{play}"
+      puts "#{format '%.1f', count * 100 / total_plays.to_f}   #{play}"
     end
 
-    puts "#{fg}/#{fg_miss + fg} #{fg/(fg + fg_miss).to_f}"
+    puts "#{fg}/#{fg_miss + fg} #{fg / (fg + fg_miss).to_f}"
   end
 end
 

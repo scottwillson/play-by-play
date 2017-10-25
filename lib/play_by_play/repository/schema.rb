@@ -78,11 +78,11 @@ module PlayByPlay
           index :home_id
           index :offense_id
           index :visitor_id
-          index [ :technical_free_throws, :free_throws, :team, :ball_in_play, :seconds_remaining, :home_id, :visitor_id ]
+          index %i[ technical_free_throws free_throws team ball_in_play seconds_remaining home_id visitor_id ]
 
           index :play_team
           index :play_type
-          index [ :and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :play_team ]
+          index %i[ and_one assisted away_from_play clear_path flagrant intentional play_team ]
         end
 
         db.send(create_table_method, :seasons) do
