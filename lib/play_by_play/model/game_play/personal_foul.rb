@@ -6,16 +6,16 @@ module PlayByPlay
         other_team = possession.other_team(play.team)
 
         if play.away_from_play?
-          attributes = attributes.merge(free_throws: [ other_team ], team: other_team)
+          attributes.merge(free_throws: [ other_team ], team: other_team)
 
         elsif play.intentional?
-          attributes = attributes.merge(free_throws: [ other_team ] * 2, team: other_team)
+          attributes.merge(free_throws: [ other_team ] * 2, team: other_team)
 
         elsif play.clear_path?
-          attributes = attributes.merge(free_throws: [ other_team ] * 2, team: other_team, next_team: other_team)
+          attributes.merge(free_throws: [ other_team ] * 2, team: other_team, next_team: other_team)
 
         elsif next_foul_in_penalty?(possession, play.team)
-          attributes = attributes.merge(free_throws: [ other_team ] * 2, team: other_team)
+          attributes.merge(free_throws: [ other_team ] * 2, team: other_team)
 
         elsif play.team == :offense
           attributes.merge(free_throws: [ other_team ], team: other_team)
