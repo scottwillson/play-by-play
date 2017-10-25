@@ -3,7 +3,7 @@ require "play_by_play/repository/base"
 module PlayByPlay
   module RepositoryModule
     class Plays < Base
-      PLAY_KEYS = %i(and_one assisted away_from_play clear_path flagrant intentional point_value).freeze
+      PLAY_KEYS = %i[and_one assisted away_from_play clear_path flagrant intentional point_value].freeze
 
       def count(possession_key, team, team_id, play)
         raise(ArgumentError, "play cannot be nil") unless play

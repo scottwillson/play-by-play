@@ -4,32 +4,41 @@ AllCops:
 Layout/SpaceInsideArrayPercentLiteral:
   Enabled: false
 
+Layout/SpaceInsideBrackets:
+  Enabled: false
+
 Layout/SpaceInsidePercentLiteralDelimiters:
   Enabled: false
-  
+
 Metrics/AbcSize:
-  Max: 40
+  Max: 80
 
 Metrics/ClassLength:
-  Max: 300
+  Max: 600
+
+Metrics/BlockLength:
+  Max: 100
 
 Metrics/CyclomaticComplexity:
-  Max: 12
+  Max: 24
 
 Metrics/LineLength:
-  Max: 160
+  Max: 320
 
 Metrics/MethodLength:
-  Max: 30
+  Max: 60
 
 Metrics/ModuleLength:
-  Max: 300
+  Max: 600
 
 Metrics/ParameterLists:
   CountKeywordArgs: false
 
 Metrics/PerceivedComplexity:
-  Max: 12
+  Max: 24
+
+Naming/VariableNumber:
+  Enabled: false
 
 Style/ConditionalAssignment:
   Enabled: false
@@ -44,19 +53,22 @@ Style/FrozenStringLiteralComment:
   Enabled: false
 
 Style/IfUnlessModifier:
-  Severity: warning
+  Enabled: false
 
 Style/GuardClause:
-  Severity: warning
+  Enabled: false
 
 Style/NegatedIf:
   Severity: warning
 
-Style/SpaceInsideBrackets:
+Style/NumericPredicate:
   Enabled: false
 
 Style/StringLiterals:
   EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  MinSize: 6
 
 Style/TrailingCommaInLiteral:
   Enabled: false

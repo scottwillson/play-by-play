@@ -1,12 +1,12 @@
 source "https://rubygems.org"
 
+gem "pg"
 gem "puma"
 gem "rack"
 gem "sequel"
+gem "sequel_pg"
 gem "sinatra"
 gem "sinatra-contrib"
-gem "pg"
-gem "sequel_pg"
 gem "text-table"
 
 group :development do
