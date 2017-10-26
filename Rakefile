@@ -119,7 +119,7 @@ end
 namespace :repository do
   desc "Erase and recreate repository"
   task :recreate do
-    `bin/setup`
+    `bin/recreate_dbs`
     PlayByPlay::Repository.new.create!
   end
 end

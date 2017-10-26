@@ -9,11 +9,7 @@ bundle
 
 ( cd web && npm install && npm run dist:dev )
 
-dropdb --if-exists play_by_play_development
-createdb play_by_play_development
-
-dropdb --if-exists play_by_play_test
-createdb play_by_play_test
+bin/recreate_dbs
 
 rake repository:recreate
 rspec
