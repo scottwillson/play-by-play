@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 
+rm -rf web/node_modules
+
+brew install phantomjs
+
+gem install bundler
+bundle
+
+( cd web && npm install && npm run dist:dev )
+
 dropdb --if-exists play_by_play_development
 createdb play_by_play_development
 
 dropdb --if-exists play_by_play_test
 createdb play_by_play_test
+
+rake repository:recreate
+rspec
+rake

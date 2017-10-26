@@ -8,6 +8,7 @@ Game simulation is very simple. There is a "home" team and a "visitor" team, eac
 
 Install
 =======
+ * On OS X, just run bin/setup
  * [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/), [node.js](https://nodejs.org/en/download/)
  * `gem install bundler`
  * `bundle`
