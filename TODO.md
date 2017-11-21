@@ -51,3 +51,5 @@
  * add default for Day and maybe Season to allow just calling .new
  * add default for source(s)
  * play should be required to add possession
+ * each Season should have a League?
+ 

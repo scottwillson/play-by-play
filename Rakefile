@@ -77,6 +77,17 @@ namespace :play do
   end
 end
 
+namespace :view do
+  task :season do
+    repository = PlayByPlay::Repository.new
+
+    repository.seasons.simulations.each do |season|
+      view = PlayByPlay::Views::Season.new(season)
+      puts view
+    end
+  end
+end
+
 namespace :parse do
   desc "Parse historical play by play file in memory"
   task :game do

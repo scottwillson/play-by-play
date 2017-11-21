@@ -25,6 +25,16 @@ module PlayByPlay
         season_id
       end
 
+      def simulations
+        @db[:seasons].where(source: "simulation").all.map do |attributes|
+          season = Persistent::Season.new(attributes)
+          league = Persistent::League.new(id: @db[:leagues].first)
+          season.league = league
+
+          season
+        end
+      end
+
       def year(year)
         attributes = @db[:seasons].where(Sequel.lit("date_part('year', start_at) = ?", year)).first
         Persistent::Season.new(attributes) if attributes
