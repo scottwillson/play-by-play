@@ -52,4 +52,5 @@
  * add default for source(s)
  * play should be required to add possession
  * each Season should have a League?
- 
+ * Repository.league should be leagues?
+ * possessions table should have position field for ordering and repository should read possessions in order

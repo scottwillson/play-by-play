@@ -25,11 +25,29 @@ module PlayByPlay
         season_id
       end
 
+      def days(season)
+        @db[:days].where(season_id: season.id).all
+                  .map do |attributes|
+                    attributes.delete(:start_at)
+                    Persistent::Day.new attributes
+                  end
+      end
+
       def simulations
         @db[:seasons].where(source: "simulation").all.map do |attributes|
           season = Persistent::Season.new(attributes)
-          league = Persistent::League.new(id: @db[:leagues].first)
-          season.league = league
+          season.league = repository.league.find
+          season.days = days(season)
+          repository.games.add_to(season)
+          season.games.each do |game|
+            repository.games.plays(game.id).each do |play|
+              possession = Model::GamePlay.play!(game.possession, play)
+
+              play.possession = game.possession
+              game.possession.play = play
+              game.possessions << possession
+            end
+          end
 
           season
         end

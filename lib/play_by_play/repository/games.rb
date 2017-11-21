@@ -6,7 +6,6 @@ module PlayByPlay
       def add_to(season)
         @db[:games].where(day_id: season.days.map(&:id)).each do |game_attributes|
           day = season.days.detect { |d| d.id == game_attributes[:day_id] }
-          game_attributes.delete(:id)
 
           visitor = season.team(game_attributes[:visitor_id])
           home = season.team(game_attributes[:home_id])
@@ -79,8 +78,16 @@ module PlayByPlay
           .map do |attributes|
             type = attributes.delete(:play_type).to_sym
             attributes[:team] = attributes.delete(:play_team)
+
+            if attributes[:team] && attributes[:team] != ""
+              attributes[:team] = attributes[:team].to_sym
+            else
+              attributes[:team] = nil
+            end
+
             Persistent::Play.new(type, attributes)
           end
+          .reverse
       end
 
       def possessions(game_id)

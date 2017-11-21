@@ -176,7 +176,7 @@ module PlayByPlay
         when nil
           nil
         else
-          raise ArgumentError, "team #{value} must be nil, :defense, :home, :offense, :team, or :visitor but is a #{value.class} #{value}"
+          raise ArgumentError, "team must be nil, :defense, :home, :offense, :team, or :visitor but is a #{value.class} #{value}"
         end
       end
 
