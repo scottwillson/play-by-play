@@ -28,9 +28,11 @@ namespace :play do
     visitor = repository.teams.find_by_abbrevation(ENV["VISITOR_TEAM"] || "ORL")
     home = repository.teams.find_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
 
+    random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
+
     (ENV["TIMES"]&.to_i || 1).times do
       game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
-      game = PlayByPlay::Simulation::Game.play!(game)
+      game = PlayByPlay::Simulation::Game.play!(game, random_play_generator)
       puts PlayByPlay::Views::Game.new(game)
       puts
     end
