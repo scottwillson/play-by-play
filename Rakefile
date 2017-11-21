@@ -30,12 +30,23 @@ namespace :play do
 
     random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
 
+    home_wins = 0
+    visitor_wins = 0
+
     (ENV["TIMES"]&.to_i || 1).times do
       game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
       game = PlayByPlay::Simulation::Game.play!(game, random_play_generator)
+      if game.winner == home
+        home_wins += 1
+      else
+        visitor_wins += 1
+      end
       puts PlayByPlay::Views::Game.new(game)
       puts
     end
+
+    puts "#{visitor.name} wins: #{visitor_wins}"
+    puts "#{home.name} wins: #{home_wins}"
   end
 
   desc "Simulate a season of games"

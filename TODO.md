@@ -1,6 +1,8 @@
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
+   * GSW should probably win at home against NYK 95-99% but is more like 70%
+   * GSW should probably win against MIL (.500 team) ~70% but is more like 63%
  * do imports concurrently
  * Test season simulation with database
  * Use better Rspec predicate matchers
