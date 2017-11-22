@@ -5,6 +5,8 @@
    * GSW should probably win against MIL (.500 team) ~70% but is more like 63%
  * do imports concurrently
  * Test season simulation with database
+ * Change Simulation::Game.play! signature to use keyed arguments
+  * share repository?
  * Use better Rspec predicate matchers
  * Refactor season simulation to be more like Redux
  * Add sequence number to row? (or just rely on ID)

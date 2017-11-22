@@ -10,7 +10,11 @@ require "play_by_play/simulation/random_play_generator"
 module PlayByPlay
   module Simulation
     module Game
-      def self.play!(game, random_play_generator = RandomPlayGenerator.new(PlayByPlay::Repository.new))
+      def self.play!(
+        game,
+        random_play_generator = RandomPlayGenerator.new(PlayByPlay::Repository.new),
+        random_seconds_generator = RandomSecondGenerator.new(PlayByPlay::Repository.new)
+      )
         PlayByPlay.logger.debug(
           simulation_game: :play!,
           date: game.day&.date,
@@ -24,6 +28,8 @@ module PlayByPlay
           play = random_play_generator.new_play(game.possession)
           possession = Model::GamePlay.play!(game.possession, play)
 
+          seconds = random_seconds_generator.seconds(game.possession)
+          play = [ play.first, play.last.merge(seconds: seconds)]
           play = Persistent::Play.from_array(play)
           play.possession = game.possession
           game.possession.play = play
