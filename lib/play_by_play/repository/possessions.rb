@@ -10,6 +10,7 @@ module PlayByPlay
           free_throws: possession.free_throws?,
           game_id: possession.game_id,
           home_id: possession.game.home_id,
+          home_margin: possession.home_margin,
           next_team: possession.next_team.to_s,
           offense: possession.offense.to_s,
           offense_id: possession.offense_id,
@@ -19,7 +20,8 @@ module PlayByPlay
           source: possession.game.source,
           team: possession.team?,
           technical_free_throws: possession.technical_free_throws?,
-          visitor_id: possession.game.visitor_id
+          visitor_id: possession.game.visitor_id,
+          visitor_margin: possession.visitor_margin
         }
 
         if possession.play

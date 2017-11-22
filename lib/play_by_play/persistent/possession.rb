@@ -7,14 +7,19 @@ module PlayByPlay
       attr_accessor :id
       attr_accessor :play
 
+      attr_reader :home_margin
+      attr_reader :visitor_margin
+
       def initialize(attributes = {})
         attributes = attributes.dup
 
         self.game = attributes.delete(:game)
         self.game_id = attributes.delete(:game_id)
+        @home_margin = attributes.delete(:home_margin)
         self.id = attributes.delete(:id)
         self.play = attributes.delete(:play)
         self.play_id = attributes.delete(:play_id)
+        @visitor_margin = attributes.delete(:visitor_margin)
 
         super attributes
       end
@@ -59,6 +64,10 @@ module PlayByPlay
         game&.home_id
       end
 
+      def home_margin
+        @home_margin || margin(:home)
+      end
+
       def offense_id
         case offense
         when :home
@@ -86,6 +95,10 @@ module PlayByPlay
 
       def visitor_id
         game&.visitor_id
+      end
+
+      def visitor_margin
+        @visitor_margin || margin(:visitor)
       end
 
       def to_s

@@ -14,6 +14,8 @@ module PlayByPlay
           game = Game.play!(game, random_play_generator)
           expect(game.possession.visitor.points).to be > 0
           expect(game.possession.home.points).to be > 0
+          expect(game.possession.margin(:visitor)).not_to eq(0)
+          expect(game.possession.margin(:home)).not_to eq(0)
         end
       end
     end

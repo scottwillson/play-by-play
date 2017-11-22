@@ -104,6 +104,17 @@ module PlayByPlay
         technical_free_throws.size == 1
       end
 
+      def margin(team)
+        case team
+        when :home
+          team_instance(:home).points - team_instance(:visitor).points
+        when :visitor
+          team_instance(:visitor).points - team_instance(:home).points
+        else
+          raise(ArgumentError, "team must be :home or :visitor, but was #{team.class} #{team}")
+        end
+      end
+
       def game_over?
         period >= 4 && !seconds_remaining? && !tied?
       end

@@ -63,6 +63,7 @@ module PlayByPlay
           Boolean :free_throws, default: false, null: false
           Integer :game_id, null: false
           Integer :home_id, null: false
+          Integer :home_margin, null: false, default: 0
           String :next_team
           String :offense
           Integer :offense_id
@@ -73,6 +74,7 @@ module PlayByPlay
           Boolean :team, default: false, null: false
           Boolean :technical_free_throws, default: false, null: false
           Integer :visitor_id, null: false
+          Integer :visitor_margin, null: false, default: 0
           index :defense_id
           index :game_id
           index :home_id

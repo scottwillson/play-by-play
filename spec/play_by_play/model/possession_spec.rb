@@ -82,6 +82,22 @@ module PlayByPlay
           expect(possession.game_over?).to eq false
         end
       end
+
+      describe "#margin" do
+        it "returns current scoring margin" do
+          possession = Possession.new
+          expect(possession.margin(:home)).to eq(0)
+          expect(possession.margin(:visitor)).to eq(0)
+
+          possession = Possession.new
+          possession = Possession.new(
+            home: Team.new(key: :home, points: 85),
+            visitor: Team.new(key: :visitor, points: 79)
+          )
+          expect(possession.margin(:home)).to eq(6)
+          expect(possession.margin(:visitor)).to eq(-6)
+        end
+      end
     end
   end
 end
