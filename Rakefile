@@ -193,21 +193,18 @@ namespace :sample do
 end
 
 namespace :spec do
-  begin
-    require "rspec/core/rake_task"
+  require "rspec/core/rake_task"
 
-    desc "Run full-stack web spec"
-    RSpec::Core::RakeTask.new(:web) do |t|
-      t.rspec_opts = "--tag web"
-    end
-
-    desc "Run fast (no database, no servers) specs"
-    RSpec::Core::RakeTask.new(:fast) do |t|
-      t.rspec_opts = "--tag ~web --tag ~database"
-    end
-
-    desc "Run all specs"
-    RSpec::Core::RakeTask.new(:all)
-  rescue LoadError
+  desc "Run full-stack web spec"
+  RSpec::Core::RakeTask.new(:web) do |t|
+    t.rspec_opts = "--tag web"
   end
+
+  desc "Run fast (no database, no servers) specs"
+  RSpec::Core::RakeTask.new(:fast) do |t|
+    t.rspec_opts = "--tag ~web --tag ~database"
+  end
+
+  desc "Run all specs"
+  RSpec::Core::RakeTask.new(:all)
 end
