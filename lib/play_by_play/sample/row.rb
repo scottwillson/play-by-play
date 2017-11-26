@@ -208,7 +208,9 @@ module PlayByPlay
       end
 
       def seconds
-        if next_row&.period_end?
+        if possession.seconds_remaining.nil?
+          0
+        elsif next_row&.period_end?
           possession.seconds_remaining
         else
           possession.seconds_remaining - seconds_remaining

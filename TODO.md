@@ -3,6 +3,13 @@
    * OPP FGs FG% is OK
    * GSW should probably win at home against NYK 95-99% but is more like 70%
    * GSW should probably win against MIL (.500 team) ~70% but is more like 63%
+   * Removing defense events seems to slightly increase good team stength, but not much
+   * Ensure we're accounting for home court
+   * 3PA seem low and too regular. Should be 14.9-32.7, but is 17.2-26.2. % looks correct, though
+   * rebounds are high, esp. offensive rebounds
+   * turnovers are low
+   * PFs a little low
+   * Points are too averaged
  * do imports concurrently
  * Test season simulation with database
  * Change Simulation::Game.play! signature to use keyed arguments

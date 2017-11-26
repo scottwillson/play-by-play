@@ -25,6 +25,7 @@ module PlayByPlay
         }
 
         if possession.play
+          raise(ArgumentError, "play seconds cannot be nil") unless possession.play.seconds
           attributes = attributes.merge(
             play_team: possession.play.team.to_s,
             and_one: possession.play.and_one?,
@@ -33,7 +34,8 @@ module PlayByPlay
             clear_path: possession.play.clear_path?,
             flagrant: possession.play.flagrant?,
             intentional: possession.play.intentional?,
-            play_type: possession.play.type.to_s
+            play_type: possession.play.type.to_s,
+            seconds: possession.play.seconds
           )
 
           if possession.play.point_value == 3

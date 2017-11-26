@@ -1,6 +1,7 @@
 require "spec_helper"
 require "play_by_play/model/possession"
 require "play_by_play/persistent/game"
+require "play_by_play/sample/game"
 require "play_by_play/sample/row"
 
 module PlayByPlay

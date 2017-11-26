@@ -90,6 +90,10 @@ module PlayByPlay
         ]
       }.freeze
 
+      def self.play_keys
+        ACCESSIBLE_PLAYS.values.flatten(1).uniq
+      end
+
       def self.possession_key?(key)
         possession_keys.include? key
       end

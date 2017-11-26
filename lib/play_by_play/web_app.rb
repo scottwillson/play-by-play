@@ -12,7 +12,7 @@ module PlayByPlay
     get "/games.json" do
       page = (params["page"] || 1).to_i
       page = 1 if page < 1
-      json repository.games.all(page)
+      json repository.games.all_with_import_errors(page)
     end
 
     get "/games/:nba_id.json" do |nba_id|

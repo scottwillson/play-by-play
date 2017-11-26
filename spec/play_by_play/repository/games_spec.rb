@@ -3,6 +3,9 @@ require "play_by_play/mock/repository"
 require "play_by_play/persistent/game"
 require "play_by_play/repository"
 require "play_by_play/simulation/game"
+require "play_by_play/simulation/season"
+require "play_by_play/simulation/random_play_generator"
+require "play_by_play/simulation/random_seconds_generator"
 
 module PlayByPlay
   RSpec.describe "Repository.games" do
@@ -19,17 +22,26 @@ module PlayByPlay
         repository = Repository.new
         repository.reset!
 
+        home = Persistent::Team.new(abbreviation: "SEA")
+        visitor = Persistent::Team.new(abbreviation: "POR")
+        repository.teams.save home
+        repository.teams.save visitor
+
+        season = Simulation::Season.new_persistent
+        day = Persistent::Day.new(season: season)
+        game = Persistent::Game.new(home: home, visitor: visitor, day: day)
+        repository.seasons.save season
+
         random_play_generator = Simulation::RandomPlayGenerator.new(Mock::Repository.new)
-        game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-        game = Simulation::Game.play!(game, random_play_generator)
+        random_seconds_generator = Simulation::RandomSecondsGenerator.new(Mock::Repository.new)
+        game = Simulation::Game.play!(game, random_play_generator, random_seconds_generator)
 
         repository.games.save_possessions game
 
-        games = repository.games.all
-        expect(games.size).to eq(1)
-        expect(game.possession.visitor.margin).not_to eq(0)
-        expect(game.possession.home.margin).not_to eq(0)
-        expect(game.possession.home.margin - game.possession.visitor.margin).to eq(0)
+        possessions = repository.games.possessions(game.id)
+        expect(possessions.last.visitor_margin).not_to eq(0)
+        expect(possessions.last.home_margin).not_to eq(0)
+        expect(possessions.last.home_margin + game.possession.visitor_margin).to eq(0)
       end
     end
   end

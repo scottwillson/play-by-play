@@ -33,7 +33,7 @@ module PlayByPlay
       end
 
       def initialize(type, *attributes)
-        attributes = attributes.first.dup
+        attributes = attributes.first.dup || {}
 
         @id = attributes.delete(:id)
         self.possession = attributes.delete(:possession)

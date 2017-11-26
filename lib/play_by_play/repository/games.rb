@@ -53,13 +53,22 @@ module PlayByPlay
       def find(id)
         attributes = @db[:games].where(id: id).first
 
-        attributes[:home] = team(attributes[:home_id])
-        attributes[:visitor] = team(attributes[:visitor_id])
+        attributes[:home] = repository.teams.find(attributes[:home_id])
+        attributes[:visitor] = repository.teams.find(attributes[:visitor_id])
 
         Persistent::Game.new attributes
       end
 
-      def all(page = 1)
+      def all
+        @db[:games].all.map do |attributes|
+          attributes[:home] = repository.teams.find(attributes[:home_id])
+          attributes[:visitor] = repository.teams.find(attributes[:visitor_id])
+
+          Persistent::Game.new(attributes)
+        end
+      end
+
+      def all_with_import_errors(page = 1)
         @db[:games].exclude(error_eventnum: nil).paginate(page, 20).all
       end
 
@@ -126,8 +135,10 @@ module PlayByPlay
 
           attributes = repository.plays.add(attributes)
 
+          attributes.delete(:seconds)
+
           Persistent::Possession.new(attributes)
-        end
+        end.reverse
       end
 
       def rows(nba_id)

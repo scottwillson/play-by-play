@@ -5,10 +5,8 @@ module PlayByPlay
   module Persistent
     class Game
       attr_accessor :error_eventnum
-      attr_accessor :home
       attr_accessor :id
       attr_accessor :rows
-      attr_accessor :visitor
 
       attr_reader :day
       attr_reader :day_id

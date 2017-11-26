@@ -2,6 +2,7 @@ require "spec_helper"
 require "json"
 require "play_by_play/model/possession"
 require "play_by_play/sample/game"
+require "play_by_play/sample/season"
 
 module PlayByPlay
   module Sample

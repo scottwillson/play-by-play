@@ -8,6 +8,7 @@ require "play_by_play/sample/league"
 require "play_by_play/sample/season"
 require "play_by_play/simulation/game"
 require "play_by_play/simulation/random_play_generator"
+require "play_by_play/simulation/random_play_generator"
 require "play_by_play/simulation/season"
 require "play_by_play/views/game"
 require "play_by_play/views/season"
@@ -29,24 +30,34 @@ namespace :play do
     home = repository.teams.find_by_abbrevation(ENV["HOME_TEAM"] || "NOP")
 
     random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
+    random_seconds_generator = PlayByPlay::Simulation::RandomSecondsGenerator.new(repository)
 
+    home_points = 0
     home_wins = 0
+    visitor_points = 0
     visitor_wins = 0
 
-    (ENV["TIMES"]&.to_i || 1).times do
+    times = ENV["TIMES"]&.to_i || 1
+    times.times do
       game = PlayByPlay::Persistent::Game.new(home: home, visitor: visitor)
-      game = PlayByPlay::Simulation::Game.play!(game, random_play_generator)
+      game = PlayByPlay::Simulation::Game.play!(game, random_play_generator, random_seconds_generator)
       if game.winner == home
         home_wins += 1
       else
         visitor_wins += 1
       end
+
+      home_points += game.possession.home.points
+      visitor_points += game.possession.visitor.points
+
       puts PlayByPlay::Views::Game.new(game)
       puts
     end
 
     puts "#{visitor.name} wins: #{visitor_wins}"
     puts "#{home.name} wins: #{home_wins}"
+    puts "#{home.name} win % #{home_wins / times.to_f}"
+    puts "#{home.name} margin over #{visitor.name}: #{(home_points - visitor_points) / times.to_f}"
   end
 
   desc "Simulate a season of games"
@@ -58,6 +69,9 @@ namespace :play do
     scheduled_games_per_teams_count = ENV["GAMES"]&.to_i || 82
     seasons = ENV["SEASONS"]&.to_i || 1
     year = ENV["YEAR"]&.to_i
+
+    random_seconds_generator = PlayByPlay::Simulation::RandomSecondsGenerator.new(repository)
+    random_seconds_generator.seconds_probability_distribution.pre_fetch!
 
     random_play_generator = PlayByPlay::Simulation::RandomPlayGenerator.new(repository)
     random_play_generator.play_probability_distribution.pre_fetch!
@@ -76,7 +90,7 @@ namespace :play do
         season = PlayByPlay::Simulation::Season.new_random(league: league, scheduled_games_per_teams_count: scheduled_games_per_teams_count)
       end
 
-      PlayByPlay::Simulation::Season.play!(days: days, season: season, repository: repository, random_play_generator: random_play_generator)
+      PlayByPlay::Simulation::Season.play!(days: days, season: season, repository: repository, random_play_generator: random_play_generator, random_seconds_generator: random_seconds_generator)
       view = PlayByPlay::Views::Season.new(season)
       puts view
 

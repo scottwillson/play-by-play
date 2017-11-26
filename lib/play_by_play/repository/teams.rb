@@ -20,7 +20,11 @@ module PlayByPlay
 
       def find(id)
         return unless id
-        Persistent::Team.new @db[:teams].where(id: id).first
+
+        attributes = @db[:teams].where(id: id).first
+        return unless attributes
+
+        Persistent::Team.new attributes
       end
 
       def find_by_abbrevation(abbreviation)

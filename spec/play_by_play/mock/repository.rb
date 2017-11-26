@@ -4,19 +4,20 @@ module PlayByPlay
   module Mock
     class Repository
       def initialize
-        plays.save({} => [ :jump_ball, team: :visitor ])
-        plays.save({ team: :visitor } => [ :fg ])
-        plays.save({ team: :visitor } => [ :fg ])
-        plays.save({ team: :visitor } => [ :fg, point_value: 3 ])
-        plays.save({ team: :home } => [ :fg_miss ])
-        plays.save({ team: :visitor } => [ :fg_miss ])
-        plays.save({ team: :home } => [ :fg_miss ])
-        plays.save({ team: :visitor } => [ :fg_miss ])
-        plays.save({ team: :visitor } => [ :steal ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :offense ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense ])
+        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1 ])
+        plays.save({ team: :visitor } => [ :fg, seconds: 19 ])
+        plays.save({ team: :visitor } => [ :fg, seconds: 8 ])
+        plays.save({ team: :visitor } => [ :fg, point_value: 3, seconds: 12 ])
+        plays.save({ team: :home } => [ :fg_miss, seconds: 4 ])
+        plays.save({ team: :visitor } => [ :fg_miss, seconds: 18 ])
+        plays.save({ team: :home } => [ :fg_miss, seconds: 17 ])
+        plays.save({ team: :visitor } => [ :fg_miss, seconds: 11 ])
+        plays.save({ team: :visitor } => [ :steal, seconds: 5 ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :offense, seconds: 1 ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, seconds: 2 ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, seconds: 0 ])
+        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, seconds: 3 ])
+        plays.save({ ball_in_play: true } => [ :period_end, seconds: 9 ])
       end
 
       def plays
@@ -40,6 +41,14 @@ module PlayByPlay
 
         def save(hash)
           sample_plays << Persistent::Play.from_hash(hash)
+        end
+
+        # Incorrectly ignore team
+        def seconds_counts(play_key, _, _)
+          sample_plays
+            .select { |play| play.key == play_key }
+            .group_by(&:seconds)
+            .map { |count, play| { count: count, seconds: play.first.seconds } }
         end
       end
     end

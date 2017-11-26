@@ -40,10 +40,8 @@ module PlayByPlay
         season
       end
 
-      def self.play!(days: nil, season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository))
+      def self.play!(days: nil, season: Season.new_random, repository: Repository.new, random_play_generator: RandomPlayGenerator.new(repository), random_seconds_generator: RandomSecondsGenerator.new(repository))
         PlayByPlay.logger.debug(simulation_season: :play!, begin: Time.now)
-
-        random_play_generator = random_play_generator
 
         if days
           days = season.days[0, days]
@@ -52,7 +50,7 @@ module PlayByPlay
         end
 
         days
-          .map { |day| play_day! day, random_play_generator }
+          .map { |day| play_day! day, random_play_generator, random_seconds_generator }
           .each(&:join)
 
         PlayByPlay.logger.debug(simulation_season: :play!, end: Time.now)
@@ -98,10 +96,10 @@ module PlayByPlay
         end
       end
 
-      def self.play_day!(day, random_play_generator)
+      def self.play_day!(day, random_play_generator, random_seconds_generator)
         Thread.new do
           day.games.each do |game|
-            Simulation::Game.play! game, random_play_generator
+            Simulation::Game.play! game, random_play_generator, random_seconds_generator
           end
         end
       end

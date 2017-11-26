@@ -50,7 +50,7 @@ module PlayByPlay
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false, seconds_remaining: 0)
         else
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false)
-          query = query.where{seconds_remaining > 0}
+          query = query.where { seconds_remaining > 0 }
         end
 
         query = query.where(Sequel.lit("possessions.#{team}_id = ?", team_id))
@@ -59,6 +59,47 @@ module PlayByPlay
         PlayByPlay.logger.debug(repository_plays: :count, sql: query.sql) if PlayByPlay.logger.debug?
 
         query.count
+      end
+
+      def seconds_counts(play, team, team_id)
+        raise(ArgumentError, "play cannot be nil") unless play
+        raise(ArgumentError, "team cannot be nil") unless team
+        raise(ArgumentError, "team_id cannot be nil") unless team_id
+
+        play_attributes = {}
+        if play.size > 1
+          play_attributes = play.last.dup
+        end
+
+        query = db[:possessions]
+                .where(
+                  and_one:        play_attributes[:and_one] || false,
+                  assisted:       play_attributes[:assisted] || false,
+                  away_from_play: play_attributes[:away_from_play] || false,
+                  clear_path:     play_attributes[:clear_path] || false,
+                  flagrant:       play_attributes[:flagrant] || false,
+                  intentional:    play_attributes[:intentional] || false,
+                  point_value:    play_attributes[:point_value],
+                  play_type:      play.first.to_s
+                )
+
+        if play_attributes[:point_value]
+          query = query.where(point_value: play_attributes[:point_value])
+        end
+
+        play_team = play_attributes.delete(:team)
+        if play_team
+          query = query.where(play_team: play_team.to_s)
+        end
+
+        query = query
+                .where(Sequel.lit("possessions.#{team}_id = ?", team_id))
+                .where(source: "sample")
+                .group_and_count(:seconds)
+
+        PlayByPlay.logger.debug(repository_plays: :seconds_counts, sql: query.sql) if PlayByPlay.logger.debug?
+
+        query.all
       end
 
       def add(attributes)

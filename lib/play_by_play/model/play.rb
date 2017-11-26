@@ -21,6 +21,8 @@ module PlayByPlay
         :turnover
       ].freeze
 
+      attr_accessor :seconds
+
       attr_reader :and_one
       attr_reader :assisted
       attr_reader :away_from_play
@@ -28,7 +30,6 @@ module PlayByPlay
       attr_reader :flagrant
       attr_reader :intentional
       attr_reader :point_value
-      attr_reader :seconds
       attr_reader :team
       attr_reader :type
 
