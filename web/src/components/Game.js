@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import request from 'superagent';
 import Row from './Row';
@@ -84,6 +85,6 @@ class Game extends React.Component {
   }
 }
 
-Game.contextTypes = { router: React.PropTypes.object.isRequired };
+Game.contextTypes = { router: PropTypes.object.isRequired };
 
 export default Game;
