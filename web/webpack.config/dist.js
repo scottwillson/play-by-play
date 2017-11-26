@@ -6,9 +6,6 @@ let webpack = require('webpack');
 let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
-// Add needed plugins here
-let BowerWebpackPlugin = require('bower-webpack-plugin');
-
 let config = Object.assign({}, baseConfig, {
   entry: path.join(__dirname, '../src/components/App'),
   cache: false,
@@ -17,9 +14,6 @@ let config = Object.assign({}, baseConfig, {
     new webpack.optimize.DedupePlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': '"production"'
-    }),
-    new BowerWebpackPlugin({
-      searchResolveModulesDirectories: false
     }),
     new webpack.optimize.UglifyJsPlugin(),
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -32,9 +26,8 @@ let config = Object.assign({}, baseConfig, {
 // Add needed loaders to the defaults here
 config.module.loaders.push({
   test: /\.(js|jsx)$/,
-  loader: 'babel',
+  loader: 'babel-loader',
   include: [].concat(
-    config.additionalPaths,
     [ path.join(__dirname, '/../src') ]
   )
 });
