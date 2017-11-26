@@ -1,5 +1,6 @@
 require "spec_helper"
 require "play_by_play/repository"
+require "play_by_play/sample/season"
 
 module PlayByPlay
   RSpec.describe Repository do
