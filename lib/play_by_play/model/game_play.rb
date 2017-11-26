@@ -81,7 +81,7 @@ module PlayByPlay
       end
 
       def self.opening_tip(possession, play)
-        if !possession.opening_tip
+        unless possession.opening_tip
           { opening_tip: play.team }
         end
       end

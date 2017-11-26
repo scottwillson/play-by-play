@@ -248,8 +248,6 @@ module PlayByPlay
           :ball_in_play
         elsif !seconds_remaining?
           :seconds_remaining
-        else
-          nil
         end
       end
 

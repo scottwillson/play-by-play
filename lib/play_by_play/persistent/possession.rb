@@ -3,12 +3,10 @@ require "play_by_play/model/possession"
 module PlayByPlay
   module Persistent
     class Possession < Model::Possession
-      attr_accessor :game
       attr_accessor :id
-      attr_accessor :play
 
-      attr_reader :home_margin
-      attr_reader :visitor_margin
+      attr_reader :game
+      attr_reader :play
 
       def initialize(attributes = {})
         attributes = attributes.dup

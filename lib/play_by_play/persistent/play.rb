@@ -48,7 +48,6 @@ module PlayByPlay
         @possession = possession
         @possession_id = possession&.id
         possession.play = self
-        possession
       end
 
       def possession_id=(value)

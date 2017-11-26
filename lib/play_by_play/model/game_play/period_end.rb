@@ -37,8 +37,6 @@ module PlayByPlay
           possession.other_team(possession.opening_tip)
         when 3
           possession.opening_tip
-        else
-          nil
         end
       end
     end

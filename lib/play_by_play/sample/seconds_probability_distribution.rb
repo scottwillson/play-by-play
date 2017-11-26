@@ -33,13 +33,13 @@ module PlayByPlay
 
         team_ids = @repository.teams.all.map { |team| team[:id] }
         Model::PlayMatrix.play_keys.each do |play_key|
-          %i(defense offense).each do |team|
+          %i[ defense offense ].each do |team|
             team_ids.each do |team_id|
               @distribution[Key.new(play_key, team, team_id)]
             end
           end
 
-          %i(home visitor).each do |team|
+          %i[ home visitor ].each do |team|
             team_ids.each do |team_id|
               @distribution[Key.new(play_key, team, team_id)]
             end

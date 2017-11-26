@@ -43,15 +43,15 @@ module PlayByPlay
         PlayByPlay.logger.debug(play_probability_distribution: :pre_fetch!, begin: Time.now)
 
         team_ids = @repository.teams.all.map { |team| team[:id] }
-        %i(ball_in_play free_throws team technical_free_throws).each do |possession_key|
-          %i(defense offense).each do |team|
+        %i[ ball_in_play free_throws team technical_free_throws ].each do |possession_key|
+          %i[ defense offense ].each do |team|
             team_ids.each do |team_id|
               @distribution[Key.new(possession_key, team, team_id)]
             end
           end
         end
 
-        %i(home visitor).each do |team|
+        %i[ home visitor ].each do |team|
           team_ids.each do |team_id|
             @distribution[Key.new(nil, team, team_id)]
           end

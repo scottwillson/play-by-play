@@ -89,7 +89,6 @@ module PlayByPlay
           expect(possession.margin(:home)).to eq(0)
           expect(possession.margin(:visitor)).to eq(0)
 
-          possession = Possession.new
           possession = Possession.new(
             home: Team.new(key: :home, points: 85),
             visitor: Team.new(key: :visitor, points: 79)

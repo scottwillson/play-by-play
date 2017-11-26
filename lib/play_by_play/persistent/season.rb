@@ -3,10 +3,10 @@ require "play_by_play/persistent/league"
 module PlayByPlay
   module Persistent
     class Season
-      attr_accessor :days
       attr_accessor :id
       attr_accessor :league
       attr_accessor :source
+      attr_reader :days
       attr_reader :start_at
 
       def initialize(days: [], id: nil, league: League.new, source: nil, start_at: Date.today)
@@ -47,7 +47,7 @@ module PlayByPlay
       end
 
       def validate!
-        raise(ArgumentError, "source must sample or simulation") unless [ "sample", "simulation" ].include?(source)
+        raise(ArgumentError, "source must sample or simulation") unless %w[ sample simulation ].include?(source)
         raise(ArgumentError, "start_at cannot be nil") if start_at.nil?
       end
     end

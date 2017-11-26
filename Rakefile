@@ -205,6 +205,11 @@ namespace :spec do
     t.rspec_opts = "--tag ~web --tag ~database"
   end
 
+  desc "Run database specs"
+  RSpec::Core::RakeTask.new(:database) do |t|
+    t.rspec_opts = "--tag ~database"
+  end
+
   desc "Run all specs"
   RSpec::Core::RakeTask.new(:all)
 end

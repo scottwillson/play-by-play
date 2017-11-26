@@ -56,9 +56,10 @@ module PlayByPlay
       attr_accessor :player3_team_nickname
       attr_accessor :possession
       attr_accessor :score
-      attr_accessor :scoremargin
       attr_accessor :visitordescription
       attr_accessor :wctimestring
+
+      attr_writer :scoremargin
 
       def initialize(game, headers, json)
         @game = game
@@ -267,7 +268,7 @@ module PlayByPlay
 
       def three_free_throws?
         index = 1
-        while row = rows[rows.find_index(self) + index]
+        while (row = rows[rows.find_index(self) + index])
           if row.ft? || row.ft_miss?
             if row.eventmsgactiontype == 13
               return true
@@ -307,7 +308,7 @@ module PlayByPlay
 
       def play_type
         if start_of_game?
-          return nil
+          nil
         elsif jump_ball?
           :jump_ball
         elsif block?
@@ -389,8 +390,6 @@ module PlayByPlay
           :home
         when 1, 3, 5, 7
           :visitor
-        else
-          nil
         end
       end
 

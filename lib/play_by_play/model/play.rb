@@ -2,23 +2,23 @@ module PlayByPlay
   module Model
     # A Redux "action" or a finite-state machine transition.
     class Play
-      TYPES = [
-        :block,
-        :fg,
-        :fg_miss,
-        :ft,
-        :ft_miss,
-        :jump_ball,
-        :jump_ball_out_of_bounds,
-        :offensive_foul,
-        :period_end,
-        :personal_foul,
-        :rebound,
-        :shooting_foul,
-        :steal,
-        :team_rebound,
-        :technical_foul,
-        :turnover
+      TYPES = %i[
+        block
+        fg
+        fg_miss
+        ft
+        ft_miss
+        jump_ball
+        jump_ball_out_of_bounds
+        offensive_foul
+        period_end
+        personal_foul
+        rebound
+        shooting_foul
+        steal
+        team_rebound
+        technical_foul
+        turnover
       ].freeze
 
       attr_accessor :seconds
@@ -116,7 +116,15 @@ module PlayByPlay
       end
 
       def set_team?
-        team && [ :jump_ball, :jump_ball_out_of_bounds, :personal_foul, :rebound, :team_rebound, :technical_foul, :turnover ].include?(type)
+        team && %i[
+          jump_ball
+          jump_ball_out_of_bounds
+          personal_foul
+          rebound
+          team_rebound
+          technical_foul
+          turnover
+        ].include?(type)
       end
 
       def validate!
