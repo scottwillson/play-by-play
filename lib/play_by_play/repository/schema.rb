@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+
 require "play_by_play/repository/base"
 
 module PlayByPlay
