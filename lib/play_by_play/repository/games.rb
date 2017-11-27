@@ -80,7 +80,7 @@ module PlayByPlay
 
       def plays(game_id)
         @db[:possessions]
-          .select(:and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :play_team, :play_type)
+          .select(:and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :play_team, :play_type, :shot)
           .where(game_id: game_id)
           .exclude(play_type: nil)
           .exclude(play_type: "")

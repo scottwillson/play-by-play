@@ -6,16 +6,18 @@ module PlayByPlay
     RSpec.describe Play do
       describe ".from_array" do
         it "creates a new Play from array" do
-          play = Play.from_array([ :fg, point_value: 3 ])
+          play = Play.from_array([ :fg, point_value: 3, shot: 9 ])
           expect(play.type).to eq(:fg)
           expect(play.point_value).to eq(3)
+          expect(play.shot).to eq(9)
         end
 
         it "set attributes" do
-          play = Play.from_array([ :fg, point_value: 3, seconds: 6.2 ])
+          play = Play.from_array([ :fg, point_value: 3, seconds: 6.2, shot: 7 ])
           expect(play.type).to eq(:fg)
           expect(play.point_value).to eq(3)
           expect(play.seconds).to eq(6.2)
+          expect(play.shot).to eq(7)
         end
       end
     end

@@ -15,12 +15,12 @@ module PlayByPlay
           Game.play! sample_game, :jump_ball, team: :visitor
           Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
           Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # home
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
+          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
+          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # home
+          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
           Game.play! sample_game, :fg_miss # home
           Game.play! sample_game, :rebound, team: :defense # visitor
-          Game.play! sample_game, :fg, point_value: 3 # visitor
+          Game.play! sample_game, :fg, point_value: 3, shot: 0 # visitor
 
           repository = Repository.new
           repository.reset!

@@ -35,7 +35,8 @@ module PlayByPlay
             flagrant: possession.play.flagrant?,
             intentional: possession.play.intentional?,
             play_type: possession.play.type.to_s,
-            seconds: possession.play.seconds
+            seconds: possession.play.seconds,
+            shot: possession.play.shot
           )
 
           if possession.play.point_value == 3

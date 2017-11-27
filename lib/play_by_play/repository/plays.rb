@@ -103,16 +103,17 @@ module PlayByPlay
       end
 
       def add(attributes)
-        play_type = attributes.delete(:play_type)
-        play_team = attributes.delete(:play_team)
+        shot = attributes.delete(:shot)
+        team = attributes.delete(:play_team)
+        type = attributes.delete(:play_type)
 
-        if play_type && play_type != ""
-          play_type = play_type.to_sym
+        if type && type != ""
+          type = type.to_sym
 
-          play_attributes = { team: play_team }
+          play_attributes = { shot: shot, team: team }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
 
-          attributes[:play] = Persistent::Play.new(play_type, play_attributes)
+          attributes[:play] = Persistent::Play.new(type, play_attributes)
         else
           PLAY_KEYS.each { |key| attributes.delete(key) }
         end

@@ -99,6 +99,20 @@ module PlayByPlay
           end
         end
       end
+
+      describe ".player_attributes" do
+        it "aggregates player columns" do
+          game = Game.new_game("0021400001", "ORL", "NOP")
+          row = Row.new(game, %w[ person1type player1_id player1_name ], [ 4, 203_076, "Anthony Davis" ])
+          expect(row.player_attributes).to eq(
+            [
+              [ 4, 203_076, "Anthony Davis" ],
+              [ nil, nil, nil ],
+              [ nil, nil, nil ]
+            ]
+          )
+        end
+      end
     end
   end
 end

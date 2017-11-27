@@ -80,6 +80,8 @@ module PlayByPlay
           expect(game.possession.errors?).to eq(false)
           expect(game.error_eventnum).to be_nil
           expect(game.id).to be_nil
+          expect(game.home.players.size).to eq(12)
+          expect(game.visitor.players.size).to eq(11)
 
           expect(game.plays[0].possession.opening_tip).to eq(nil)
           expect(game.plays[0].possession.period).to eq(1)
@@ -119,6 +121,7 @@ module PlayByPlay
           expect(play.possession.team).to eq(:visitor)
           expect(play.possession.offense).to eq(:visitor)
           expect(play.possession_key => play.key).to eq(team: [ :fg ])
+          expect(play.possession.play.shot).to eq(0)
 
           play = Game.find_play_by_eventnum!(game, 67)
           expect(play.possession.visitor.points).to eq(15)

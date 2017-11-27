@@ -9,6 +9,7 @@ module PlayByPlay
       attr_reader :division_id
       attr_reader :games
       attr_reader :name
+      attr_reader :players
 
       def initialize(attributes)
         @games = []
@@ -18,6 +19,8 @@ module PlayByPlay
         @division_id = attributes.delete(:division_id)
         @id = attributes.delete(:id)
         @name = attributes.delete(:name)
+        @players = attributes.delete(:players) || []
+
         super attributes
       end
 

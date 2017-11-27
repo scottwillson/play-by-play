@@ -1,3 +1,11 @@
+ * players
+   * add players as index to model play
+   * add random player indexes from generator
+   * add validation for play types
+   * add players from sample
+   * store players in repository
+   * make play distributions by player
+   * replace random player with distribution sample
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
@@ -67,6 +75,7 @@
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
  * replace Play#team with Play#player
+ * ensure database: true if spec uses real repository
 
 Events and players
 ------------------

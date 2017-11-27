@@ -358,6 +358,7 @@ module PlayByPlay
           intentional: intentional?,
           point_value: point_value,
           seconds: seconds,
+          shot: shot,
           team: play_team
         }
       end
@@ -375,6 +376,24 @@ module PlayByPlay
           end
         else
           team
+        end
+      end
+
+      def player_attributes
+        [
+          [ person1type, player1_id, player1_name ],
+          [ person2type, player2_id, player2_name ],
+          [ person3type, player3_id, player3_name ]
+        ]
+      end
+
+      def shot
+        if fg?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player1_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player1_id }
+          end
         end
       end
 

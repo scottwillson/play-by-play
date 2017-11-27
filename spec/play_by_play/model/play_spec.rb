@@ -19,10 +19,10 @@ module PlayByPlay
 
       describe "#key" do
         it "considers type and attributes" do
-          play = Play.new(:fg)
-          play_2 = Play.new(:fg)
-          play_3 = Play.new(:fg, point_value: 3)
-          play_4 = Play.new(:fg, point_value: 3)
+          play = Play.new(:fg, shot: 0)
+          play_2 = Play.new(:fg, shot: 0)
+          play_3 = Play.new(:fg, point_value: 3, shot: 0)
+          play_4 = Play.new(:fg, point_value: 3, shot: 0)
 
           expect(play.key).to eq(play_2.key)
           expect(play.key).to_not eq(play_3.key)
@@ -62,7 +62,7 @@ module PlayByPlay
           possession = Possession.new(ball_in_play: true, team: :home, home: { period_personal_fouls: 2 })
           expect(possession.home.period_personal_fouls).to eq(2)
 
-          next_possession = GamePlay.play!(possession, [ :fg ])
+          next_possession = GamePlay.play!(possession, [ :fg, shot: 0 ])
 
           expect(next_possession.ball_in_play?).to eq(false)
           expect(next_possession.team).to eq(:visitor)
@@ -74,7 +74,7 @@ module PlayByPlay
       describe ":fg with attributes" do
         it "updates team, ball_in_play, and fouls" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          next_possession = GamePlay.play!(possession, [ :fg, point_value: 3, and_one: true, assisted: true ])
+          next_possession = GamePlay.play!(possession, [ :fg, point_value: 3, shot: 0, and_one: true, assisted: true ])
           expect(next_possession.ball_in_play?).to eq(false)
           expect(next_possession.team).to eq(:home)
           expect(next_possession.next_team).to eq(nil)
@@ -87,7 +87,7 @@ module PlayByPlay
       describe ":fg at end of period" do
         it "updates points" do
           possession = Possession.new(ball_in_play: true, team: :visitor, seconds_remaining: 21)
-          next_possession = GamePlay.play!(possession, [ :fg, assisted: true, seconds: 21 ])
+          next_possession = GamePlay.play!(possession, [ :fg, assisted: true, seconds: 21, shot: 0 ])
           expect(next_possession.visitor.points).to eq(2)
         end
       end

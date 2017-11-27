@@ -60,6 +60,7 @@ module PlayByPlay
           String :play_team
           String :play_type
           Integer :seconds
+          Integer :shot
 
           Boolean :ball_in_play, default: false, null: false
           Integer :defense_id

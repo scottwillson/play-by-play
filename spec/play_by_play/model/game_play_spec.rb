@@ -17,7 +17,7 @@ module PlayByPlay
 
         it "raises errors for invalid play types" do
           possession = Possession.new(team: :visitor, technical_free_throws: [ :home ])
-          expect { GamePlay.play!(possession, [ :fg ]) }.to raise_error(InvalidStateError)
+          expect { GamePlay.play!(possession, [ :fg, shot: 0 ]) }.to raise_error(InvalidStateError)
         end
 
         it "accepts shot: for :fg" do

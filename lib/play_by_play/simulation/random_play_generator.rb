@@ -21,7 +21,7 @@ module PlayByPlay
 
         probabilities.each do |play_probability|
           if r < previous_probability + play_probability.probability
-            return play_probability.play
+            return add_player(play_probability.play)
           end
           previous_probability += play_probability.probability
         end
@@ -33,6 +33,16 @@ module PlayByPlay
         raise(ArgumentError, "random must be positive number less than 1, but was: #{random_number}") if random_number.negative? || random_number >= 1
         raise(ArgumentError, "probabilities cannot be empty") if probabilities.empty?
         raise(ArgumentError, "At least one PlayProbability must be greater than 0 for #{possession}") if aggregate_probabilty.zero?
+      end
+
+      def add_player(play)
+        case play.first
+        when :fg
+          attributes = play[1] || {}
+          [ :fg, attributes.merge(shot: rand(5)) ]
+        else
+          play
+        end
       end
     end
   end

@@ -132,7 +132,8 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
-        raise(ArgumentError, "Shot must be player index between 0-12, but was: #{shot}") if shot && (shot < 0 || shot > 12)
+        raise(ArgumentError, "shot: player required for :fg in #{key}") if type == :fg && shot.nil?
+        raise(ArgumentError, "shot: must be player between 0-12, but was: #{shot}") if shot && (shot < 0 || shot > 12)
       end
     end
   end

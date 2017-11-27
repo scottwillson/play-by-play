@@ -49,12 +49,12 @@ module PlayByPlay
         Sample::Game.play! sample_game, :jump_ball, team: :visitor
         Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
         Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-        Sample::Game.play! sample_game, :fg, assisted: true # visitor
-        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true # home
-        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
+        Sample::Game.play! sample_game, :fg, assisted: true, shot: 0 # visitor
+        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # home
+        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
         Sample::Game.play! sample_game, :fg_miss # home
         Sample::Game.play! sample_game, :rebound, team: :defense # visitor
-        Sample::Game.play! sample_game, :fg, point_value: 3 # visitor
+        Sample::Game.play! sample_game, :fg, point_value: 3, shot: 0 # visitor
 
         repository.seasons.save season
 

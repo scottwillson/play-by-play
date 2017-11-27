@@ -18,7 +18,7 @@ module PlayByPlay
     end
 
     describe ".save_possessions" do
-      it "saves possessions with current score margin" do
+      it "saves possessions with current score margin", database: true do
         repository = Repository.new
         repository.reset!
 
