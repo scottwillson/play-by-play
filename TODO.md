@@ -66,3 +66,4 @@
  * Repository.league should be leagues?
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
+ * Update "babel-preset-env now: please read babeljs.io/env"
