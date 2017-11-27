@@ -20,8 +20,8 @@ module PlayByPlay
           expect { GamePlay.play!(possession, [ :fg ]) }.to raise_error(InvalidStateError)
         end
 
-        it "accepts :player" do
-          play = [ :fg, player: 5 ]
+        it "accepts shot: for :fg" do
+          play = [ :fg, shot: 5 ]
           possession = Possession.new(team: :home)
           next_possession = GamePlay.play!(possession, play)
           expect(next_possession.home.points).to eq(2)
@@ -29,7 +29,7 @@ module PlayByPlay
 
         it "raises errors for invalid player" do
           possession = Possession.new(team: :visitor)
-          expect { GamePlay.play!(possession, [ :fg, player: 13 ]) }.to raise_error(ArgumentError)
+          expect { GamePlay.play!(possession, [ :fg, shot: 13 ]) }.to raise_error(ArgumentError)
         end
 
         it "applies :ft" do

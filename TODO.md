@@ -67,3 +67,17 @@
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
  * replace Play#team with Play#player
+
+Events and players
+------------------
+assist
+block
+foul
+fouled
+home_jump
+rebound
+shot
+steal
+tip
+turnover
+visitor_jump
