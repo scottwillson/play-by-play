@@ -33,11 +33,11 @@ Development
 
 See the Rakefile for options and other Rake tasks.
 
-`rackup` to run the web app and browse http://localhost:9020/ to view import errors.
+`rackup` to run the web app and browse http://localhost:9292/ to view import errors.
 
 Tech stack
 ==========
-Ruby 2.3 with minimal gems
+Ruby 2.4 with minimal gems
 [Sinatra](http://www.sinatrarb.com/) for web API
 [React](https://facebook.github.io/react/) for frontend web UI
 

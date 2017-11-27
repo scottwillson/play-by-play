@@ -6,11 +6,11 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 let config = Object.assign({}, baseConfig, {
-  entry: './src/components/App',
+  entry: ['babel-polyfill', './src/components/App'],
   cache: true,
   devtool: 'eval-source-map',
   plugins: [
-    new webpack.NoErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin()
   ],
   module: defaultSettings.getDefaultModules()
 });

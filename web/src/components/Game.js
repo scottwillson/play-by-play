@@ -7,8 +7,8 @@ class Game extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      eventnum: props.params.eventnum,
-      nba_id: props.params.nba_id,
+      eventnum: props.match.params.eventnum,
+      nba_id: props.match.params.nba_id,
       rows: []
     };
   }

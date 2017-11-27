@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 class GameSummary extends React.Component {
   render() {
@@ -21,4 +21,5 @@ class GameSummary extends React.Component {
 }
 
 GameSummary.contextTypes = { router: PropTypes.object.isRequired };
+
 export default GameSummary;

@@ -5,7 +5,7 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 let config = Object.assign({}, baseConfig, {
-  entry: './src/components/App',
+  entry: ['babel-polyfill', './src/components/App'],
   cache: false,
   devtool: 'eval-source-map',
   module: defaultSettings.getDefaultModules()
