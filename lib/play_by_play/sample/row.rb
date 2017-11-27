@@ -388,13 +388,17 @@ module PlayByPlay
       end
 
       def shot
-        if fg?
+        if shot?
           if team == :home
             game.home.players.index { |player| player.nba_id == player1_id }
           else
             game.visitor.players.index { |player| player.nba_id == player1_id }
           end
         end
+      end
+
+      def shot?
+        Model::Play.shot? play_type
       end
 
       def team

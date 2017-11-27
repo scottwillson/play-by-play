@@ -37,9 +37,9 @@ module PlayByPlay
 
       def add_player(play)
         case play.first
-        when :fg
+        when :fg, :fg_miss, :ft, :ft_miss
           attributes = play[1] || {}
-          [ :fg, attributes.merge(shot: rand(5)) ]
+          [ play.first, attributes.merge(shot: rand(5)) ]
         else
           play
         end

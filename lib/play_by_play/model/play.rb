@@ -34,6 +34,10 @@ module PlayByPlay
       attr_reader :team
       attr_reader :type
 
+      def self.shot?(type)
+        [ :fg, :fg_miss, :ft, :ft_miss, :technical_ft, :technical_ft_miss ].include?(type)
+      end
+
       def initialize(
         type,
         and_one: false,
@@ -130,9 +134,13 @@ module PlayByPlay
         ].include?(type)
       end
 
+      def shot?
+        Play.shot? type
+      end
+
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
-        raise(ArgumentError, "shot: player required for :fg in #{key}") if type == :fg && shot.nil?
+        raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
         raise(ArgumentError, "shot: must be player between 0-12, but was: #{shot}") if shot && (shot < 0 || shot > 12)
       end
     end

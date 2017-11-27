@@ -34,7 +34,7 @@ module PlayByPlay
 
         it "applies :ft" do
           possession = Possession.new(team: :home, technical_free_throws: [ :home, :home ], home: Team.new(key: :home, points: 10))
-          next_possession = GamePlay.play!(possession, [ :ft ])
+          next_possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(next_possession.technical_free_throws).to eq([ :home ])
           expect(next_possession.home.points).to eq(11)
           expect(next_possession.errors?).to eq(false)
@@ -49,7 +49,7 @@ module PlayByPlay
           expect(possession.next_team).to eq(:visitor)
           expect(possession.technical_free_throws).to eq([ :home ])
 
-          possession = GamePlay.play!(possession, [ :ft_miss ])
+          possession = GamePlay.play!(possession, [ :ft_miss, shot: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.offense).to eq(:visitor)
           expect(possession.team).to eq(:visitor)
@@ -70,20 +70,20 @@ module PlayByPlay
           expect(possession.next_team).to eq(:home)
           expect(possession.technical_free_throws).to eq([ :home, :home, :visitor ])
 
-          possession = GamePlay.play!(possession, [ :ft_miss ])
+          possession = GamePlay.play!(possession, [ :ft_miss, shot: 0 ])
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
           expect(possession.next_team).to eq(:home)
           expect(possession.technical_free_throws).to eq([ :home, :home ])
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.technical_free_throws).to eq([ :home ])
           expect(possession.home.points).to eq(1)
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
           expect(possession.next_team).to eq(:home)
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.technical_free_throws).to eq([])
           expect(possession.home.points).to eq(2)
           expect(possession.offense).to eq(:home)
@@ -101,12 +101,12 @@ module PlayByPlay
           expect(possession.next_team).to eq(nil)
           expect(possession.free_throws).to eq([ :visitor, :visitor ])
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.free_throws).to eq([ :visitor ])
           expect(possession.visitor.points).to eq(1)
           expect(possession.next_team).to eq(nil)
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.free_throws).to eq([])
           expect(possession.visitor.points).to eq(2)
           expect(possession.offense).to eq(:home)
@@ -118,14 +118,14 @@ module PlayByPlay
           expect(possession.next_team).to eq(:home)
           expect(possession.technical_free_throws).to eq([ :home, :home ])
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.technical_free_throws).to eq([ :home ])
           expect(possession.home.points).to eq(1)
           expect(possession.offense).to eq(:home)
           expect(possession.team).to eq(:home)
           expect(possession.next_team).to eq(:home)
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.technical_free_throws).to eq([])
           expect(possession.home.points).to eq(2)
           expect(possession.offense).to eq(:home)
@@ -142,7 +142,7 @@ module PlayByPlay
           expect(possession.team).to eq(:home)
           expect(possession.next_team).to eq(:visitor)
 
-          possession = GamePlay.play!(possession, [ :ft ])
+          possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
           expect(possession.offense).to eq(:visitor)
           expect(possession.team).to eq(:visitor)
         end

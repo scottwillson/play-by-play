@@ -8,7 +8,7 @@ module PlayByPlay
     RSpec.describe Play do
       describe ".new" do
         it "creates a Play" do
-          play = Play.new(:ft)
+          play = Play.new(:ft, shot: 4)
           expect(play.type).to eq(:ft)
         end
 
@@ -95,14 +95,14 @@ module PlayByPlay
       describe ":fg_miss" do
         it "updates team and ball_in_play" do
           possession = Possession.new(ball_in_play: false, team: :visitor)
-          possession = GamePlay.play!(possession, [ :fg_miss ])
+          possession = GamePlay.play!(possession, [ :fg_miss, shot: 0 ])
           expect(possession.ball_in_play?).to eq(true)
           expect(possession.team).to eq(nil)
         end
 
         it "updates team and ball_in_play" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          possession = GamePlay.play!(possession, [ :fg_miss, point_value: 3 ])
+          possession = GamePlay.play!(possession, [ :fg_miss, point_value: 3, shot: 3 ])
           expect(possession.ball_in_play?).to eq(true)
           expect(possession.team).to eq(nil)
         end
@@ -111,7 +111,7 @@ module PlayByPlay
       describe ":ft_miss" do
         it "updates free throws" do
           possession = Possession.new(free_throws: [ :visitor, :visitor ], team: :visitor, next_team: :home)
-          possession = GamePlay.play!(possession, [ :ft_miss ])
+          possession = GamePlay.play!(possession, [ :ft_miss, shot: 0 ])
           expect(possession.free_throws).to eq([ :visitor ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.team).to eq(:visitor)
@@ -121,7 +121,7 @@ module PlayByPlay
 
         it "updates team, ball_in_play, and free throws" do
           possession = Possession.new(free_throws: [ :visitor ], team: :visitor, next_team: :home)
-          possession = GamePlay.play!(possession, [ :ft_miss ])
+          possession = GamePlay.play!(possession, [ :ft_miss, shot: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.free_throws).to eq([])
           expect(possession.team).to eq(:home)
@@ -131,7 +131,7 @@ module PlayByPlay
 
         it "decrements technical free throws" do
           possession = Possession.new(technical_free_throws: [ :visitor, :visitor ], team: :visitor, next_team: :home)
-          possession = GamePlay.play!(possession, [ :ft_miss ])
+          possession = GamePlay.play!(possession, [ :ft_miss, shot: 0 ])
           expect(possession.free_throws).to eq([])
           expect(possession.technical_free_throws).to eq([ :visitor ])
         end
@@ -150,7 +150,7 @@ module PlayByPlay
       describe ":rebound" do
         it "assigns team and puts ball_in_play" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          possession = GamePlay.play!(possession, [ :fg_miss ])
+          possession = GamePlay.play!(possession, [ :fg_miss, shot: 0 ])
           next_possession = GamePlay.play!(possession, [ :rebound, team: :offense ])
           expect(next_possession.ball_in_play?).to eq(true)
           expect(next_possession.team).to eq(:home)
@@ -171,7 +171,7 @@ module PlayByPlay
       describe ":team_rebound" do
         it "assigns team" do
           possession = Possession.new(ball_in_play: true, team: :visitor)
-          possession = GamePlay.play!(possession, [ :fg_miss ])
+          possession = GamePlay.play!(possession, [ :fg_miss, shot: 0 ])
           next_possession = GamePlay.play!(possession, [ :team_rebound, team: :defense ])
           expect(next_possession.ball_in_play?).to eq(true)
           expect(next_possession.team).to eq(:home)

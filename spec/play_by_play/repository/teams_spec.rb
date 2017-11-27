@@ -52,7 +52,7 @@ module PlayByPlay
         Sample::Game.play! sample_game, :fg, assisted: true, shot: 0 # visitor
         Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # home
         Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
-        Sample::Game.play! sample_game, :fg_miss # home
+        Sample::Game.play! sample_game, :fg_miss, shot: 1 # home
         Sample::Game.play! sample_game, :rebound, team: :defense # visitor
         Sample::Game.play! sample_game, :fg, point_value: 3, shot: 0 # visitor
 

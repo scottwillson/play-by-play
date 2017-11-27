@@ -1,11 +1,10 @@
  * players
-   * add players as index to model play
-   * add random player indexes from generator
    * add validation for play types
    * add players from sample
    * store players in repository
    * make play distributions by player
    * replace random player with distribution sample
+   * shot becomes part of play key?
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
@@ -76,6 +75,13 @@
  * ES6
  * replace Play#team with Play#player
  * ensure database: true if spec uses real repository
+ * ensure database: false makes a mock repository
+ * change FTs from list of teams to list of players
+ * play player validation
+   * 6 PFs -> ejection
+   * 2 techs -> ejection
+   * fouled player must be one shooting
+   * player must be in game
 
 Events and players
 ------------------
