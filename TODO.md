@@ -66,3 +66,4 @@
  * Repository.league should be leagues?
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
+ * replace Play#team with Play#player

@@ -30,6 +30,7 @@ module PlayByPlay
       attr_reader :flagrant
       attr_reader :intentional
       attr_reader :point_value
+      attr_reader :player
       attr_reader :team
       attr_reader :type
 
@@ -42,6 +43,7 @@ module PlayByPlay
         flagrant: false,
         intentional: false,
         point_value: 2,
+        player: nil,
         seconds: 7.7,
         team: nil
       )
@@ -52,6 +54,7 @@ module PlayByPlay
         @clear_path = clear_path
         @flagrant = flagrant
         @intentional = intentional
+        @player = player
         @point_value = point_value || 2
         @seconds = seconds
         @team = team
@@ -129,6 +132,7 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
+        raise(ArgumentError, "Player must be index between 0-12, but was: #{player}") if player && (player < 0 || player > 12)
       end
     end
   end
