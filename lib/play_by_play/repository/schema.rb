@@ -58,12 +58,15 @@ module PlayByPlay
           Boolean :flagrant, default: false, null: false
           Integer :foul
           Integer :fouled
+          Integer :home_jump
           Boolean :intentional, default: false, null: false
           Integer :point_value
           String :play_team
           String :play_type
           Integer :seconds
           Integer :shot
+          Integer :tip
+          Integer :visitor_jump
 
           Boolean :ball_in_play, default: false, null: false
           Integer :defense_id

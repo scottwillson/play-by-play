@@ -36,10 +36,13 @@ module PlayByPlay
             flagrant: possession.play.flagrant?,
             foul: possession.play.foul,
             fouled: possession.play.fouled,
+            home_jump: possession.play.home_jump,
             intentional: possession.play.intentional?,
             play_type: possession.play.type.to_s,
             seconds: possession.play.seconds,
-            shot: possession.play.shot
+            shot: possession.play.shot,
+            tip: possession.play.tip,
+            visitor_jump: possession.play.visitor_jump
           )
 
           if possession.play.point_value == 3

@@ -106,9 +106,12 @@ module PlayByPlay
         assist = attributes.delete(:assist)
         foul = attributes.delete(:foul)
         fouled = attributes.delete(:fouled)
+        home_jump = attributes.delete(:home_jump)
         shot = attributes.delete(:shot)
         team = attributes.delete(:play_team)
+        tip = attributes.delete(:tip)
         type = attributes.delete(:play_type)
+        visitor_jump = attributes.delete(:visitor_jump)
 
         if type && type != ""
           type = type.to_sym
@@ -117,8 +120,11 @@ module PlayByPlay
             assist: assist,
             foul: foul,
             fouled: fouled,
+            home_jump: home_jump,
             shot: shot,
-            team: team
+            team: team,
+            tip: tip,
+            visitor_jump: visitor_jump
           }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
 

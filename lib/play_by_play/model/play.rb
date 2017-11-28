@@ -31,11 +31,14 @@ module PlayByPlay
       attr_reader :flagrant
       attr_reader :foul
       attr_reader :fouled
+      attr_reader :home_jump
       attr_reader :intentional
       attr_reader :point_value
       attr_reader :shot
       attr_reader :team
+      attr_reader :tip
       attr_reader :type
+      attr_reader :visitor_jump
 
       def self.foul?(type)
         %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
@@ -43,6 +46,10 @@ module PlayByPlay
 
       def self.shot?(type)
         %i[ fg fg_miss ft ft_miss technical_ft technical_ft_miss ].include?(type)
+      end
+
+      def self.jump_ball?(type)
+        type == :jump_ball
       end
 
       def initialize(
@@ -55,11 +62,14 @@ module PlayByPlay
         flagrant: false,
         foul: nil,
         fouled: nil,
+        home_jump: nil,
         intentional: false,
         point_value: 2,
         shot: nil,
         seconds: 7.7,
-        team: nil
+        team: nil,
+        visitor_jump: nil,
+        tip: nil
       )
 
         @and_one = and_one
@@ -70,12 +80,15 @@ module PlayByPlay
         @flagrant = flagrant
         @foul = foul
         @fouled = fouled
+        @home_jump = home_jump
         @intentional = intentional
         @shot = shot
         @point_value = point_value || 2
         @seconds = seconds
         @team = team
+        @tip = tip
         @type = type
+        @visitor_jump = visitor_jump
 
         validate!
       end
@@ -125,6 +138,10 @@ module PlayByPlay
 
       def intentional?
         intentional
+      end
+
+      def jump_ball?
+        Play.jump_ball? type
       end
 
       def key
@@ -179,7 +196,20 @@ module PlayByPlay
           raise(ArgumentError, "fouled: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled shot ].each { |attribute| validate_player_attribute(attribute) }
+        if jump_ball? && !home_jump
+          raise(ArgumentError, "home_jump: player required for #{type} in #{key}")
+        end
+
+        if jump_ball? && !tip
+          raise(ArgumentError, "tip: player required for #{type} in #{key}")
+        end
+
+        if jump_ball? && !visitor_jump
+          raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
+        end
+
+        %w[ assist foul fouled home_jump shot tip visitor_jump ]
+          .each { |attribute| validate_player_attribute(attribute) }
       end
     end
   end
