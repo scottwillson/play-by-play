@@ -3,6 +3,7 @@ require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/sample/game"
 require "play_by_play/sample/play_probability_distribution"
+require "play_by_play/sample/season"
 require "play_by_play/repository"
 
 module PlayByPlay
@@ -15,9 +16,9 @@ module PlayByPlay
           Game.play! sample_game, :jump_ball, team: :visitor
           Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
           Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
-          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # home
-          Game.play! sample_game, :fg, point_value: 3, assisted: true, shot: 0 # visitor
+          Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # visitor
+          Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # home
+          Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # visitor
           Game.play! sample_game, :fg_miss, shot: 1 # home
           Game.play! sample_game, :rebound, team: :defense # visitor
           Game.play! sample_game, :fg, point_value: 3, shot: 0 # visitor

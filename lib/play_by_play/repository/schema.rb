@@ -51,6 +51,7 @@ module PlayByPlay
         db.send(create_table_method, :possessions) do
           primary_key :id
           Boolean :and_one, default: false, null: false
+          Integer :assist
           Boolean :assisted, default: false, null: false
           Boolean :away_from_play, default: false, null: false
           Boolean :clear_path, default: false, null: false

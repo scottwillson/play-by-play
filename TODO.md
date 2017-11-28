@@ -5,6 +5,8 @@
    * make play distributions by player
    * replace random player with distribution sample
    * shot becomes part of play key?
+   * remove assisted? and just use assist ?
+ * Replace game.home and game.visitor with game.team(:home|visitor) where it makes sense
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
@@ -82,6 +84,8 @@
    * 2 techs -> ejection
    * fouled player must be one shooting
    * player must be in game
+   * assist and shot must be different
+   * jump and tip must be different
 
 Events and players
 ------------------

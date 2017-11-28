@@ -24,6 +24,7 @@ module PlayByPlay
       attr_accessor :seconds
 
       attr_reader :and_one
+      attr_reader :assist
       attr_reader :assisted
       attr_reader :away_from_play
       attr_reader :clear_path
@@ -41,6 +42,7 @@ module PlayByPlay
       def initialize(
         type,
         and_one: false,
+        assist: nil,
         assisted: false,
         away_from_play: false,
         clear_path: false,
@@ -53,6 +55,7 @@ module PlayByPlay
       )
 
         @and_one = and_one
+        @assist = assist
         @assisted = assisted
         @away_from_play = away_from_play
         @clear_path = clear_path
@@ -142,6 +145,8 @@ module PlayByPlay
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
         raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
         raise(ArgumentError, "shot: must be player between 0-12, but was: #{shot}") if shot && (shot < 0 || shot > 12)
+        raise(ArgumentError, "assist: player required for #{type} in #{key}") if assisted? && assist.nil?
+        raise(ArgumentError, "assist: must be player between 0-12, but was: #{shot}") if assist && (assist < 0 || assist > 12)
       end
     end
   end
