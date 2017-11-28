@@ -29,14 +29,20 @@ module PlayByPlay
       attr_reader :away_from_play
       attr_reader :clear_path
       attr_reader :flagrant
+      attr_reader :foul
+      attr_reader :fouled
       attr_reader :intentional
       attr_reader :point_value
       attr_reader :shot
       attr_reader :team
       attr_reader :type
 
+      def self.foul?(type)
+        %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
+      end
+
       def self.shot?(type)
-        [ :fg, :fg_miss, :ft, :ft_miss, :technical_ft, :technical_ft_miss ].include?(type)
+        %i[ fg fg_miss ft ft_miss technical_ft technical_ft_miss ].include?(type)
       end
 
       def initialize(
@@ -47,6 +53,8 @@ module PlayByPlay
         away_from_play: false,
         clear_path: false,
         flagrant: false,
+        foul: nil,
+        fouled: nil,
         intentional: false,
         point_value: 2,
         shot: nil,
@@ -60,6 +68,8 @@ module PlayByPlay
         @away_from_play = away_from_play
         @clear_path = clear_path
         @flagrant = flagrant
+        @foul = foul
+        @fouled = fouled
         @intentional = intentional
         @shot = shot
         @point_value = point_value || 2
@@ -109,6 +119,10 @@ module PlayByPlay
         flagrant
       end
 
+      def foul?
+        Play.foul? type
+      end
+
       def intentional?
         intentional
       end
@@ -141,12 +155,31 @@ module PlayByPlay
         Play.shot? type
       end
 
+      def technical_foul?
+        type == :technical_foul
+      end
+
+      def validate_player_attribute(attribute)
+        value = send(attribute)
+        if value && (value < 0 || value > 12)
+          raise(ArgumentError, "#{attribute}: must be player between 0-12, but was: #{value}")
+        end
+      end
+
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
-        raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
-        raise(ArgumentError, "shot: must be player between 0-12, but was: #{shot}") if shot && (shot < 0 || shot > 12)
         raise(ArgumentError, "assist: player required for #{type} in #{key}") if assisted? && assist.nil?
-        raise(ArgumentError, "assist: must be player between 0-12, but was: #{shot}") if assist && (assist < 0 || assist > 12)
+        raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
+
+        if foul? && !foul
+          raise(ArgumentError, "foul: player required for #{type} in #{key}")
+        end
+
+        if foul? && !technical_foul? && !fouled
+          raise(ArgumentError, "fouled: player required for #{type} in #{key}")
+        end
+
+        %w[ assist foul fouled shot ].each { |attribute| validate_player_attribute(attribute) }
       end
     end
   end

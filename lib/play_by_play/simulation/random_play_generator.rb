@@ -37,7 +37,16 @@ module PlayByPlay
 
       def add_player(play)
         case play.first
-        when :fg, :fg_miss, :ft, :ft_miss
+        when :personal_foul
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(foul: rand(5), fouled: rand(5)) ]
+        when :fg, :fg_miss
+          attributes = play[1] || {}
+          if attributes[:assisted]
+            attributes = attributes.merge(assist: rand(5))
+          end
+          [ play.first, attributes.merge(shot: rand(5)) ]
+        when :ft, :ft_miss
           attributes = play[1] || {}
           [ play.first, attributes.merge(shot: rand(5)) ]
         else

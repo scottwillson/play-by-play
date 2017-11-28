@@ -7,6 +7,8 @@
    * replace random player with distribution sample
    * shot becomes part of play key?
    * remove assisted? and just use assist ?
+   * consolidate game.visitor.players.index { |player| player.nba_id == player1_id } in Row
+ * `fouled` should be optional for technical_fouls
  * Replace game.home and game.visitor with game.team(:home|visitor) where it makes sense
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests

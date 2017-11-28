@@ -34,6 +34,8 @@ module PlayByPlay
             away_from_play: possession.play.away_from_play?,
             clear_path: possession.play.clear_path?,
             flagrant: possession.play.flagrant?,
+            foul: possession.play.foul,
+            fouled: possession.play.fouled,
             intentional: possession.play.intentional?,
             play_type: possession.play.type.to_s,
             seconds: possession.play.seconds,

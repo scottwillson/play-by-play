@@ -56,6 +56,8 @@ module PlayByPlay
           Boolean :away_from_play, default: false, null: false
           Boolean :clear_path, default: false, null: false
           Boolean :flagrant, default: false, null: false
+          Integer :foul
+          Integer :fouled
           Boolean :intentional, default: false, null: false
           Integer :point_value
           String :play_team

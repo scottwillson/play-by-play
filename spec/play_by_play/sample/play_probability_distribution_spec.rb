@@ -14,8 +14,8 @@ module PlayByPlay
           sample_game = Game.new_game("001", "GSW", "POR")
 
           Game.play! sample_game, :jump_ball, team: :visitor
-          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
+          Game.play! sample_game, :personal_foul, team: :defense, foul: 0, fouled: 0 # home (visitor on offense)
+          Game.play! sample_game, :personal_foul, team: :defense, foul: 0, fouled: 0 # home (visitor on offense)
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # visitor
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # home
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # visitor
