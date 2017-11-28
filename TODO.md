@@ -1,6 +1,7 @@
  * players
    * add validation for play types
    * add players from sample
+   * link play shot, assist, etc. to
    * store players in repository
    * make play distributions by player
    * replace random player with distribution sample
@@ -86,6 +87,9 @@
    * player must be in game
    * assist and shot must be different
    * jump and tip must be different
+ * How to account for assist influence when players are on/off court?
+   * How do players influence teammates?
+   * How do players influence opponents?
 
 Events and players
 ------------------
