@@ -167,6 +167,12 @@ module PlayByPlay
         end
       end
 
+      def home_jump
+        if jump_ball?
+          game.home.players.index { |player| player.nba_id == player1_id }
+        end
+      end
+
       def intentional?
         (foul? && eventmsgactiontype == 5)
       end
@@ -296,6 +302,16 @@ module PlayByPlay
         event == :timeout
       end
 
+      def tip
+        if jump_ball?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player3_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player3_id }
+          end
+        end
+      end
+
       def three_free_throws?
         index = 1
         while (row = rows[rows.find_index(self) + index])
@@ -388,11 +404,14 @@ module PlayByPlay
           flagrant: flagrant?,
           foul: foul,
           fouled: fouled,
+          home_jump: home_jump,
           intentional: intentional?,
           point_value: point_value,
           seconds: seconds,
           shot: shot,
-          team: play_team
+          team: play_team,
+          tip: tip,
+          visitor_jump: visitor_jump
         }
       end
 
@@ -446,6 +465,12 @@ module PlayByPlay
           :home
         when 1, 3, 5, 7
           :visitor
+        end
+      end
+
+      def visitor_jump
+        if jump_ball?
+          game.visitor.players.index { |player| player.nba_id == player2_id }
         end
       end
 

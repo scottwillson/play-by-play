@@ -4,7 +4,7 @@ module PlayByPlay
   module Mock
     class Repository
       def initialize
-        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1 ])
+        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1, home_jump: 0, tip: 0, visitor_jump: 0 ])
         plays.save({ team: :visitor } => [ :fg, seconds: 19, shot: 0 ])
         plays.save({ team: :visitor } => [ :fg, seconds: 8, shot: 0 ])
         plays.save({ team: :visitor } => [ :fg, point_value: 3, seconds: 12, shot: 1 ])

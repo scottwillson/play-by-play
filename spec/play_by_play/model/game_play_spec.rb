@@ -8,7 +8,7 @@ module PlayByPlay
     RSpec.describe GamePlay do
       describe "#play!" do
         it "creates a new Possession from a Play" do
-          play = [ :jump_ball, team: :home ]
+          play = [ :jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0 ]
           possession = Possession.new
           expect(GamePlay.play!(possession, play)).to_not eq(possession)
           expect(GamePlay.play!(possession, play)).to_not equal(possession)

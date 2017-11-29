@@ -200,10 +200,6 @@ module PlayByPlay
           raise(ArgumentError, "home_jump: player required for #{type} in #{key}")
         end
 
-        if jump_ball? && !tip
-          raise(ArgumentError, "tip: player required for #{type} in #{key}")
-        end
-
         if jump_ball? && !visitor_jump
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
