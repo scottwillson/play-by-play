@@ -40,6 +40,7 @@ module PlayByPlay
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
+            # rely on ordering in mock and RandomPlayGenerator
             expect_play(0, game, generator).to eq([ :jump_ball, team: :home ])
             expect_play(0.49999, game, generator).to eq([ :jump_ball, team: :home ])
             expect_play(0.5, game, generator).to eq([ :jump_ball, team: :visitor ])

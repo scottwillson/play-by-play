@@ -11,19 +11,15 @@ module PlayByPlay
 
       # +random_number+ argument (0.0 - 1.0) for testing
       def new_play(possession, random_number = rand)
-        p "-" * 80
         probabilities = @play_probability_distribution.for(possession)
-        p probabilities.map(&:probability)
         aggregate_probabilty = probabilities.map(&:probability).reduce(:+)
 
         validate! probabilities, random_number, aggregate_probabilty, possession
 
         r = random_number * aggregate_probabilty
         previous_probability = 0
-        p "aggregate_probabilty #{aggregate_probabilty} random_number #{random_number} r #{r}"
 
         probabilities.each do |play_probability|
-          p play_probability
           if r < previous_probability + play_probability.probability
             return add_player(play_probability.play)
           end
