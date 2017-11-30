@@ -20,7 +20,7 @@ module PlayByPlay
 
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0, abbreviation: "POR"), visitor: Persistent::Team.new(id: 1, abbreviation: "GSW"))
           possession = game.possession
-          possession.play = Persistent::Play.new(:jump_ball, team: :home)
+          possession.play = Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0)
 
           generator = RandomSecondsGenerator.new(repository)
           seconds = generator.seconds(possession)
@@ -37,7 +37,7 @@ module PlayByPlay
             generator = RandomSecondsGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :home)
+            game.possession.play = Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0)
             expect(generator.seconds(game.possession, 0)).to eq(3)
             expect(generator.seconds(game.possession, 0.5)).to eq(3)
             expect(generator.seconds(game.possession, 0.999999)).to eq(3)
