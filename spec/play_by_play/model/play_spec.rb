@@ -161,7 +161,7 @@ module PlayByPlay
       describe ":steal" do
         it "gives ball to other team" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          next_possession = GamePlay.play!(possession, [ :steal ])
+          next_possession = GamePlay.play!(possession, [ :steal, steal: 0, turnover: 0 ])
           expect(next_possession.ball_in_play?).to eq(true)
           expect(next_possession.team).to eq(:visitor)
           expect(next_possession.offense).to eq(:visitor)

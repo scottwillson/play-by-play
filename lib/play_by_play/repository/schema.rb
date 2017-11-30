@@ -60,13 +60,15 @@ module PlayByPlay
           Integer :fouled
           Integer :home_jump
           Boolean :intentional, default: false, null: false
-          Integer :point_value
           String :play_team
           String :play_type
-          Integer :seconds
+          Integer :point_value
           Integer :rebound
+          Integer :seconds
           Integer :shot
+          Integer :steal
           Integer :tip
+          Integer :turnover
           Integer :visitor_jump
 
           Boolean :ball_in_play, default: false, null: false

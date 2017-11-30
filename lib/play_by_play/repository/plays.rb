@@ -109,8 +109,10 @@ module PlayByPlay
         home_jump = attributes.delete(:home_jump)
         rebound = attributes.delete(:rebound)
         shot = attributes.delete(:shot)
+        steal = attributes.delete(:steal)
         team = attributes.delete(:play_team)
         tip = attributes.delete(:tip)
+        turnover = attributes.delete(:turnover)
         type = attributes.delete(:play_type)
         visitor_jump = attributes.delete(:visitor_jump)
 

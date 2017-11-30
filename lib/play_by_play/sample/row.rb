@@ -418,7 +418,9 @@ module PlayByPlay
           rebound: rebound,
           seconds: seconds,
           shot: shot,
+          steal: steal,
           team: play_team,
+          turnover: turnover,
           tip: tip,
           visitor_jump: visitor_jump
         }
@@ -462,6 +464,16 @@ module PlayByPlay
         Model::Play.shot? play_type
       end
 
+      def steal
+        if steal?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player1_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player1_id }
+          end
+        end
+      end
+
       def team
         if person3type && person3type > 1
           person_type = person3type
@@ -474,6 +486,16 @@ module PlayByPlay
           :home
         when 1, 3, 5, 7
           :visitor
+        end
+      end
+
+      def turnover
+        if turnover?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player2_id }
+          end
         end
       end
 

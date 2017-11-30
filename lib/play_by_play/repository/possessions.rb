@@ -42,7 +42,9 @@ module PlayByPlay
             seconds: possession.play.seconds,
             rebound: possession.play.rebound,
             shot: possession.play.shot,
+            steal: possession.play.steal,
             tip: possession.play.tip,
+            turnover: possession.play.turnover,
             visitor_jump: possession.play.visitor_jump
           )
 

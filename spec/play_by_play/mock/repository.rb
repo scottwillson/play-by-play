@@ -12,7 +12,7 @@ module PlayByPlay
         plays.save({ team: :visitor } => [ :fg_miss, seconds: 18, shot: 0 ])
         plays.save({ team: :home } => [ :fg_miss, seconds: 17, shot: 0 ])
         plays.save({ team: :visitor } => [ :fg_miss, seconds: 11, shot: 0 ])
-        plays.save({ team: :visitor } => [ :steal, seconds: 5 ])
+        plays.save({ team: :visitor } => [ :steal, seconds: 5, steal: 0, turnover: 0 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :offense, rebound: 0, seconds: 1 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :defense, rebound: 0, seconds: 2 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :defense, rebound: 0, seconds: 0 ])

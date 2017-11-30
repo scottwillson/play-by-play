@@ -55,6 +55,9 @@ module PlayByPlay
         when :rebound
           attributes = play[1] || {}
           [ play.first, attributes.merge(rebound: rand(5)) ]
+        when :steal
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(steal: rand(5), turnover: rand(5)) ]
         else
           play
         end
