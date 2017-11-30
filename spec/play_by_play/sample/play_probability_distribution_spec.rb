@@ -13,7 +13,7 @@ module PlayByPlay
         it "returns instances of PlayProbability", database: true do
           sample_game = Game.new_game("001", "GSW", "POR")
 
-          Game.play! sample_game, :jump_ball, team: :visitor
+          Game.play! sample_game, :jump_ball, team: :visitor, home_jump: 0, visitor_jump: 0, tip: 0
           Game.play! sample_game, :personal_foul, team: :defense, foul: 0, fouled: 0 # home (visitor on offense)
           Game.play! sample_game, :personal_foul, team: :defense, foul: 0, fouled: 0 # home (visitor on offense)
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, shot: 0 # visitor

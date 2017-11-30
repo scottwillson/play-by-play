@@ -46,7 +46,7 @@ module PlayByPlay
         sample_game = Sample::Game.new_game("001", "GSW", "POR")
         sample_game.day = day
 
-        Sample::Game.play! sample_game, :jump_ball, team: :visitor
+        Sample::Game.play! sample_game, :jump_ball, team: :visitor, home_jump: 0, visitor_jump: 0, tip: 0
         Sample::Game.play! sample_game, :personal_foul, team: :defense, foul: 1, fouled: 2 # home (visitor on offense)
         Sample::Game.play! sample_game, :personal_foul, team: :defense, foul: 1, fouled: 2 # home (visitor on offense)
         Sample::Game.play! sample_game, :fg, assist: 2, assisted: true, shot: 0 # visitor

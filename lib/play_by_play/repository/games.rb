@@ -88,12 +88,15 @@ module PlayByPlay
             :clear_path,
             :flagrant,
             :foul,
-            :fouled, 
+            :fouled,
+            :home_jump,
             :intentional,
             :point_value,
             :play_team,
             :play_type,
-            :shot
+            :shot,
+            :tip,
+            :visitor_jump
           )
           .where(game_id: game_id)
           .exclude(play_type: nil)
