@@ -32,7 +32,7 @@ module PlayByPlay
           end
         end
 
-        context "two equal choices" do
+        context "equal choices" do
           it "chooses equally" do
             repository.reset!
             repository.plays.save({} => [ :jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0 ])
@@ -42,8 +42,12 @@ module PlayByPlay
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             # rely on ordering in mock and RandomPlayGenerator
             expect_play(0, game, generator).to eq([ :jump_ball, team: :home ])
-            expect_play(0.49999, game, generator).to eq([ :jump_ball, team: :home ])
-            expect_play(0.5, game, generator).to eq([ :jump_ball, team: :visitor ])
+            expect_play(0.2499, game, generator).to eq([ :jump_ball, team: :home ])
+            expect_play(0.25, game, generator).to eq([ :jump_ball, team: :visitor ])
+            expect_play(0.4999, game, generator).to eq([ :jump_ball, team: :visitor ])
+            expect_play(0.5, game, generator).to eq([ :jump_ball, team: :home ])
+            expect_play(0.7499, game, generator).to eq([ :jump_ball, team: :home ])
+            expect_play(0.75, game, generator).to eq([ :jump_ball, team: :visitor ])
             expect_play(0.9999, game, generator).to eq([ :jump_ball, team: :visitor ])
           end
         end

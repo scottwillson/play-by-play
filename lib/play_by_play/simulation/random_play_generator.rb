@@ -16,7 +16,7 @@ module PlayByPlay
 
         validate! probabilities, random_number, aggregate_probabilty, possession
 
-        r = random_number * aggregate_probabilty
+        r = random_number * aggregate_probabilty.to_f
         previous_probability = 0
 
         probabilities.each do |play_probability|
