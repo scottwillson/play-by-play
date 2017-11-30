@@ -1,5 +1,6 @@
  * players
    * add validation for play types
+   * replace player attributes with player, opponent, teammate?
    * add players from sample
    * link play shot, assist, etc. to
    * store players in repository

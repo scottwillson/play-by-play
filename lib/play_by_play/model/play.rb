@@ -222,6 +222,7 @@ module PlayByPlay
         raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
         raise(ArgumentError, "steal: player required for #{type} in #{key}") if steal? && steal.nil?
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if steal? && turnover.nil?
+        raise(ArgumentError, "turnover: player required for #{type} in #{key}") if turnover? && turnover.nil?
 
         if foul? && !foul
           raise(ArgumentError, "foul: player required for #{type} in #{key}")
@@ -239,7 +240,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled home_jump rebound shot steal turnover tip visitor_jump ]
+        %w[ assist foul fouled home_jump rebound shot steal tip turnover visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

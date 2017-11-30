@@ -490,11 +490,19 @@ module PlayByPlay
       end
 
       def turnover
+        if steal?
+          if team == :home
+            return game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            return game.home.players.index { |player| player.nba_id == player2_id }
+          end
+        end
+
         if turnover?
           if team == :home
-            game.visitor.players.index { |player| player.nba_id == player2_id }
+            return game.home.players.index { |player| player.nba_id == player1_id }
           else
-            game.home.players.index { |player| player.nba_id == player2_id }
+            return game.visitor.players.index { |player| player.nba_id == player1_id }
           end
         end
       end
