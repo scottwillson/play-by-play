@@ -94,8 +94,11 @@ module PlayByPlay
             :point_value,
             :play_team,
             :play_type,
+            :rebound,
             :shot,
+            :steal,
             :tip,
+            :turnover,
             :visitor_jump
           )
           .where(game_id: game_id)

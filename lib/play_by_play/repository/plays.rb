@@ -126,8 +126,10 @@ module PlayByPlay
             home_jump: home_jump,
             rebound: rebound,
             shot: shot,
+            steal: steal,
             team: team,
             tip: tip,
+            turnover: turnover,
             visitor_jump: visitor_jump
           }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
