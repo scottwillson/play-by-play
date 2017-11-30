@@ -52,6 +52,9 @@ module PlayByPlay
         when :personal_foul
           attributes = play[1] || {}
           [ play.first, attributes.merge(foul: rand(5), fouled: rand(5)) ]
+        when :rebound
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(rebound: rand(5)) ]
         else
           play
         end

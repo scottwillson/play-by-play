@@ -40,6 +40,7 @@ module PlayByPlay
             intentional: possession.play.intentional?,
             play_type: possession.play.type.to_s,
             seconds: possession.play.seconds,
+            rebound: possession.play.rebound,
             shot: possession.play.shot,
             tip: possession.play.tip,
             visitor_jump: possession.play.visitor_jump

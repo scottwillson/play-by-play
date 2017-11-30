@@ -232,6 +232,14 @@ module PlayByPlay
         end
       end
 
+      def rebound
+        if team == :home
+          game.home.players.index { |player| player.nba_id == player1_id }
+        else
+          game.visitor.players.index { |player| player.nba_id == player1_id }
+        end
+      end
+
       def rebound?
         event == :rebound
       end
@@ -407,6 +415,7 @@ module PlayByPlay
           home_jump: home_jump,
           intentional: intentional?,
           point_value: point_value,
+          rebound: rebound,
           seconds: seconds,
           shot: shot,
           team: play_team,

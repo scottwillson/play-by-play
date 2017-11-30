@@ -64,6 +64,7 @@ module PlayByPlay
           String :play_team
           String :play_type
           Integer :seconds
+          Integer :rebound
           Integer :shot
           Integer :tip
           Integer :visitor_jump

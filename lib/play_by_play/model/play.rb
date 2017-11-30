@@ -34,6 +34,7 @@ module PlayByPlay
       attr_reader :home_jump
       attr_reader :intentional
       attr_reader :point_value
+      attr_reader :rebound
       attr_reader :shot
       attr_reader :team
       attr_reader :tip
@@ -52,6 +53,10 @@ module PlayByPlay
         type == :jump_ball
       end
 
+      def self.rebound?(type)
+        type == :rebound
+      end
+
       def initialize(
         type,
         and_one: false,
@@ -65,6 +70,7 @@ module PlayByPlay
         home_jump: nil,
         intentional: false,
         point_value: 2,
+        rebound: nil,
         shot: nil,
         seconds: 7.7,
         team: nil,
@@ -84,6 +90,7 @@ module PlayByPlay
         @intentional = intentional
         @shot = shot
         @point_value = point_value || 2
+        @rebound = rebound
         @seconds = seconds
         @team = team
         @tip = tip
@@ -156,6 +163,10 @@ module PlayByPlay
         possession.key
       end
 
+      def rebound?
+        Play.rebound? type
+      end
+
       def set_team?
         team && %i[
           jump_ball
@@ -204,7 +215,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled home_jump shot tip visitor_jump ]
+        %w[ assist foul fouled home_jump rebound shot tip visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

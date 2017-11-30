@@ -151,7 +151,7 @@ module PlayByPlay
         it "assigns team and puts ball_in_play" do
           possession = Possession.new(ball_in_play: true, team: :home)
           possession = GamePlay.play!(possession, [ :fg_miss, shot: 0 ])
-          next_possession = GamePlay.play!(possession, [ :rebound, team: :offense ])
+          next_possession = GamePlay.play!(possession, [ :rebound, team: :offense, rebound: 0 ])
           expect(next_possession.ball_in_play?).to eq(true)
           expect(next_possession.team).to eq(:home)
           expect(next_possession.offense).to eq(:home)
