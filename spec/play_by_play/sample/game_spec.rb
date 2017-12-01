@@ -171,8 +171,8 @@ module PlayByPlay
           expect(play.possession.home.period_personal_fouls).to eq(0)
           expect(play.possession.visitor.period_personal_fouls).to eq(0)
           expect(play.possession_key => play.key).to eq(team: [ :shooting_foul ])
+          expect(play.possession.play.opponent).to eq(5)
           expect(play.possession.play.player).to eq(7)
-          expect(play.possession.play.fouled).to eq(5)
 
           play = Game.find_play_by_eventnum!(game, 180)
           expect(play.possession.home.period_personal_fouls).to eq(0)

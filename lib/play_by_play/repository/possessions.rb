@@ -33,17 +33,12 @@ module PlayByPlay
             away_from_play: possession.play.away_from_play?,
             clear_path: possession.play.clear_path?,
             flagrant: possession.play.flagrant?,
-            fouled: possession.play.fouled,
-            home_jump: possession.play.home_jump,
             intentional: possession.play.intentional?,
+            opponent: possession.play.opponent,
             play_type: possession.play.type.to_s,
             player: possession.play.player,
             seconds: possession.play.seconds,
-            steal: possession.play.steal,
-            tip: possession.play.tip,
-            teammate: possession.play.teammate,
-            turnover: possession.play.turnover,
-            visitor_jump: possession.play.visitor_jump
+            teammate: possession.play.teammate
           )
 
           if possession.play.point_value == 3

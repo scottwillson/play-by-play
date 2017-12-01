@@ -103,30 +103,20 @@ module PlayByPlay
       end
 
       def add(attributes)
-        fouled = attributes.delete(:fouled)
-        home_jump = attributes.delete(:home_jump)
+        opponent = attributes.delete(:opponent)
         player = attributes.delete(:player)
-        steal = attributes.delete(:steal)
         team = attributes.delete(:play_team)
         teammate = attributes.delete(:teammate)
-        tip = attributes.delete(:tip)
-        turnover = attributes.delete(:turnover)
         type = attributes.delete(:play_type)
-        visitor_jump = attributes.delete(:visitor_jump)
 
         if type && type != ""
           type = type.to_sym
 
           play_attributes = {
-            fouled: fouled,
-            home_jump: home_jump,
+            opponent: opponent,
             player: player,
-            steal: steal,
             team: team,
-            teammate: teammate,
-            tip: tip,
-            turnover: turnover,
-            visitor_jump: visitor_jump
+            teammate: teammate
           }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
 

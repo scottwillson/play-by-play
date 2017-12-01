@@ -4,7 +4,7 @@ module PlayByPlay
   module Mock
     class Repository
       def initialize
-        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1, home_jump: 0, tip: 0, visitor_jump: 0 ])
+        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1, teammate: 0, player: 0, opponent: 0 ])
         plays.save({ team: :visitor } => [ :fg, seconds: 19, player: 0 ])
         plays.save({ team: :visitor } => [ :fg, seconds: 8, player: 0 ])
         plays.save({ team: :visitor } => [ :fg, point_value: 3, seconds: 12, player: 1 ])
@@ -12,7 +12,7 @@ module PlayByPlay
         plays.save({ team: :visitor } => [ :fg_miss, seconds: 18, player: 0 ])
         plays.save({ team: :home } => [ :fg_miss, seconds: 17, player: 0 ])
         plays.save({ team: :visitor } => [ :fg_miss, seconds: 11, player: 0 ])
-        plays.save({ team: :visitor } => [ :steal, seconds: 5, steal: 0, turnover: 0 ])
+        plays.save({ team: :visitor } => [ :steal, seconds: 5, opponent: 0, player: 0 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :offense, player: 0, seconds: 1 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 2 ])
         plays.save({ ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 0 ])

@@ -59,7 +59,6 @@
  * cache play count query (if not already)
  * remove dupe webpacking
  * remove possessions home_id and visitor_id?
- * row sorting is out of whack?
  * add progress animation to teams page
  * Only apply other team's probabilities when they can affect outcome. E.g., other team should no affect FT%.
  * Collapse duplicate PlayProbabilityDistributions?
@@ -92,17 +91,15 @@
  * How to account for assist influence when players are on/off court?
    * How do players influence teammates?
    * How do players influence opponents?
-
-Events and players
-------------------
-assist
-block
-foul
-fouled
-home_jump
-rebound
-shot
-steal
-tip
-turnover
-visitor_jump
+   * Draft:
+     * player sample previous year * 4
+     * player sample (year - 2) * 2
+     * player sample (year - 3)
+     * player as teammate for each teammate * 0.2
+     * opponent previous year
+     * opponent (year - 2) * 0.5
+     * opponent (year - 3) * 0.25
+     * regress towards mean based on minutes (if player averages 5 minutes a game and is now playing 30 minutes, weight average of players who play 5 min/game)
+     * adjust for fatigue (more than 30 minutes)
+     * adjust for warmup (less than ~5 minutes)
+ * Decompose Sample#Row

@@ -137,16 +137,6 @@ module PlayByPlay
         foul? && eventmsgactiontype == 9
       end
 
-      def fouled
-        if Model::Play.foul?(play_type)
-          if team == :home
-            game.visitor.players.index { |player| player.nba_id == player2_id }
-          else
-            game.home.players.index { |player| player.nba_id == player2_id }
-          end
-        end
-      end
-
       def home_jump
         if jump_ball?
           game.home.players.index { |player| player.nba_id == player1_id }
@@ -178,6 +168,28 @@ module PlayByPlay
 
       def offensive_foul_turnover?
         turnover? && (eventmsgactiontype == 5 || eventmsgactiontype == 37)
+      end
+
+      def opponent
+        if Model::Play.foul?(play_type)
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player2_id }
+          end
+        elsif jump_ball?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player1_id }
+          end
+        elsif steal?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player2_id }
+          end
+        end
       end
 
       def misidentified_shooting_foul?
@@ -282,16 +294,6 @@ module PlayByPlay
         event == :timeout
       end
 
-      def tip
-        if jump_ball?
-          if team == :home
-            game.home.players.index { |player| player.nba_id == player3_id }
-          else
-            game.visitor.players.index { |player| player.nba_id == player3_id }
-          end
-        end
-      end
-
       def three_free_throws?
         index = 1
         while (row = rows[rows.find_index(self) + index])
@@ -381,18 +383,13 @@ module PlayByPlay
           away_from_play: away_from_play?,
           clear_path: clear_path_foul?,
           flagrant: flagrant?,
-          fouled: fouled,
-          home_jump: home_jump,
           intentional: intentional?,
+          opponent: opponent,
           player: player,
           point_value: point_value,
           seconds: seconds,
-          steal: steal,
           team: play_team,
-          teammate: teammate,
-          turnover: turnover,
-          tip: tip,
-          visitor_jump: visitor_jump
+          teammate: teammate
         }
       end
 
@@ -413,11 +410,17 @@ module PlayByPlay
       end
 
       def player
-        if rebound? || shot? || Model::Play.foul?(play_type)
+        if Model::Play.foul?(play_type) || rebound? || shot? || steal? || turnover?
           if team == :home
             game.home.players.index { |player| player.nba_id == player1_id }
           else
             game.visitor.players.index { |player| player.nba_id == player1_id }
+          end
+        elsif jump_ball?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player3_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player3_id }
           end
         end
       end
@@ -432,16 +435,6 @@ module PlayByPlay
 
       def shot?
         Model::Play.shot? play_type
-      end
-
-      def steal
-        if steal?
-          if team == :home
-            game.home.players.index { |player| player.nba_id == player1_id }
-          else
-            game.visitor.players.index { |player| player.nba_id == player1_id }
-          end
-        end
       end
 
       def team
@@ -466,30 +459,12 @@ module PlayByPlay
           else
             game.visitor.players.index { |player| player.nba_id == player2_id }
           end
-        end
-      end
-
-      def turnover
-        if steal?
+        elsif jump_ball?
           if team == :home
-            return game.visitor.players.index { |player| player.nba_id == player2_id }
+            game.home.players.index { |player| player.nba_id == player1_id }
           else
-            return game.home.players.index { |player| player.nba_id == player2_id }
+            game.visitor.players.index { |player| player.nba_id == player2_id }
           end
-        end
-
-        if turnover?
-          if team == :home
-            return game.home.players.index { |player| player.nba_id == player1_id }
-          else
-            return game.visitor.players.index { |player| player.nba_id == player1_id }
-          end
-        end
-      end
-
-      def visitor_jump
-        if jump_ball?
-          game.visitor.players.index { |player| player.nba_id == player2_id }
         end
       end
 

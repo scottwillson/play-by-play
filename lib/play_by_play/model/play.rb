@@ -28,18 +28,13 @@ module PlayByPlay
       attr_reader :away_from_play
       attr_reader :clear_path
       attr_reader :flagrant
-      attr_reader :fouled
-      attr_reader :home_jump
       attr_reader :intentional
+      attr_reader :opponent
       attr_reader :point_value
       attr_reader :player
-      attr_reader :steal
       attr_reader :team
       attr_reader :teammate
-      attr_reader :tip
-      attr_reader :turnover
       attr_reader :type
-      attr_reader :visitor_jump
 
       def self.foul?(type)
         %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
@@ -72,18 +67,13 @@ module PlayByPlay
         away_from_play: false,
         clear_path: false,
         flagrant: false,
-        fouled: nil,
-        home_jump: nil,
         intentional: false,
+        opponent: nil,
         point_value: 2,
         player: nil,
-        steal: nil,
         seconds: 7.7,
         team: nil,
-        teammate: nil,
-        tip: nil,
-        turnover: nil,
-        visitor_jump: nil
+        teammate: nil
       )
 
         @and_one = and_one
@@ -91,19 +81,14 @@ module PlayByPlay
         @away_from_play = away_from_play
         @clear_path = clear_path
         @flagrant = flagrant
-        @fouled = fouled
-        @home_jump = home_jump
         @intentional = intentional
+        @opponent = opponent
         @point_value = point_value || 2
         @player = player
         @seconds = seconds
-        @steal = steal
         @team = team
         @teammate = teammate
-        @tip = tip
         @type = type
-        @turnover = turnover
-        @visitor_jump = visitor_jump
 
         validate!
       end
@@ -212,29 +197,32 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
+
         raise(ArgumentError, "player required for #{type} in #{key}") if assisted? && teammate.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
-        raise(ArgumentError, "steal: player required for #{type} in #{key}") if steal? && steal.nil?
-        raise(ArgumentError, "turnover: player required for #{type} in #{key}") if steal? && turnover.nil?
-        raise(ArgumentError, "turnover: player required for #{type} in #{key}") if turnover? && turnover.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if steal? && player.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if turnover? && player.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if jump_ball? && player.nil?
+
+        raise(ArgumentError, "opponent required for #{type} in #{key}") if steal? && opponent.nil?
 
         if foul? && !player
           raise(ArgumentError, "player required for #{type} in #{key}")
         end
 
-        if foul? && !technical_foul? && !fouled
-          raise(ArgumentError, "fouled: player required for #{type} in #{key}")
+        if foul? && !technical_foul? && !player
+          raise(ArgumentError, "player required for #{type} in #{key}")
         end
 
-        if jump_ball? && !home_jump
-          raise(ArgumentError, "home_jump: player required for #{type} in #{key}")
+        if jump_ball? && !teammate
+          raise(ArgumentError, "teammate required for #{type} in #{key}")
         end
 
-        if jump_ball? && !visitor_jump
-          raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
+        if jump_ball? && !opponent
+          raise(ArgumentError, "opponent required for #{type} in #{key}")
         end
 
-        %w[ fouled home_jump player steal teammate tip turnover visitor_jump ]
+        %w[ opponent player teammate ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

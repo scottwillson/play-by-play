@@ -161,7 +161,7 @@ module PlayByPlay
       describe ":steal" do
         it "gives ball to other team" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          next_possession = GamePlay.play!(possession, [ :steal, steal: 0, turnover: 0 ])
+          next_possession = GamePlay.play!(possession, [ :steal, opponent: 0, player: 0 ])
           expect(next_possession.ball_in_play?).to eq(true)
           expect(next_possession.team).to eq(:visitor)
           expect(next_possession.offense).to eq(:visitor)
@@ -190,7 +190,7 @@ module PlayByPlay
       describe ":turnover" do
         it "cancels FTs and gives ball to team" do
           possession = Possession.new(free_throws: [ :visitor, :visitor ], team: :visitor, next_team: :home)
-          possession = GamePlay.play!(possession, [ :turnover, turnover: 0 ])
+          possession = GamePlay.play!(possession, [ :turnover, player: 0 ])
           expect(possession.free_throws).to eq([])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.team).to eq(:home)
@@ -199,7 +199,7 @@ module PlayByPlay
         it "gives ball to other team" do
           possession = Possession.new(ball_in_play: true, team: :visitor)
           expect(possession.team).to eq(:visitor)
-          possession = GamePlay.play!(possession, [ :turnover, turnover: 1 ])
+          possession = GamePlay.play!(possession, [ :turnover, player: 1 ])
           expect(possession.free_throws).to eq([])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.team).to eq(:home)

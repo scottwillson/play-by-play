@@ -86,18 +86,13 @@ module PlayByPlay
             :away_from_play,
             :clear_path,
             :flagrant,
-            :fouled,
-            :home_jump,
             :intentional,
+            :opponent,
             :point_value,
             :play_team,
             :play_type,
             :player,
-            :steal,
-            :teammate,
-            :tip,
-            :turnover,
-            :visitor_jump
+            :teammate
           )
           .where(game_id: game_id)
           .exclude(play_type: nil)

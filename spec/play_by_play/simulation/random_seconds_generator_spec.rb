@@ -15,12 +15,12 @@ module PlayByPlay
           repository.reset!
 
           game = Sample::Game.new_game("001", "GSW", "POR")
-          play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, home_jump: 0, tip: 0, visitor_jump: 0, seconds: 2)
+          play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, teammate: 0, player: 0, opponent: 0, seconds: 2)
           repository.plays.save play
 
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0, abbreviation: "POR"), visitor: Persistent::Team.new(id: 1, abbreviation: "GSW"))
           possession = game.possession
-          possession.play = Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0)
+          possession.play = Persistent::Play.new(:jump_ball, team: :home, teammate: 0, player: 0, opponent: 0)
 
           generator = RandomSecondsGenerator.new(repository)
           seconds = generator.seconds(possession)
@@ -33,11 +33,11 @@ module PlayByPlay
         context "one choice" do
           it "always chooses the seconds for that play" do
             repository.reset!
-            repository.plays.save({} => [ :jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0, seconds: 3 ])
+            repository.plays.save({} => [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0, seconds: 3 ])
             generator = RandomSecondsGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, tip: 0, visitor_jump: 0)
+            game.possession.play = Persistent::Play.new(:jump_ball, team: :home, teammate: 0, player: 0, opponent: 0)
             expect(generator.seconds(game.possession, 0)).to eq(3)
             expect(generator.seconds(game.possession, 0.5)).to eq(3)
             expect(generator.seconds(game.possession, 0.999999)).to eq(3)
@@ -48,7 +48,7 @@ module PlayByPlay
           it "raises an exception" do
             repository.reset!
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :visitor, home_jump: 0, tip: 0, visitor_jump: 0)
+            game.possession.play = Persistent::Play.new(:jump_ball, team: :visitor, teammate: 0, player: 0, opponent: 0)
             expect { RandomSecondsGenerator.new(repository).seconds(game.possession, 0.5) }.to raise_error(ArgumentError)
           end
         end

@@ -9,7 +9,7 @@ module PlayByPlay
       describe ":offensive_foul" do
         it "updates team, ball_in_play, and free throws" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, fouled: 0 ])
+          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, opponent: 0 ])
           expect(next_possession.ball_in_play?).to eq(false)
           expect(next_possession.team).to eq(:visitor)
           expect(next_possession.offense).to eq(:visitor)
@@ -20,7 +20,7 @@ module PlayByPlay
       describe ":offensive_foul during FTs" do
         it "cancels FTs" do
           possession = Possession.new(free_throws: [ :home, :home, :home ], next_team: :visitor, team: :home)
-          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, fouled: 0 ])
+          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, opponent: 0 ])
           expect(next_possession.ball_in_play?).to eq(false)
           expect(next_possession.team).to eq(:visitor)
           expect(next_possession.offense).to eq(:visitor)
@@ -31,7 +31,7 @@ module PlayByPlay
       describe ":offensive_foul during rebound" do
         it "updates team, ball_in_play, and free throws" do
           possession = Possession.new(ball_in_play: false, team: :visitor)
-          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, fouled: 0 ])
+          next_possession = GamePlay.play!(possession, [ :offensive_foul, player: 0, opponent: 0 ])
           expect(next_possession.ball_in_play?).to eq(false)
           expect(next_possession.team).to eq(:home)
           expect(next_possession.offense).to eq(:home)
@@ -42,7 +42,7 @@ module PlayByPlay
       describe ":shooting_foul" do
         it "gives the offense FTs" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          possession = GamePlay.play!(possession, [ :shooting_foul, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :shooting_foul, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.free_throws).to eq([ :home, :home ])
           expect(possession.team).to eq(:home)
@@ -51,7 +51,7 @@ module PlayByPlay
 
         it "gives the offense 3 FTs for a 3PT attempt" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          possession = GamePlay.play!(possession, [ :shooting_foul, point_value: 3, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :shooting_foul, point_value: 3, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.free_throws).to eq([ :home, :home, :home ])
           expect(possession.team).to eq(:home)
@@ -62,7 +62,7 @@ module PlayByPlay
       describe ":technical_foul" do
         it "gives other team a technical FT" do
           possession = Possession.new(ball_in_play: true, team: :home)
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.technical_free_throws).to eq([ :visitor ])
           expect(possession.offense).to eq(:visitor)
@@ -82,7 +82,7 @@ module PlayByPlay
 
         it "gives other team a technical FT" do
           possession = Possession.new(team: :home, free_throws: [ :visitor ], next_team: :visitor)
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.free_throws).to eq([ :visitor ])
           expect(possession.technical_free_throws).to eq([ :visitor ])
@@ -93,7 +93,7 @@ module PlayByPlay
 
         it "gives other team a technical FT" do
           possession = Possession.new(team: :home, technical_free_throws: [ :home ])
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.free_throws).to eq([])
           expect(possession.technical_free_throws).to eq([ :home, :visitor ])
@@ -104,7 +104,7 @@ module PlayByPlay
 
         it "gives other team a technical FT" do
           possession = Possession.new(team: :home)
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :offense, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.technical_free_throws).to eq([ :visitor ])
           expect(possession.offense).to eq(:visitor)
@@ -114,7 +114,7 @@ module PlayByPlay
 
         it "no team, ball not in play leads to jump ball" do
           possession = Possession.new
-          possession = GamePlay.play!(possession, [ :technical_foul, team: :visitor, player: 0, fouled: 0 ])
+          possession = GamePlay.play!(possession, [ :technical_foul, team: :visitor, player: 0, opponent: 0 ])
           expect(possession.ball_in_play?).to eq(false)
           expect(possession.technical_free_throws).to eq([ :home ])
           expect(possession.next_team).to eq(nil)
@@ -125,7 +125,7 @@ module PlayByPlay
         describe "flagrant" do
           it "gives two shots" do
             possession = Possession.new(ball_in_play: true, team: :home)
-            possession = GamePlay.play!(possession, [ :technical_foul, flagrant: true, team: :defense, player: 0, fouled: 0 ])
+            possession = GamePlay.play!(possession, [ :technical_foul, flagrant: true, team: :defense, player: 0, opponent: 0 ])
             expect(possession.ball_in_play?).to eq(false)
             expect(possession.technical_free_throws).to eq([ :home, :home ])
             expect(possession.offense).to eq(:home)
@@ -135,7 +135,7 @@ module PlayByPlay
 
           it "gives two shots and possession" do
             possession = Possession.new(ball_in_play: true, team: :home)
-            possession = GamePlay.play!(possession, [ :technical_foul, flagrant: true, team: :offense, player: 0, fouled: 0 ])
+            possession = GamePlay.play!(possession, [ :technical_foul, flagrant: true, team: :offense, player: 0, opponent: 0 ])
             expect(possession.ball_in_play?).to eq(false)
             expect(possession.technical_free_throws).to eq([ :visitor, :visitor ])
             expect(possession.offense).to eq(:visitor)

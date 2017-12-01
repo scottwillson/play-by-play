@@ -55,19 +55,14 @@ module PlayByPlay
           Boolean :away_from_play, default: false, null: false
           Boolean :clear_path, default: false, null: false
           Boolean :flagrant, default: false, null: false
-          Integer :fouled
-          Integer :home_jump
           Boolean :intentional, default: false, null: false
+          Integer :opponent
           String :play_team
           String :play_type
           Integer :player
           Integer :point_value
           Integer :seconds
-          Integer :steal
           Integer :teammate
-          Integer :tip
-          Integer :turnover
-          Integer :visitor_jump
 
           Boolean :ball_in_play, default: false, null: false
           Integer :defense_id

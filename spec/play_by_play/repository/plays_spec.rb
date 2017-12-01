@@ -12,7 +12,7 @@ module PlayByPlay
         day = Persistent::Day.new(season: season)
         game = Sample::Game.new_game("001", "GSW", "POR")
         game.day = day
-        Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, visitor_jump: 0, tip: 0, possession: game.possessions.first)
+        Persistent::Play.new(:jump_ball, team: :home, teammate: 0, opponent: 0, player: 0, possession: game.possessions.first)
         repository.seasons.save season
 
         home_team = repository.teams.find_by_abbrevation("POR")
@@ -22,7 +22,7 @@ module PlayByPlay
         day = Persistent::Day.new(season: season)
         game = Persistent::Game.new(day: day, home: home_team, visitor: visitor_team)
         game.day = day
-        Persistent::Play.new(:jump_ball, team: :home, home_jump: 0, visitor_jump: 0, tip: 0, possession: game.possessions.first)
+        Persistent::Play.new(:jump_ball, team: :home, teammate: 0, opponent: 0, player: 0, possession: game.possessions.first)
         repository.seasons.save season
 
         count = repository.plays.count(nil, :home, home_team.id, [ :jump_ball, team: :home ])
