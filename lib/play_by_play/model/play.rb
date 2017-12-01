@@ -34,7 +34,6 @@ module PlayByPlay
       attr_reader :home_jump
       attr_reader :intentional
       attr_reader :point_value
-      attr_reader :rebound
       attr_reader :player
       attr_reader :steal
       attr_reader :team
@@ -80,7 +79,6 @@ module PlayByPlay
         home_jump: nil,
         intentional: false,
         point_value: 2,
-        rebound: nil,
         player: nil,
         steal: nil,
         seconds: 7.7,
@@ -102,7 +100,6 @@ module PlayByPlay
         @intentional = intentional
         @point_value = point_value || 2
         @player = player
-        @rebound = rebound
         @seconds = seconds
         @steal = steal
         @team = team
@@ -240,7 +237,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled home_jump player rebound steal tip turnover visitor_jump ]
+        %w[ assist foul fouled home_jump player steal tip turnover visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

@@ -95,7 +95,6 @@ module PlayByPlay
             :play_team,
             :play_type,
             :player,
-            :rebound,
             :steal,
             :tip,
             :turnover,

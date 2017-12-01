@@ -43,7 +43,7 @@ module PlayByPlay
             attributes = attributes.merge(assist: rand(5))
           end
           [ play.first, attributes.merge(player: rand(5)) ]
-        when :ft, :ft_miss
+        when :ft, :ft_miss, :rebound
           attributes = play[1] || {}
           [ play.first, attributes.merge(player: rand(5)) ]
         when :jump_ball
@@ -52,9 +52,6 @@ module PlayByPlay
         when :personal_foul
           attributes = play[1] || {}
           [ play.first, attributes.merge(foul: rand(5), fouled: rand(5)) ]
-        when :rebound
-          attributes = play[1] || {}
-          [ play.first, attributes.merge(rebound: rand(5)) ]
         when :steal
           attributes = play[1] || {}
           [ play.first, attributes.merge(steal: rand(5), turnover: rand(5)) ]

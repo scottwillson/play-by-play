@@ -20,7 +20,7 @@ module PlayByPlay
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, player: 0 # home
           Game.play! sample_game, :fg, point_value: 3, assist: 1, assisted: true, player: 0 # visitor
           Game.play! sample_game, :fg_miss, player: 1 # home
-          Game.play! sample_game, :rebound, team: :defense, rebound: 0 # visitor
+          Game.play! sample_game, :rebound, team: :defense, player: 0 # visitor
           Game.play! sample_game, :fg, point_value: 3, player: 0 # visitor
 
           repository = Repository.new

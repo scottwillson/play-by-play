@@ -64,7 +64,6 @@ module PlayByPlay
           String :play_type
           Integer :player
           Integer :point_value
-          Integer :rebound
           Integer :seconds
           Integer :steal
           Integer :tip
