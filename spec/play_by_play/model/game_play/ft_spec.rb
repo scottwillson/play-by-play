@@ -10,7 +10,7 @@ module PlayByPlay
         describe "pending free throws and technical FTs" do
           it "assigns possession after technical FT" do
             possession = Possession.new(team: :home, free_throws: [ :home ], technical_free_throws: [ :home ])
-            possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
+            possession = GamePlay.play!(possession, [ :ft, player: 0 ])
             expect(possession.free_throws).to eq([ :home ])
             expect(possession.home.points).to eq(1)
             expect(possession.team).to eq(:home)
@@ -20,7 +20,7 @@ module PlayByPlay
 
           it "updates team, ball_in_play, and free throws" do
             possession = Possession.new(team: :home, free_throws: [ :home ], next_team: :visitor)
-            possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
+            possession = GamePlay.play!(possession, [ :ft, player: 0 ])
             expect(possession.free_throws).to eq([])
             expect(possession.home.points).to eq(1)
             expect(possession.errors?).to eq(false)
@@ -31,7 +31,7 @@ module PlayByPlay
 
           it "decrements technical free throws" do
             possession = Possession.new(team: :home, technical_free_throws: [ :home ], next_team: :visitor)
-            next_possession = GamePlay.play!(possession, [ :ft, shot: 0 ])
+            next_possession = GamePlay.play!(possession, [ :ft, player: 0 ])
             expect(next_possession.free_throws).to eq([])
             expect(next_possession.technical_free_throws).to eq([])
           end

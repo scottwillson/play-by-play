@@ -45,8 +45,8 @@ module PlayByPlay
           expect(repository.plays.count(:team, :defense, game.home_id, [ :fg, point_value: 3, and_one: true, assisted: true ])).to eq(0)
           expect(repository.plays.count(:team, :offense, game.visitor_id, [ :fg, point_value: 3, assisted: true ])).to eq(3)
           expect(repository.plays.count(:team, :defense, game.home_id, [ :fg, point_value: 3, assisted: true ])).to eq(3)
-          expect(repository.plays.count(:team, :offense, game.visitor_id, [ :fg_miss, shot: 0 ])).to eq(29)
-          expect(repository.plays.count(:team, :defense, game.home_id, [ :fg_miss, shot: 0 ])).to eq(29)
+          expect(repository.plays.count(:team, :offense, game.visitor_id, [ :fg_miss, player: 0 ])).to eq(29)
+          expect(repository.plays.count(:team, :defense, game.home_id, [ :fg_miss, player: 0 ])).to eq(29)
           expect(repository.plays.count(:team, :offense, game.visitor_id, [ :fg_miss, point_value: 3 ])).to eq(6)
           expect(repository.plays.count(:team, :defense, game.home_id, [ :fg_miss, point_value: 3 ])).to eq(6)
 
@@ -56,8 +56,8 @@ module PlayByPlay
           expect(repository.plays.count(:team, :defense, game.visitor_id, [ :block, point_value: 3 ])).to eq(0)
           expect(repository.plays.count(:team, :offense, game.home_id, [ :fg ])).to eq(19)
           expect(repository.plays.count(:team, :defense, game.visitor_id, [ :fg ])).to eq(19)
-          expect(repository.plays.count(:team, :offense, game.home_id, [ :fg_miss, shot: 0 ])).to eq(38)
-          expect(repository.plays.count(:team, :defense, game.visitor_id, [ :fg_miss, shot: 0 ])).to eq(38)
+          expect(repository.plays.count(:team, :offense, game.home_id, [ :fg_miss, player: 0 ])).to eq(38)
+          expect(repository.plays.count(:team, :defense, game.visitor_id, [ :fg_miss, player: 0 ])).to eq(38)
           expect(repository.plays.count(:team, :offense, game.home_id, [ :fg_miss, point_value: 3 ])).to eq(13)
           expect(repository.plays.count(:team, :defense, game.visitor_id, [ :fg_miss, point_value: 3 ])).to eq(13)
 
@@ -121,7 +121,7 @@ module PlayByPlay
           expect(play.possession.team).to eq(:visitor)
           expect(play.possession.offense).to eq(:visitor)
           expect(play.possession_key => play.key).to eq(team: [ :fg ])
-          expect(play.possession.play.shot).to eq(0)
+          expect(play.possession.play.player).to eq(0)
 
           play = Game.find_play_by_eventnum!(game, 67)
           expect(play.possession.visitor.points).to eq(15)

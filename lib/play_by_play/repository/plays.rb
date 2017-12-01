@@ -107,8 +107,8 @@ module PlayByPlay
         foul = attributes.delete(:foul)
         fouled = attributes.delete(:fouled)
         home_jump = attributes.delete(:home_jump)
+        player = attributes.delete(:player)
         rebound = attributes.delete(:rebound)
-        shot = attributes.delete(:shot)
         steal = attributes.delete(:steal)
         team = attributes.delete(:play_team)
         tip = attributes.delete(:tip)
@@ -124,8 +124,8 @@ module PlayByPlay
             foul: foul,
             fouled: fouled,
             home_jump: home_jump,
+            player: player,
             rebound: rebound,
-            shot: shot,
             steal: steal,
             team: team,
             tip: tip,

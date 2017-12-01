@@ -62,10 +62,10 @@ module PlayByPlay
           Boolean :intentional, default: false, null: false
           String :play_team
           String :play_type
+          Integer :player
           Integer :point_value
           Integer :rebound
           Integer :seconds
-          Integer :shot
           Integer :steal
           Integer :tip
           Integer :turnover

@@ -35,7 +35,7 @@ module PlayByPlay
       attr_reader :intentional
       attr_reader :point_value
       attr_reader :rebound
-      attr_reader :shot
+      attr_reader :player
       attr_reader :steal
       attr_reader :team
       attr_reader :tip
@@ -81,7 +81,7 @@ module PlayByPlay
         intentional: false,
         point_value: 2,
         rebound: nil,
-        shot: nil,
+        player: nil,
         steal: nil,
         seconds: 7.7,
         team: nil,
@@ -101,9 +101,9 @@ module PlayByPlay
         @home_jump = home_jump
         @intentional = intentional
         @point_value = point_value || 2
+        @player = player
         @rebound = rebound
         @seconds = seconds
-        @shot = shot
         @steal = steal
         @team = team
         @tip = tip
@@ -219,7 +219,7 @@ module PlayByPlay
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
         raise(ArgumentError, "assist: player required for #{type} in #{key}") if assisted? && assist.nil?
-        raise(ArgumentError, "shot: player required for #{type} in #{key}") if shot? && shot.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
         raise(ArgumentError, "steal: player required for #{type} in #{key}") if steal? && steal.nil?
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if steal? && turnover.nil?
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if turnover? && turnover.nil?
@@ -240,7 +240,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled home_jump rebound shot steal tip turnover visitor_jump ]
+        %w[ assist foul fouled home_jump player rebound steal tip turnover visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

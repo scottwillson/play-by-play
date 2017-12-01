@@ -42,10 +42,10 @@ module PlayByPlay
           if attributes[:assisted]
             attributes = attributes.merge(assist: rand(5))
           end
-          [ play.first, attributes.merge(shot: rand(5)) ]
+          [ play.first, attributes.merge(player: rand(5)) ]
         when :ft, :ft_miss
           attributes = play[1] || {}
-          [ play.first, attributes.merge(shot: rand(5)) ]
+          [ play.first, attributes.merge(player: rand(5)) ]
         when :jump_ball
           attributes = play[1] || {}
           [ play.first, attributes.merge(home_jump: rand(5), tip: rand(5), visitor_jump: rand(5)) ]

@@ -414,10 +414,10 @@ module PlayByPlay
           fouled: fouled,
           home_jump: home_jump,
           intentional: intentional?,
+          player: player,
           point_value: point_value,
           rebound: rebound,
           seconds: seconds,
-          shot: shot,
           steal: steal,
           team: play_team,
           turnover: turnover,
@@ -442,15 +442,7 @@ module PlayByPlay
         end
       end
 
-      def player_attributes
-        [
-          [ person1type, player1_id, player1_name ],
-          [ person2type, player2_id, player2_name ],
-          [ person3type, player3_id, player3_name ]
-        ]
-      end
-
-      def shot
+      def player
         if shot?
           if team == :home
             game.home.players.index { |player| player.nba_id == player1_id }
@@ -458,6 +450,14 @@ module PlayByPlay
             game.visitor.players.index { |player| player.nba_id == player1_id }
           end
         end
+      end
+
+      def player_attributes
+        [
+          [ person1type, player1_id, player1_name ],
+          [ person2type, player2_id, player2_name ],
+          [ person3type, player3_id, player3_name ]
+        ]
       end
 
       def shot?
