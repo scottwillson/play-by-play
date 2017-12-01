@@ -189,11 +189,11 @@ module PlayByPlay
           play = Game.find_play_by_eventnum!(game, 218)
           expect(play.possession.home.period_personal_fouls).to eq(1)
           expect(play.possession_key => play.key).to eq(team: [ :fg, and_one: true, assisted: true ])
-          expect(play.possession.play.assist).to eq(2)
+          expect(play.possession.play.teammate).to eq(2)
 
           play = Game.find_play_by_eventnum!(game, 346)
           expect(play.possession_key => play.key).to eq(team: [ :fg, point_value: 3, assisted: true ])
-          expect(play.possession.play.assist).to eq(2)
+          expect(play.possession.play.teammate).to eq(2)
 
           play = Game.find_play_by_eventnum!(game, 556)
           expect(play.possession.home.period_personal_fouls).to eq(2)

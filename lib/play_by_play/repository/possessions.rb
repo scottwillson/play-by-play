@@ -29,7 +29,6 @@ module PlayByPlay
           attributes = attributes.merge(
             play_team: possession.play.team.to_s,
             and_one: possession.play.and_one?,
-            assist: possession.play.assist,
             assisted: possession.play.assisted?,
             away_from_play: possession.play.away_from_play?,
             clear_path: possession.play.clear_path?,
@@ -42,6 +41,7 @@ module PlayByPlay
             seconds: possession.play.seconds,
             steal: possession.play.steal,
             tip: possession.play.tip,
+            teammate: possession.play.teammate,
             turnover: possession.play.turnover,
             visitor_jump: possession.play.visitor_jump
           )

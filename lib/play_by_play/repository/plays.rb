@@ -103,12 +103,12 @@ module PlayByPlay
       end
 
       def add(attributes)
-        assist = attributes.delete(:assist)
         fouled = attributes.delete(:fouled)
         home_jump = attributes.delete(:home_jump)
         player = attributes.delete(:player)
         steal = attributes.delete(:steal)
         team = attributes.delete(:play_team)
+        teammate = attributes.delete(:teammate)
         tip = attributes.delete(:tip)
         turnover = attributes.delete(:turnover)
         type = attributes.delete(:play_type)
@@ -118,13 +118,12 @@ module PlayByPlay
           type = type.to_sym
 
           play_attributes = {
-            assist: assist,
             fouled: fouled,
             home_jump: home_jump,
-
             player: player,
             steal: steal,
             team: team,
+            teammate: teammate,
             tip: tip,
             turnover: turnover,
             visitor_jump: visitor_jump

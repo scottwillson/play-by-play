@@ -40,7 +40,7 @@ module PlayByPlay
         when :fg, :fg_miss
           attributes = play[1] || {}
           if attributes[:assisted]
-            attributes = attributes.merge(assist: rand(5))
+            attributes = attributes.merge(teammate: rand(5))
           end
           [ play.first, attributes.merge(player: rand(5)) ]
         when :ft, :ft_miss, :rebound

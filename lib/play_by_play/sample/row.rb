@@ -90,16 +90,6 @@ module PlayByPlay
         ACTION_MAP[eventmsgtype]
       end
 
-      def assist
-        if assist?
-          if team == :home
-            game.home.players.index { |player| player.nba_id == player2_id }
-          else
-            game.visitor.players.index { |player| player.nba_id == player2_id }
-          end
-        end
-      end
-
       def assist?
         fg? && player2_id && player2_id > 0
       end
@@ -387,7 +377,6 @@ module PlayByPlay
       def play_attributes
         {
           and_one: and_one?,
-          assist: assist,
           assisted: assist?,
           away_from_play: away_from_play?,
           clear_path: clear_path_foul?,
@@ -400,6 +389,7 @@ module PlayByPlay
           seconds: seconds,
           steal: steal,
           team: play_team,
+          teammate: teammate,
           turnover: turnover,
           tip: tip,
           visitor_jump: visitor_jump
@@ -466,6 +456,16 @@ module PlayByPlay
           :home
         when 1, 3, 5, 7
           :visitor
+        end
+      end
+
+      def teammate
+        if assist?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player2_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          end
         end
       end
 

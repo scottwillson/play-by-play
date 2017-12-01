@@ -24,7 +24,6 @@ module PlayByPlay
       attr_accessor :seconds
 
       attr_reader :and_one
-      attr_reader :assist
       attr_reader :assisted
       attr_reader :away_from_play
       attr_reader :clear_path
@@ -36,6 +35,7 @@ module PlayByPlay
       attr_reader :player
       attr_reader :steal
       attr_reader :team
+      attr_reader :teammate
       attr_reader :tip
       attr_reader :turnover
       attr_reader :type
@@ -68,7 +68,6 @@ module PlayByPlay
       def initialize(
         type,
         and_one: false,
-        assist: nil,
         assisted: false,
         away_from_play: false,
         clear_path: false,
@@ -81,13 +80,13 @@ module PlayByPlay
         steal: nil,
         seconds: 7.7,
         team: nil,
+        teammate: nil,
         tip: nil,
         turnover: nil,
         visitor_jump: nil
       )
 
         @and_one = and_one
-        @assist = assist
         @assisted = assisted
         @away_from_play = away_from_play
         @clear_path = clear_path
@@ -100,6 +99,7 @@ module PlayByPlay
         @seconds = seconds
         @steal = steal
         @team = team
+        @teammate = teammate
         @tip = tip
         @type = type
         @turnover = turnover
@@ -212,7 +212,7 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
-        raise(ArgumentError, "assist: player required for #{type} in #{key}") if assisted? && assist.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if assisted? && teammate.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
         raise(ArgumentError, "steal: player required for #{type} in #{key}") if steal? && steal.nil?
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if steal? && turnover.nil?
@@ -234,7 +234,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist fouled home_jump player steal tip turnover visitor_jump ]
+        %w[ fouled home_jump player steal teammate tip turnover visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

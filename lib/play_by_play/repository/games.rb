@@ -82,7 +82,6 @@ module PlayByPlay
         @db[:possessions]
           .select(
             :and_one,
-            :assist,
             :assisted,
             :away_from_play,
             :clear_path,
@@ -95,6 +94,7 @@ module PlayByPlay
             :play_type,
             :player,
             :steal,
+            :teammate,
             :tip,
             :turnover,
             :visitor_jump
