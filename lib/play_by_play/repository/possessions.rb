@@ -34,7 +34,6 @@ module PlayByPlay
             away_from_play: possession.play.away_from_play?,
             clear_path: possession.play.clear_path?,
             flagrant: possession.play.flagrant?,
-            foul: possession.play.foul,
             fouled: possession.play.fouled,
             home_jump: possession.play.home_jump,
             intentional: possession.play.intentional?,

@@ -87,7 +87,6 @@ module PlayByPlay
             :away_from_play,
             :clear_path,
             :flagrant,
-            :foul,
             :fouled,
             :home_jump,
             :intentional,

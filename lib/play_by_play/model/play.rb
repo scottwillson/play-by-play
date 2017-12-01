@@ -29,7 +29,6 @@ module PlayByPlay
       attr_reader :away_from_play
       attr_reader :clear_path
       attr_reader :flagrant
-      attr_reader :foul
       attr_reader :fouled
       attr_reader :home_jump
       attr_reader :intentional
@@ -74,7 +73,6 @@ module PlayByPlay
         away_from_play: false,
         clear_path: false,
         flagrant: false,
-        foul: nil,
         fouled: nil,
         home_jump: nil,
         intentional: false,
@@ -94,7 +92,6 @@ module PlayByPlay
         @away_from_play = away_from_play
         @clear_path = clear_path
         @flagrant = flagrant
-        @foul = foul
         @fouled = fouled
         @home_jump = home_jump
         @intentional = intentional
@@ -221,8 +218,8 @@ module PlayByPlay
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if steal? && turnover.nil?
         raise(ArgumentError, "turnover: player required for #{type} in #{key}") if turnover? && turnover.nil?
 
-        if foul? && !foul
-          raise(ArgumentError, "foul: player required for #{type} in #{key}")
+        if foul? && !player
+          raise(ArgumentError, "player required for #{type} in #{key}")
         end
 
         if foul? && !technical_foul? && !fouled
@@ -237,7 +234,7 @@ module PlayByPlay
           raise(ArgumentError, "visitor_jump: player required for #{type} in #{key}")
         end
 
-        %w[ assist foul fouled home_jump player steal tip turnover visitor_jump ]
+        %w[ assist fouled home_jump player steal tip turnover visitor_jump ]
           .each { |attribute| validate_player_attribute(attribute) }
       end
     end

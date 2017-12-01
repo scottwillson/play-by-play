@@ -147,16 +147,6 @@ module PlayByPlay
         foul? && eventmsgactiontype == 9
       end
 
-      def foul
-        if Model::Play.foul?(play_type)
-          if team == :home
-            game.home.players.index { |player| player.nba_id == player1_id }
-          else
-            game.visitor.players.index { |player| player.nba_id == player1_id }
-          end
-        end
-      end
-
       def fouled
         if Model::Play.foul?(play_type)
           if team == :home
@@ -402,7 +392,6 @@ module PlayByPlay
           away_from_play: away_from_play?,
           clear_path: clear_path_foul?,
           flagrant: flagrant?,
-          foul: foul,
           fouled: fouled,
           home_jump: home_jump,
           intentional: intentional?,
@@ -434,7 +423,7 @@ module PlayByPlay
       end
 
       def player
-        if rebound? || shot?
+        if rebound? || shot? || Model::Play.foul?(play_type)
           if team == :home
             game.home.players.index { |player| player.nba_id == player1_id }
           else

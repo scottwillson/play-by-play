@@ -104,7 +104,6 @@ module PlayByPlay
 
       def add(attributes)
         assist = attributes.delete(:assist)
-        foul = attributes.delete(:foul)
         fouled = attributes.delete(:fouled)
         home_jump = attributes.delete(:home_jump)
         player = attributes.delete(:player)
@@ -120,7 +119,6 @@ module PlayByPlay
 
           play_attributes = {
             assist: assist,
-            foul: foul,
             fouled: fouled,
             home_jump: home_jump,
 
