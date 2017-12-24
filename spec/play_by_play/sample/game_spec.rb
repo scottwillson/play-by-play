@@ -66,7 +66,14 @@ module PlayByPlay
           expect(game.rows.size).to eq(512)
 
           expect(repository.games.possessions(game.id).size).to eq(426)
-          expect(repository.games.plays(game.id).size).to eq(425)
+          plays = repository.games.plays(game.id)
+          expect(plays.size).to eq(425)
+
+          play = plays.first
+          expect(play.type).to eq(:jump_ball)
+          expect(play).to be_kind_of(Persistent::Play)
+          expect(play.player.name).to eq("Jrue Holiday")
+          expect(play.player.nba_id).to eq(201_950)
         end
       end
 

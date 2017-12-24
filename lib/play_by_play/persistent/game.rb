@@ -97,6 +97,10 @@ module PlayByPlay
         possessions.map(&:play).compact
       end
 
+      def players
+        teams.map(&:players).flatten
+      end
+
       def possession
         possessions.last
       end
@@ -107,6 +111,21 @@ module PlayByPlay
 
       def source
         season&.source
+      end
+
+      # :home or :visitor
+      def team(key)
+        if key == :home
+          home
+        elsif key == :visitor
+          visitor
+        else
+          raise ArgumentError, "key must be :home or :visitor but was '#{key}' (#{key.class})"
+        end
+      end
+
+      def teams
+        [ visitor, home ]
       end
 
       def visitor

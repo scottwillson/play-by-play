@@ -35,6 +35,8 @@ module PlayByPlay
         game.home = repository.teams.first_or_create(game.home)
         game.visitor = repository.teams.first_or_create(game.visitor)
 
+        save_players game
+
         game.id = @db[:games].insert(
           day_id: game.day.id,
           errors: game.errors,
@@ -48,6 +50,12 @@ module PlayByPlay
         repository.rows.save game.rows
 
         game.id
+      end
+
+      def save_players(game)
+        game.players.each do |player|
+          repository.players.save player
+        end
       end
 
       def find(id)
@@ -145,7 +153,7 @@ module PlayByPlay
           else
             attributes[:technical_free_throws] = []
           end
-
+          
           attributes = repository.plays.add(attributes)
 
           attributes.delete(:seconds)

@@ -104,19 +104,26 @@ module PlayByPlay
 
       def add(attributes)
         opponent = attributes.delete(:opponent)
+        opponent_id = attributes.delete(:opponent_id)
         player = attributes.delete(:player)
+        player_id = attributes.delete(:player_id)
         team = attributes.delete(:play_team)
         teammate = attributes.delete(:teammate)
+        teammate_id = attributes.delete(:teammate_id)
         type = attributes.delete(:play_type)
+
 
         if type && type != ""
           type = type.to_sym
 
           play_attributes = {
             opponent: opponent,
+            opponent_id: opponent_id,
             player: player,
+            player_id: player_id,
             team: team,
-            teammate: teammate
+            teammate: teammate,
+            teammate_id: teammate_id
           }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
 

@@ -34,11 +34,11 @@ module PlayByPlay
             clear_path: possession.play.clear_path?,
             flagrant: possession.play.flagrant?,
             intentional: possession.play.intentional?,
-            opponent: possession.play.opponent,
+            opponent_id: possession.play.opponent_id,
             play_type: possession.play.type.to_s,
-            player: possession.play.player,
+            player_id: possession.play.player_id,
             seconds: possession.play.seconds,
-            teammate: possession.play.teammate
+            teammate_id: possession.play.teammate_id
           )
 
           if possession.play.point_value == 3

@@ -5,6 +5,7 @@ require "play_by_play/repository/days"
 require "play_by_play/repository/games"
 require "play_by_play/repository/league"
 require "play_by_play/repository/plays"
+require "play_by_play/repository/players"
 require "play_by_play/repository/possessions"
 require "play_by_play/repository/seasons"
 require "play_by_play/repository/rows"
@@ -41,6 +42,10 @@ module PlayByPlay
 
     def plays
       @plays ||= RepositoryModule::Plays.new(self, @db)
+    end
+
+    def players
+      @players ||= RepositoryModule::Players.new(self, @db)
     end
 
     def possessions

@@ -48,6 +48,12 @@ module PlayByPlay
           String :name, unique: true
         end
 
+        db.send(create_table_method, :players) do
+          primary_key :id
+          String :name, unique: true
+          Integer :nba_id, unique: true
+        end
+
         db.send(create_table_method, :possessions) do
           primary_key :id
           Boolean :and_one, default: false, null: false
@@ -56,13 +62,10 @@ module PlayByPlay
           Boolean :clear_path, default: false, null: false
           Boolean :flagrant, default: false, null: false
           Boolean :intentional, default: false, null: false
-          Integer :opponent
           String :play_team
           String :play_type
-          Integer :player
           Integer :point_value
           Integer :seconds
-          Integer :teammate
 
           Boolean :ball_in_play, default: false, null: false
           Integer :defense_id
@@ -81,6 +84,11 @@ module PlayByPlay
           Boolean :technical_free_throws, default: false, null: false
           Integer :visitor_id, null: false
           Integer :visitor_margin, null: false, default: 0
+
+          foreign_key :opponent_id, :players
+          foreign_key :player_id
+          foreign_key :teammate_id, :players
+
           index :defense_id
           index :game_id
           index :home_id

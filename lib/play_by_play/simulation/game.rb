@@ -27,7 +27,7 @@ module PlayByPlay
 
         until game.possession.game_over?
           play = random_play_generator.new_play(game.possession)
-          play = Persistent::Play.from_array(play)
+          play = Persistent::Play.from_array(play, game.possession)
           play.possession = game.possession
           game.possession.play = play
 
