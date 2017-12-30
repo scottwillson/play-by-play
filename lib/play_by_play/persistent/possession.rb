@@ -2,34 +2,57 @@ require "play_by_play/model/possession"
 
 module PlayByPlay
   module Persistent
-    class Possession < Model::Possession
+    class Possession
+      extend Forwardable
+
       attr_accessor :id
 
       attr_reader :game
       attr_reader :play
 
+      def_delegators :@model,
+                     :ball_in_play?,
+                     :defense,
+                     :free_throws?,
+                     :game_over?,
+                     :home,
+                     :key,
+                     :margin,
+                     :next_team,
+                     :offense,
+                     :opening_tip,
+                     :period,
+                     :seconds,
+                     :seconds=,
+                     :seconds_remaining,
+                     :team,
+                     :team?,
+                     :technical_free_throws?,
+                     :visitor
+
       def initialize(attributes = {})
         attributes = attributes.dup
 
-        self.game = attributes.delete(:game)
-        self.game_id = attributes.delete(:game_id)
-        @home_margin = attributes.delete(:home_margin)
-        self.id = attributes.delete(:id)
-        self.play = attributes.delete(:play)
-        self.play_id = attributes.delete(:play_id)
-        @visitor_margin = attributes.delete(:visitor_margin)
+        self.game = attributes[:game]
+        self.game_id = attributes[:game_id]
+        @home_margin = attributes[:home_margin]
+        self.id = attributes[:id]
+        @offense = attributes[:offense]
+        self.play = attributes[:play]
+        self.play_id = attributes[:play_id]
+        @visitor_margin = attributes[:visitor_margin]
 
-        super attributes
+        assign_model attributes
       end
 
       def attributes
-        super.merge(
+        {
           game: game,
           game_id: game_id,
           id: id,
           play: play,
           play_id: play_id
-        )
+        }
       end
 
       def defense_id
@@ -75,6 +98,10 @@ module PlayByPlay
         end
       end
 
+      def assign_model(attributes)
+        @model = Model::Possession.new_from_attributes(attributes)
+      end
+
       def play=(value)
         @play = value
         @play_id = value&.id
@@ -91,12 +118,20 @@ module PlayByPlay
         end
       end
 
+      def source
+        game&.source
+      end
+
       def visitor_id
         game&.visitor_id
       end
 
       def visitor_margin
         @visitor_margin || margin(:visitor)
+      end
+
+      def inspect
+        attributes.to_s
       end
 
       def to_s

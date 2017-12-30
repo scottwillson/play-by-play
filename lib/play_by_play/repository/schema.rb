@@ -101,7 +101,7 @@ module PlayByPlay
         db.send(create_table_method, :rows) do
           primary_key :id
           Integer :game_id
-          Integer :possession_id
+          Integer :play_id
           Integer :eventmsgactiontype
           Integer :eventmsgtype
           Integer :eventnum

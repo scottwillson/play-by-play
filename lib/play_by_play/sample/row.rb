@@ -21,8 +21,10 @@ module PlayByPlay
         116 => :delay_of_game_technical
       }.freeze
 
+      attr_reader :game
+
       attr_accessor :id
-      attr_accessor :possession_id
+      attr_accessor :play_id
       attr_accessor :eventmsgactiontype
       attr_accessor :eventmsgtype
       # *Not* in exact chronological order
@@ -34,7 +36,6 @@ module PlayByPlay
       attr_accessor :person1type
       attr_accessor :person2type
       attr_accessor :person3type
-      attr_accessor :game
       attr_accessor :nba_id
       attr_accessor :player1_id
       attr_accessor :player1_name
@@ -61,9 +62,8 @@ module PlayByPlay
 
       attr_writer :scoremargin
 
-      def initialize(game, headers, json)
+      def initialize(headers, json, game)
         @game = game
-        @game.rows << self
 
         json.each.with_index do |cell, index|
           send "#{headers[index].downcase}=", cell
@@ -150,7 +150,7 @@ module PlayByPlay
       end
 
       def next_row
-        @next_row ||= rows[rows.find_index(self) + 1]
+        @next_row ||= game.rows[game.rows.find_index(self) + 1]
       end
 
       def offensive_foul?
@@ -191,17 +191,11 @@ module PlayByPlay
       end
 
       def previous_row
-        if rows
-          @previous_row ||= rows[rows.find_index(self) - 1]
-        end
+        @previous_row ||= game.rows[game.rows.find_index(self) - 1]
       end
 
       def rebound?
         event == :rebound
-      end
-
-      def rows
-        game.rows
       end
 
       def scoremargin
@@ -268,7 +262,7 @@ module PlayByPlay
 
       def three_free_throws?
         index = 1
-        while (row = rows[rows.find_index(self) + index])
+        while (row = game.rows[game.rows.find_index(self) + index])
           if row.ft? || row.ft_miss?
             if row.eventmsgactiontype == 13
               return true

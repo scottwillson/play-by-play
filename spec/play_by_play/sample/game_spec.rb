@@ -71,29 +71,29 @@ module PlayByPlay
       end
 
       describe "#parse" do
-        it "creates plays from JSON file" do
+        it "creates Persistent::Game with Possessions and Plays from JSON file" do
           json = JSON.parse(File.read("spec/data/0021400001.json"))
           game = Game.new_game("0021400001", "ORL", "NOP")
           game = Game.parse(game, json, ENV["DEBUG"])
           expect(game).to_not be_nil
           expect(game.errors).to eq([])
-          expect(game.possession.errors?).to eq(false)
           expect(game.error_eventnum).to be_nil
           expect(game.id).to be_nil
 
-          expect(game.plays[0].possession.opening_tip).to eq(nil)
-          expect(game.plays[0].possession.period).to eq(1)
-          expect(game.plays[0].possession_key => game.plays[0].key).to eq(nil => [ :jump_ball, team: :home ])
-          expect(game.plays[0].possession.seconds_remaining).to eq(720)
+          possessions = game.possessions
+          expect(possessions[0].opening_tip).to eq(nil)
+          expect(possessions[0].period).to eq(1)
+          expect(possessions[0].key => game.plays[0].key).to eq(nil => [ :jump_ball, team: :home ])
+          expect(possessions[0].seconds_remaining).to eq(720)
           expect(game.plays[0].seconds).to eq(0)
 
-          expect(game.plays[1].possession.opening_tip).to eq(:home)
-          expect(game.plays[1].possession.period).to eq(1)
-          expect(game.plays[1].possession.seconds_remaining).to eq(720)
-          expect(game.plays[1].possession_key => game.plays[1].key).to eq(team: [ :fg_miss ])
+          expect(possessions[1].opening_tip).to eq(:home)
+          expect(possessions[1].period).to eq(1)
+          expect(possessions[1].seconds_remaining).to eq(720)
+          expect(possessions[1].key => game.plays[1].key).to eq(team: [ :fg_miss ])
           expect(game.plays[1].seconds).to eq(17)
 
-          expect(game.plays[2].possession_key => game.plays[2].key).to eq(ball_in_play: [ :rebound, team: :defense ])
+          expect(possessions[2].key => game.plays[2].key).to eq(ball_in_play: [ :rebound, team: :defense ])
 
           play = Game.find_play_by_eventnum!(game, 14)
           expect(play.possession.team).to eq(:home)

@@ -2,6 +2,18 @@ module PlayByPlay
   module Model
     # A Redux "action" or a finite-state machine transition.
     class Play
+      KEYS = %i[
+        and_one
+        assisted
+        away_from_play
+        clear_path
+        flagrant
+        intentional
+        point_value
+        seconds
+        team
+      ].freeze
+
       TYPES = %i[
         block
         fg
@@ -32,6 +44,11 @@ module PlayByPlay
       attr_reader :point_value
       attr_reader :team
       attr_reader :type
+
+      def self.new_from_attributes(type, attributes)
+        a = attributes.slice(*KEYS)
+        self.new type, a
+      end
 
       def initialize(
         type,
@@ -111,10 +128,6 @@ module PlayByPlay
         end
       end
 
-      def possession_key
-        possession.key
-      end
-
       def set_team?
         team && %i[
           jump_ball
@@ -129,6 +142,14 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
+      end
+
+      def inspect
+        to_s
+      end
+
+      def to_s
+        key.to_s
       end
     end
   end

@@ -43,7 +43,7 @@ module PlayByPlay
       def save(rows)
         values = rows.map do |row|
           [
-            row.possession_id,
+            row.play_id,
             row.game.id,
             row.eventmsgactiontype,
             row.eventmsgtype,

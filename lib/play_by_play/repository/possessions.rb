@@ -9,7 +9,7 @@ module PlayByPlay
           defense_id: possession.defense_id,
           free_throws: possession.free_throws?,
           game_id: possession.game_id,
-          home_id: possession.game.home_id,
+          home_id: possession.home_id,
           home_margin: possession.home_margin,
           next_team: possession.next_team.to_s,
           offense: possession.offense.to_s,
@@ -17,10 +17,10 @@ module PlayByPlay
           opening_tip: possession.opening_tip.to_s,
           period: possession.period,
           seconds_remaining: possession.seconds_remaining,
-          source: possession.game.source,
+          source: possession.source,
           team: possession.team?,
           technical_free_throws: possession.technical_free_throws?,
-          visitor_id: possession.game.visitor_id,
+          visitor_id: possession.visitor_id,
           visitor_margin: possession.visitor_margin
         }
 

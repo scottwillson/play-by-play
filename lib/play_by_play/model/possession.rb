@@ -9,6 +9,21 @@ module PlayByPlay
     class Possession
       include Duplication
 
+      KEYS = %i[
+        ball_in_play
+        errors
+        free_throws
+        home
+        next_team
+        offense
+        opening_tip
+        period
+        seconds_remaining
+        team
+        technical_free_throws
+        visitor
+      ].freeze
+
       # team with possession
       attr_reader :team
 
@@ -29,6 +44,10 @@ module PlayByPlay
       attr_reader :technical_free_throws
       # seconds remaining in current period
       attr_reader :seconds_remaining
+
+      def self.new_from_attributes(attributes)
+        self.new attributes.slice(*KEYS)
+      end
 
       def initialize(
         ball_in_play: false,
@@ -249,6 +268,10 @@ module PlayByPlay
         elsif !seconds_remaining?
           :seconds_remaining
         end
+      end
+
+      def to_s
+        key
       end
 
       private

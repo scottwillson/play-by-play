@@ -6,7 +6,6 @@ module PlayByPlay
     class Game
       attr_accessor :error_eventnum
       attr_accessor :id
-      attr_accessor :rows
 
       attr_reader :day
       attr_reader :day_id
@@ -14,6 +13,7 @@ module PlayByPlay
       attr_reader :home_id
       attr_reader :nba_id
       attr_reader :possessions
+      attr_reader :rows
       attr_reader :visitor_id
 
       def initialize(
@@ -22,10 +22,11 @@ module PlayByPlay
         id: nil,
         errors: [],
         error_eventnum: nil,
-        home: Persistent::Team.new(key: :home),
+        home: Persistent::Team.new,
         home_id: nil,
         nba_id: nil,
-        visitor: Persistent::Team.new(key: :visitor),
+        rows: [],
+        visitor: Persistent::Team.new,
         visitor_id: nil
       )
 
@@ -34,13 +35,13 @@ module PlayByPlay
         @errors = errors
         @error_eventnum = error_eventnum
         self.home_id = home_id
-        self.home = home.merge(key: :home)
+        self.home = home
         @id = id
         @nba_id = nba_id
+        @rows = rows
         @possessions = [ Persistent::Possession.new(game: self) ]
-        @rows = []
         self.visitor_id = visitor_id
-        self.visitor = visitor.merge(key: :visitor)
+        self.visitor = visitor
 
         raise(ArgumentError, "Vistor team cannot be nil") if @visitor.nil?
         raise(ArgumentError, "Home team cannot be nil") if @home.nil?
@@ -80,17 +81,11 @@ module PlayByPlay
       end
 
       def loser
-        return unless possession.game_over?
-
         if possession.home.points < possession.visitor.points
           home
-        else
+        elsif possession.home.points > possession.visitor.points
           visitor
         end
-      end
-
-      def over?
-        possession.game_over?
       end
 
       def plays
@@ -127,11 +122,9 @@ module PlayByPlay
       end
 
       def winner
-        return unless possession.game_over?
-
         if possession.home.points > possession.visitor.points
           home
-        else
+        elsif possession.home.points < possession.visitor.points
           visitor
         end
       end

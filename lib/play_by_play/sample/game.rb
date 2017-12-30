@@ -36,21 +36,27 @@ module PlayByPlay
       end
 
       def self.parse(game, json, invalid_state_error = true)
-        add_rows(game, json, json["resultSets"].first["headers"])
+        model_possession = Model::Possession.new
 
-        game.rows.each do |row|
-          debug(game.possession, row)
-          next if ignore?(game.possession, row)
+        rows(game, json).each do |row|
+          debug model_possession, row
+          next if ignore?(model_possession, row)
 
           begin
-            row.possession = game.possession
-            row = correct_row(row)
+            row.possession = model_possession
+            row = correct_row(row, game.nba_id)
 
-            play = play!(game, row.play_type, row.play_attributes)
+            play = play!(row.play_type, row.play_attributes)
             play.row = row
 
-            validate_score! game.possession, row
-            break if game.possession.errors?
+            model_possession = Model::GamePlay.play!(model_possession, model_play)
+            debug_play model_possession, model_play
+            validate_score! model_possession, row
+            break if model_possession.errors?
+
+            possession = Persistent::Possession.new(model_possession.attributes)
+            possession.game = game
+            game.possessions << possession
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if invalid_state_error
             game.error_eventnum = row.eventnum
@@ -65,33 +71,30 @@ module PlayByPlay
       end
 
       def self.play!(game, play_type, play_attributes = {})
-        play = Model::Play.new(play_type, play_attributes)
-        possession = Model::GamePlay.play!(game.possession, play)
-        debug_play possession, play
-
-        play = Persistent::Play.new(play_type, play_attributes.merge(possession: game.possession))
+        model_play = Model::Play.new(play_type, play_attributes)
+        play = Persistent::Play.from_model(model_play, game.possession)
         game.possession.play = play
-
-        possession = Persistent::Possession.new(possession.attributes)
-        game.possessions << possession
+        play.possession = game.possession
         play
       end
 
       # Map JSON array to Sample::Row
-      def self.add_rows(game, json, headers)
-        json["resultSets"].first["rowSet"].map do |json_row|
-          Row.new(game, headers, json_row)
+      def self.rows(game, json)
+        headers = json["resultSets"].first["headers"]
+        json["resultSets"].first["rowSet"].each do |json_row|
+          game.rows << Row.new(headers, json_row, game)
         end
+        game.rows
       end
 
       # Source data may have specific problems
       # Change to correct_play
-      def self.correct_row(row)
+      def self.correct_row(row, nba_id)
         if row.misidentified_shooting_foul?
           row.eventmsgactiontype = 2
         end
 
-        if row.game.nba_id == "0021400009" && row.eventnum == 393
+        if nba_id == "0021400009" && row.eventnum == 393
           row.eventmsgactiontype = 7
         end
 
@@ -128,9 +131,9 @@ module PlayByPlay
         PlayByPlay.logger.debug row
       end
 
-      def self.debug_play(possession, model_play)
+      def self.debug_play(possession, play)
         return unless PlayByPlay.logger.debug?
-        PlayByPlay.logger.debug possession.key => model_play.key
+        PlayByPlay.logger.debug possession.key => play.key
       end
     end
   end
