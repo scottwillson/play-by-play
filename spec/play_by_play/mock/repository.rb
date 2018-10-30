@@ -36,14 +36,20 @@ module PlayByPlay
         end
 
         def count(possession_key, _, _, play)
-          sample_plays.count { |a| a.possession_key == possession_key && a.key == play }
+          sample_plays.count do |a|
+            if play.size > 1 && play.last[:team]
+              a.possession_key == possession_key && a.key == play && a.team == play.last[:team]
+            else
+              a.possession_key == possession_key && a.key == play
+            end
+          end
         end
 
         def save(hash)
           sample_plays << Persistent::Play.from_hash(hash)
         end
 
-        # Incorrectly ignore team
+        # Incorrectly ignore play team
         def seconds_counts(play_key, _, _)
           sample_plays
             .select { |play| play.key == play_key }

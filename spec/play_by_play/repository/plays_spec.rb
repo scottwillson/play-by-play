@@ -4,7 +4,7 @@ require "play_by_play/repository"
 module PlayByPlay
   RSpec.describe Repository do
     describe "#plays.count" do
-      it "counts sample possessions only" do
+      it "counts sample possessions only", database: true do
         repository = Repository.new
         repository.reset!
 

@@ -1,13 +1,13 @@
 require "json"
-require "play_by_play/sample/row"
 require "play_by_play/model/game_play"
+require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
-require "play_by_play/model/invalid_state_error"
 require "play_by_play/persistent/game"
 require "play_by_play/persistent/play"
 require "play_by_play/persistent/possession"
 require "play_by_play/repository"
+require "play_by_play/sample/row"
 
 module PlayByPlay
   module Sample

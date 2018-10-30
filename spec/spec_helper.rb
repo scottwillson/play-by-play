@@ -8,6 +8,7 @@ require "sinatra"
 require "play_by_play"
 raise("Specs must run in 'test' environment, but is '#{PlayByPlay.environment}'") unless PlayByPlay.environment == :test
 
+require "play_by_play/simulation/generator_helper"
 require "play_by_play/web_app"
 
 RSpec.configure do |config|
@@ -31,7 +32,9 @@ RSpec.configure do |config|
 
   config.order = :random
   Kernel.srand config.seed
+
   config.include Capybara::DSL
+  config.include PlayByPlay::Simulation::GeneratorHelper
 end
 
 Capybara.app = PlayByPlay::WebApp
