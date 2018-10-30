@@ -46,7 +46,7 @@
     "style-loader": "^0.19",
     "url-loader": "^0.6",
     "webpack": "^3.8",
-    "webpack-dev-server": "^2.9"
+    "webpack-dev-server": "^3.1.10"
   },
   "dependencies": {
     "core-js": "^2.0.0",
