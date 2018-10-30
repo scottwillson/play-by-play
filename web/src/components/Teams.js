@@ -1,5 +1,5 @@
+import * as R from 'ramda';
 import React from 'react';
-import R from 'ramda';
 import request from 'superagent';
 import Team from './Team';
 

@@ -35,6 +35,8 @@ See the Rakefile for options and other Rake tasks.
 
 `rackup` to run the web app and browse http://localhost:9292/ to view import errors.
 
+Database: `psql play_by_play_development`
+
 Tech stack
 ==========
 Ruby 2.5 with minimal gems

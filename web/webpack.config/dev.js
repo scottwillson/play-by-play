@@ -6,17 +6,18 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 let config = Object.assign({}, baseConfig, {
-  entry: ['babel-polyfill', './src/components/App'],
+  entry: ['@babel/polyfill', './src/components/App'],
   cache: true,
   devtool: 'eval-source-map',
+  mode: 'development',
   plugins: [
     new webpack.NoEmitOnErrorsPlugin()
   ],
   module: defaultSettings.getDefaultModules()
 });
 
-// Add needed loaders to the defaults here
-config.module.loaders.push({
+// Add needed rules to the defaults here
+config.module.rules.push({
   test: /\.(js|jsx)$/,
   loader: 'babel-loader',
   include: [].concat(
