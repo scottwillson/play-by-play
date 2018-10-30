@@ -37,7 +37,7 @@ See the Rakefile for options and other Rake tasks.
 
 Tech stack
 ==========
-Ruby 2.4 with minimal gems
+Ruby 2.5 with minimal gems
 [Sinatra](http://www.sinatrarb.com/) for web API
 [React](https://facebook.github.io/react/) for frontend web UI
 
