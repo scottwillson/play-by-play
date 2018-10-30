@@ -41,6 +41,8 @@ class Pagination extends React.Component {
 }
 
 Pagination.propTypes = { page: PropTypes.number };
+Pagination.propTypes = { pageChangeListener: PropTypes.object };
+
 Pagination.defaultProps = { page: 1 };
 
 export default Pagination;

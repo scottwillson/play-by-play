@@ -1,3 +1,4 @@
+require "play_by_play/persistent/game"
 require "play_by_play/repository/base"
 
 module PlayByPlay

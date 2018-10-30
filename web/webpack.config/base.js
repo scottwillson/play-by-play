@@ -1,7 +1,6 @@
 'use strict';
 let path = require('path');
 let defaultSettings = require('./defaults');
-const NpmInstallPlugin = require('npm-install-webpack-plugin');
 
 // Additional npm or bower modules to include in builds
 // Add all foreign plugins you may need into this array
@@ -24,9 +23,6 @@ module.exports = {
     noInfo: false,
     stats: 'errors-only'
   },
-  plugins: [
-    new NpmInstallPlugin()
-  ],
   resolve: {
     extensions: ['.js', '.jsx'],
     alias: {

@@ -5,13 +5,14 @@ let baseConfig = require('./base');
 let defaultSettings = require('./defaults');
 
 let config = Object.assign({}, baseConfig, {
-  entry: ['babel-polyfill', './src/components/App'],
+  entry: ['@babel/polyfill', './src/components/App'],
   cache: false,
   devtool: 'eval-source-map',
+  mode: 'development',
   module: defaultSettings.getDefaultModules()
 });
 
-config.module.loaders.push({
+config.module.rules.push({
   test: /\.(js|jsx)$/,
   loader: 'babel-loader',
   include: [].concat(

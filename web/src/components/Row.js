@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const Row = props => (
@@ -38,5 +39,7 @@ const Row = props => (
     <td className="mdl-data-table__cell--non-numeric">{props.data.neutraldescription}</td>
   </tr>
 );
+
+Row.propTypes = { data: PropTypes.object };
 
 export default Row;

@@ -12,7 +12,7 @@ const dfltPort = 8000;
 
 function getDefaultModules() {
   return {
-    loaders: [
+    rules: [
       {
         test: /\.(js|jsx)$/,
         include: srcPath,

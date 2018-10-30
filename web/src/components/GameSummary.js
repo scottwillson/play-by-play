@@ -21,5 +21,6 @@ class GameSummary extends React.Component {
 }
 
 GameSummary.contextTypes = { router: PropTypes.object.isRequired };
+GameSummary.propTypes = { file: PropTypes.object };
 
 export default GameSummary;
