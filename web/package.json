@@ -24,7 +24,7 @@
   "keywords": [],
   "author": "Scott Willson",
   "devDependencies": {
-    "babel-core": "^6.0.0",
+    "babel-core": "^6.26.3",
     "babel-eslint": "^8.0.0",
     "babel-loader": "^7.1.0",
     "babel-polyfill": "^6.26.0",
