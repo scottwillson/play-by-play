@@ -22,7 +22,6 @@ RSpec.describe "index page", web: true, js: true do
 
   it "renders" do
     visit "/"
-    expect(page).to have_content "Play by Play"
     expect(page).to have_content "Game ID"
 
     click_link "21400014"
