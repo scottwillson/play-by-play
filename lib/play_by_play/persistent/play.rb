@@ -1,5 +1,6 @@
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
+require "play_by_play/persistent/player"
 
 module PlayByPlay
   module Persistent
@@ -51,11 +52,19 @@ module PlayByPlay
           self.player = team.players[attributes[:player]]
         end
 
+        if attributes[:opponent].is_a?(Integer)
+          team = possession.game.other_team(possession.team)
+          self.opponent = team.players[attributes[:opponent]]
+        end
+
+        if attributes[:teammate].is_a?(Integer)
+          team = possession.game.team(possession.team)
+          self.player = team.players[attributes[:teammate]]
+        end
+
         @id = attributes.delete(:id)
-        self.opponent = attributes.delete(:opponent)
         self.opponent_id = attributes.delete(:opponent_id)
         self.player_id = attributes.delete(:player_id)
-        self.teammate = attributes.delete(:teammate)
         self.teammate_id = attributes.delete(:teammate_id)
         @row = attributes.delete(:row)
 
@@ -65,7 +74,7 @@ module PlayByPlay
       def opponent=(opponent)
         return unless opponent
 
-        if !opponent.instance_of?(Player)
+        if !opponent.instance_of?(Persistent::Player)
           raise ArgumentError, "opponent must be a Persistent::Player but was #{opponent.class}"
         end
 

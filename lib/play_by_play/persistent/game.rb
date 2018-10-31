@@ -114,8 +114,19 @@ module PlayByPlay
       end
 
       # :home or :visitor
+      def other_team(key)
+        if key == :home || key == nil
+          visitor
+        elsif key == :visitor
+          home
+        else
+          raise ArgumentError, "key must be :home or :visitor but was '#{key}' (#{key.class})"
+        end
+      end
+
+      # :home or :visitor
       def team(key)
-        if key == :home
+        if key == :home || key == nil
           home
         elsif key == :visitor
           visitor

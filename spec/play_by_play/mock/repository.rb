@@ -1,23 +1,29 @@
+require "play_by_play/persistent/game"
 require "play_by_play/persistent/play"
 
 module PlayByPlay
   module Mock
     class Repository
       def initialize
-        plays.save({} => [ :jump_ball, team: :visitor, seconds: 1, teammate: 0, player: 0, opponent: 0 ])
-        plays.save({ team: :visitor } => [ :fg, seconds: 19, player: 0 ])
-        plays.save({ team: :visitor } => [ :fg, seconds: 8, player: 0 ])
-        plays.save({ team: :visitor } => [ :fg, point_value: 3, seconds: 12, player: 1 ])
-        plays.save({ team: :home } => [ :fg_miss, seconds: 4, player: 4 ])
-        plays.save({ team: :visitor } => [ :fg_miss, seconds: 18, player: 0 ])
-        plays.save({ team: :home } => [ :fg_miss, seconds: 17, player: 0 ])
-        plays.save({ team: :visitor } => [ :fg_miss, seconds: 11, player: 0 ])
-        plays.save({ team: :visitor } => [ :steal, seconds: 5, opponent: 0, player: 0 ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :offense, player: 0, seconds: 1 ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 2 ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 0 ])
-        plays.save({ ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 3 ])
-        plays.save({ ball_in_play: true } => [ :period_end, seconds: 9 ])
+        game = PlayByPlay::Persistent::Game.new(
+          nba_id: "0021400014",
+          home: PlayByPlay::Persistent::Team.new(abbreviation: "CLE"),
+          visitor: PlayByPlay::Persistent::Team.new(abbreviation: "GSW")
+        )
+        plays.save({ game: game } => [ :jump_ball, team: :visitor, seconds: 1, teammate: 0, player: 0, opponent: 0 ])
+        plays.save({ game: game, team: :visitor } => [ :fg, seconds: 19, player: 0 ])
+        plays.save({ game: game, team: :visitor } => [ :fg, seconds: 8, player: 0 ])
+        plays.save({ game: game, team: :visitor } => [ :fg, point_value: 3, seconds: 12, player: 1 ])
+        plays.save({ game: game, team: :home } => [ :fg_miss, seconds: 4, player: 4 ])
+        plays.save({ game: game, team: :visitor } => [ :fg_miss, seconds: 18, player: 0 ])
+        plays.save({ game: game, team: :home } => [ :fg_miss, seconds: 17, player: 0 ])
+        plays.save({ game: game, team: :visitor } => [ :fg_miss, seconds: 11, player: 0 ])
+        plays.save({ game: game, team: :visitor } => [ :steal, seconds: 5, opponent: 0, player: 0 ])
+        plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :offense, player: 0, seconds: 1 ])
+        plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 2 ])
+        plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 0 ])
+        plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 3 ])
+        plays.save({ game: game, ball_in_play: true } => [ :period_end, seconds: 9 ])
       end
 
       def plays
