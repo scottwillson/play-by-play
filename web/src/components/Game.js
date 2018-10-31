@@ -87,4 +87,6 @@ class Game extends React.Component {
 
 Game.contextTypes = { router: PropTypes.object.isRequired };
 
+Game.propTypes = { match: PropTypes.object };
+
 export default Game;

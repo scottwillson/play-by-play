@@ -10,13 +10,13 @@ Install
 =======
  * On OS X, just run bin/setup
  * [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/), [node.js](https://nodejs.org/en/download/)
+ * Postgres
  * `gem install bundler`
  * `bundle`
  * `cd web; npm install; npm run dist:dev`
 
 Test
 ====
- * [Install phantomjs](http://phantomjs.org/download.html)
 `rspec`
 
 Simulate a single game
@@ -35,11 +35,14 @@ See the Rakefile for options and other Rake tasks.
 
 `rackup` to run the web app and browse http://localhost:9292/ to view import errors.
 
+Database: `psql play_by_play_development`
+
 Tech stack
 ==========
 Ruby 2.5 with minimal gems
 [Sinatra](http://www.sinatrarb.com/) for web API
 [React](https://facebook.github.io/react/) for frontend web UI
+Postgres
 
 Model
 =====

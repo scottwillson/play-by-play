@@ -18,7 +18,15 @@
     "mocha": true
   },
   "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended"
-  ]
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
+  "rules": {
+    "no-func-assign": 0
+  },
+  "settings": {
+    "react": {
+      "version": "16.6.0"
+    }
+  }
 }

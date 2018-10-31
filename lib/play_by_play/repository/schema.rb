@@ -56,9 +56,9 @@ module PlayByPlay
           Boolean :clear_path, default: false, null: false
           Boolean :flagrant, default: false, null: false
           Boolean :intentional, default: false, null: false
-          Integer :point_value
           String :play_team
           String :play_type
+          Integer :point_value
           Integer :seconds
 
           Boolean :ball_in_play, default: false, null: false

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-rm -rf web/node_modules
+set -e
 
-brew install phantomjs
+rm -rf web/node_modules
 
 gem install bundler
 bundle

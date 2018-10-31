@@ -45,6 +45,30 @@ module PlayByPlay
       attr_reader :team
       attr_reader :type
 
+      def self.foul?(type)
+        %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
+      end
+
+      def self.jump_ball?(type)
+        type == :jump_ball
+      end
+
+      def self.rebound?(type)
+        type == :rebound
+      end
+
+      def self.shot?(type)
+        %i[ fg fg_miss ft ft_miss technical_ft technical_ft_miss ].include?(type)
+      end
+
+      def self.steal?(type)
+        type == :steal
+      end
+
+      def self.turnover?(type)
+        type == :turnover
+      end
+
       def self.new_from_attributes(type, attributes)
         a = attributes.slice(*KEYS)
         self.new type, a
@@ -116,8 +140,16 @@ module PlayByPlay
         flagrant
       end
 
+      def foul?
+        Play.foul? type
+      end
+
       def intentional?
         intentional
+      end
+
+      def jump_ball?
+        Play.jump_ball? type
       end
 
       def key
@@ -126,6 +158,14 @@ module PlayByPlay
         else
           [ type, attributes ]
         end
+      end
+
+      def possession_key
+        possession.key
+      end
+
+      def rebound?
+        Play.rebound? type
       end
 
       def set_team?
@@ -138,6 +178,29 @@ module PlayByPlay
           technical_foul
           turnover
         ].include?(type)
+      end
+
+      def shot?
+        Play.shot? type
+      end
+
+      def steal?
+        Play.steal? type
+      end
+
+      def turnover?
+        Play.turnover? type
+      end
+
+      def technical_foul?
+        type == :technical_foul
+      end
+
+      def validate_player_attribute(attribute)
+        value = send(attribute)
+        if value && (value < 0 || value > 12)
+          raise(ArgumentError, "#{attribute}: must be player between 0-12, but was: #{value}")
+        end
       end
 
       def validate!

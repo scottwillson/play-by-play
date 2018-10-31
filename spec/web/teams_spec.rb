@@ -19,14 +19,10 @@ RSpec.describe "teams index page", web: true, js: true do
     )
     game.error_eventnum = 291
     repository.seasons.save season
-
-    spawn "npm run dist:test", chdir: "web"
-    Process.wait
   end
 
   it "renders" do
-    visit "/#teams"
-    expect(page).to have_content "Play by Play"
-    expect(page).to have_content "Teams"
+    visit "/teams"
+    expect(page).to have_content "3FGM"
   end
 end

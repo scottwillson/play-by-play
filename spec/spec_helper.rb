@@ -2,12 +2,14 @@ ENV["RACK_ENV"] = "test"
 
 require "capybara/rspec"
 require "capybara-screenshot/rspec"
-require "capybara/poltergeist"
+require "chromedriver-helper"
+require "selenium/webdriver"
 require "sinatra"
 
 require "play_by_play"
 raise("Specs must run in 'test' environment, but is '#{PlayByPlay.environment}'") unless PlayByPlay.environment == :test
 
+require "play_by_play/simulation/generator_helper"
 require "play_by_play/web_app"
 
 RSpec.configure do |config|
@@ -25,16 +27,21 @@ RSpec.configure do |config|
   config.disable_monkey_patching!
   config.warnings = false
 
-  if config.files_to_run.one?
-    config.default_formatter = "doc"
-  end
+  config.default_formatter = "doc" if config.files_to_run.one?
 
   config.order = :random
   Kernel.srand config.seed
+
   config.include Capybara::DSL
+  config.include PlayByPlay::Simulation::GeneratorHelper
+
+  config.before(:all, web: true) do
+    spawn "npm run dist:test", chdir: "web"
+    Process.wait
+  end
 end
 
 Capybara.app = PlayByPlay::WebApp
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.save_path = "tmp/capybara"
 Capybara::Screenshot.prune_strategy = :keep_last_run

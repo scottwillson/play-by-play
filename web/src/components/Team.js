@@ -1,4 +1,5 @@
 import numeral from 'numeral';
+import PropTypes from 'prop-types';
 import React from 'react';
 
 const Team = props => (
@@ -28,5 +29,31 @@ const Team = props => (
     <td>{numeral(props.points_differential).format('0.0')}</td>
   </tr>
 );
+
+Team.propTypes = {
+  assists: PropTypes.number,
+  blocks: PropTypes.number,
+  fg_attempts: PropTypes.number,
+  fg_percentage: PropTypes.number,
+  fgs: PropTypes.number,
+  ft_attempts: PropTypes.number,
+  ft_percentage: PropTypes.number,
+  fts: PropTypes.number,
+  name: PropTypes.string,
+  opponent_fg_attempts: PropTypes.number,
+  opponent_fg_percentage: PropTypes.number,
+  opponent_fgs: PropTypes.number,
+  opponent_points: PropTypes.number,
+  opponent_three_point_fg_attempts: PropTypes.number,
+  opponent_three_point_fg_percentage: PropTypes.number,
+  opponent_three_point_fgs: PropTypes.number,
+  points_differential: PropTypes.number,
+  points: PropTypes.number,
+  steals: PropTypes.number,
+  three_point_fg_attempts: PropTypes.number,
+  three_point_fg_percentage: PropTypes.number,
+  three_point_fgs: PropTypes.number,
+  turnovers: PropTypes.number
+ };
 
 export default Team;

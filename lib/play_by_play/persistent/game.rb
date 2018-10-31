@@ -104,6 +104,21 @@ module PlayByPlay
         season&.source
       end
 
+      # :home or :visitor
+      def team(key)
+        if key == :home
+          home
+        elsif key == :visitor
+          visitor
+        else
+          raise ArgumentError, "key must be :home or :visitor but was '#{key}' (#{key.class})"
+        end
+      end
+
+      def teams
+        [ visitor, home ]
+      end
+
       def visitor
         raise "Team not set" if @visitor_id && @visitor.nil?
         @visitor
