@@ -138,6 +138,13 @@ module PlayByPlay
           raise ArgumentError, "Can't set teammate_id to #{value} with teammate already set with ID #{value}"
         end
       end
+
+      def validate_player_attribute(attribute)
+        value = send(attribute)
+        if value && !value.is_a?(Player)
+          raise(ArgumentError, "#{attribute}: must be a Persistent::Player, but was: #{value.class} #{value}")
+        end
+      end
     end
   end
 end

@@ -84,7 +84,7 @@ module PlayByPlay
         @intentional = intentional
         @opponent = opponent
         @point_value = point_value || 2
-        @player = player
+        @player = player unless @player
         @seconds = seconds
         @team = team
         @teammate = teammate
