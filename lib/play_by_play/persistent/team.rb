@@ -33,6 +33,7 @@ module PlayByPlay
           name: name,
           period_personal_fouls: period_personal_fouls,
           personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
+          players: players,
           points: points
         }
       end
