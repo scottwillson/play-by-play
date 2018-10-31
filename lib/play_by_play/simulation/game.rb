@@ -25,16 +25,20 @@ module PlayByPlay
           begin: Time.now
         )
 
+        model_possession = Model::Possession.new
         until game.possession.game_over?
-          play = random_play_generator.new_play(game.possession)
-          play = Persistent::Play.from_array(play)
+          model_play = random_play_generator.new_play(game.possession)
+          play = Persistent::Play.from_array(model_play)
           play.possession = game.possession
           game.possession.play = play
 
           seconds = random_seconds_generator.seconds(game.possession)
           play.seconds = seconds
 
-          possession = Model::GamePlay.play!(game.possession, play)
+          model_possession = Model::GamePlay.play!(model_possession, model_play)
+
+          possession = Persistent::Possession.new(model_possession.attributes)
+          possession.game = game
           game.possessions << possession
 
           if game.possessions.size > 3_000

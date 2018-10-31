@@ -1,4 +1,6 @@
+ * RandomSecondsGenerator should consider play
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
+   * Caused by parsing errors that exclude plays at the end of games?
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
    * GSW should probably win at home against NYK 95-99% but is more like 70%

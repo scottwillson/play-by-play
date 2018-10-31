@@ -36,27 +36,19 @@ module PlayByPlay
       end
 
       def self.parse(game, json, invalid_state_error = true)
-        model_possession = Model::Possession.new
-
         rows(game, json).each do |row|
-          debug model_possession, row
-          next if ignore?(model_possession, row)
+          debug game.possession, row
+          next if ignore?(game.possession, row)
 
           begin
-            row.possession = model_possession
+            row.possession = game.possession
             row = correct_row(row, game.nba_id)
 
-            play = play!(row.play_type, row.play_attributes)
-            play.row = row
+            play! game, row.play
+            game.possession.play.row = row
 
-            model_possession = Model::GamePlay.play!(model_possession, model_play)
-            debug_play model_possession, model_play
-            validate_score! model_possession, row
-            break if model_possession.errors?
-
-            possession = Persistent::Possession.new(model_possession.attributes)
-            possession.game = game
-            game.possessions << possession
+            validate_score! game.possession, row
+            break if game.possession.errors?
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if invalid_state_error
             game.error_eventnum = row.eventnum
@@ -70,12 +62,17 @@ module PlayByPlay
         game
       end
 
-      def self.play!(game, play_type, play_attributes = {})
-        model_play = Model::Play.new(play_type, play_attributes)
-        play = Persistent::Play.from_model(model_play, game.possession)
-        game.possession.play = play
-        play.possession = game.possession
-        play
+      def self.play!(game, play)
+        possession = Model::GamePlay.play!(game.possession, play)
+        debug_play possession, play
+
+        persistent_play = Persistent::Play.from_model(play, game.possession)
+        game.possession.play = persistent_play
+        persistent_play.possession = game.possession
+
+        possession = Persistent::Possession.new(possession.attributes)
+        possession.game = game
+        game.possessions << possession
       end
 
       # Map JSON array to Sample::Row

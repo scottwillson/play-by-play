@@ -62,10 +62,10 @@ module PlayByPlay
 
       attr_writer :scoremargin
 
-      def initialize(headers, json, game)
+      def initialize(headers, json_row, game)
         @game = game
 
-        json.each.with_index do |cell, index|
+        json_row.each.with_index do |cell, index|
           send "#{headers[index].downcase}=", cell
         end
       end
@@ -298,6 +298,10 @@ module PlayByPlay
       # Missed shot at end of period
       def uncounted_team_rebound?(possession)
         team_rebound? && (possession.free_throws? || possession.seconds_remaining == 720 || previous_row&.technical_ft_miss?)
+      end
+
+      def play
+        Model::Play.new play_type, play_attributes
       end
 
       def play_type

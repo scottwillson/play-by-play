@@ -83,8 +83,8 @@ module PlayByPlay
 
       describe ".seconds_remaining" do
         it "parses time string" do
-          file = Game.new_game("0021400001", "ORL", "NOP")
-          row = Row.new(file, %w[ pctimestring ], [ "5:12" ])
+          game = Game.new_game("0021400001", "ORL", "NOP")
+          row = Row.new(%w[ pctimestring ], [ "5:12" ], game)
           expect(row.seconds_remaining).to eq(312)
         end
       end
@@ -93,7 +93,7 @@ module PlayByPlay
         context "defense technical foul" do
           it "is :defense" do
             game = Game.new_game("0021400001", "ORL", "NOP")
-            row = Row.new(game, %w[ eventmsgtype eventmsgactiontype person1type ], [ 6, 267, 5 ])
+            row = Row.new(%w[ eventmsgtype eventmsgactiontype person1type ], [ 6, 267, 5 ], game)
             row.possession = Model::Possession.new(team: :home)
             expect(row.play_team).to eq(:defense)
           end
