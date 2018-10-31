@@ -10,6 +10,7 @@ Install
 =======
  * On OS X, just run bin/setup
  * [Install Ruby](https://www.ruby-lang.org/en/documentation/installation/), [node.js](https://nodejs.org/en/download/)
+ * Postgres
  * `gem install bundler`
  * `bundle`
  * `cd web; npm install; npm run dist:dev`
@@ -41,6 +42,7 @@ Tech stack
 Ruby 2.5 with minimal gems
 [Sinatra](http://www.sinatrarb.com/) for web API
 [React](https://facebook.github.io/react/) for frontend web UI
+Postgres
 
 Model
 =====
