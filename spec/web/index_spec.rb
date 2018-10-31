@@ -18,9 +18,6 @@ RSpec.describe "index page", web: true, js: true do
     )
     game.error_eventnum = 291
     repository.seasons.save season
-
-    spawn "npm run dist:test", chdir: "web"
-    Process.wait
   end
 
   it "renders" do

@@ -2,8 +2,6 @@
 
 rm -rf web/node_modules
 
-brew install phantomjs
-
 gem install bundler
 bundle
 

@@ -2,7 +2,8 @@ ENV["RACK_ENV"] = "test"
 
 require "capybara/rspec"
 require "capybara-screenshot/rspec"
-require "capybara/poltergeist"
+require "chromedriver-helper"
+require "selenium/webdriver"
 require "sinatra"
 
 require "play_by_play"
@@ -35,9 +36,14 @@ RSpec.configure do |config|
 
   config.include Capybara::DSL
   config.include PlayByPlay::Simulation::GeneratorHelper
+
+  config.before(:all, web: true) do
+    spawn "npm run dist:test", chdir: "web"
+    Process.wait
+  end
 end
 
 Capybara.app = PlayByPlay::WebApp
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :selenium_chrome_headless
 Capybara.save_path = "tmp/capybara"
 Capybara::Screenshot.prune_strategy = :keep_last_run

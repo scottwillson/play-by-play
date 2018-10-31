@@ -16,7 +16,6 @@ Install
 
 Test
 ====
- * [Install phantomjs](http://phantomjs.org/download.html)
 `rspec`
 
 Simulate a single game
