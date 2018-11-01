@@ -25,9 +25,14 @@ module PlayByPlay
 
       describe "#play!" do
         it "plays default number of games" do
+          repository = Mock::Repository.new
+          repository.populate!
+
           league = League.new_random(4)
           season = Season.new_random(league: league, scheduled_games_per_teams_count: 4)
-          season = Season.play!(season: season, repository: Mock::Repository.new)
+          repository.seasons.save season
+
+          season = Season.play!(season: season, repository: repository)
           expect(season.games.all? { |game| game.possession.game_over? }).to be true
           expect(season.games.all?(&:winner)).to be true
           expect(season.teams.none? { |team| team.games.empty? }).to be true

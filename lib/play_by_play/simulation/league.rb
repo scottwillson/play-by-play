@@ -37,8 +37,17 @@ module PlayByPlay
       end
 
       def self.create_teams(teams_count)
-        i = 0
-        Array.new(teams_count) { Persistent::Team.new(id: i, name: "team_#{i += 1}") }
+        teams = []
+
+        teams_count.times.with_index do |i|
+          team = Persistent::Team.new(id: i, name: "team_#{i}", abbreviation: "T#{i}")
+          13.times do |player_index|
+            team.players << Persistent::Player.new(name: "Visitor Player #{player_index}")
+          end
+          teams << team
+        end
+
+        teams
       end
 
       def self.create_divisons(conference, teams)

@@ -12,6 +12,10 @@ module PlayByPlay
         @plays ||= Plays.new(self, nil)
       end
 
+      def seasons
+        @seasons ||= Seasons.new(self, nil)
+      end
+
       def teams
         @teams ||= Teams.new(self, nil)
       end
@@ -87,6 +91,14 @@ module PlayByPlay
             .select { |play| play.key == play_key }
             .group_by(&:seconds)
             .map { |count, play| { count: count, seconds: play.first.seconds } }
+        end
+      end
+
+      class Seasons < RepositoryModule::Base
+        def save(season)
+          season.days.flat_map(&:games).each do |game|
+            repository.games.save game
+          end
         end
       end
 

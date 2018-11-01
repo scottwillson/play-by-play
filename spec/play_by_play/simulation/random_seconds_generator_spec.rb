@@ -34,11 +34,14 @@ module PlayByPlay
         context "one choice" do
           it "always chooses the seconds for that play" do
             repository.reset!
-            repository.plays.save({} => [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0, seconds: 3 ])
+            game = Mock::Game.new_persistent
+            repository.games.save game
+
+            repository.plays.save({game: game} => [ :jump_ball, team: :home, possession: game.possessions.first, teammate: 0, player: 0, opponent: 0, seconds: 3 ])
             generator = RandomSecondsGenerator.new(repository)
 
-            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :home, teammate: 0, player: 0, opponent: 0)
+            game = Persistent::Game.new(home: game.home, visitor: game.visitor)
+            game.possession.play = Persistent::Play.new(:jump_ball, possession: game.possession, team: :home, teammate: 0, player: 0, opponent: 0)
             expect(generator.seconds(game.possession, 0)).to eq(3)
             expect(generator.seconds(game.possession, 0.5)).to eq(3)
             expect(generator.seconds(game.possession, 0.999999)).to eq(3)
