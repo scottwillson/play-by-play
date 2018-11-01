@@ -101,3 +101,7 @@
      * adjust for fatigue (more than 30 minutes)
      * adjust for warmup (less than ~5 minutes)
  * Decompose Sample#Row
+ * Mock::Repository inherit from real Repository?
+   * Pass in mock DB instead?
+   * is mock repository useful?
+ * Ditch Model?

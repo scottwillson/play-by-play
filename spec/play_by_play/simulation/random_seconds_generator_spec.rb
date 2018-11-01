@@ -12,15 +12,16 @@ module PlayByPlay
 
       describe ".seconds" do
         it "returns random sample of play seconds" do
-          repository.reset!
+          repository.import!
 
-          game = Sample::Game.new_game("001", "GSW", "POR")
+          game = repository.games.all[0]
           play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, teammate: 0, player: 0, opponent: 0, seconds: 2)
           repository.plays.save play
 
-          game = Persistent::Game.new(home: Persistent::Team.new(id: 0, abbreviation: "POR"), visitor: Persistent::Team.new(id: 1, abbreviation: "GSW"))
+          game = Mock::Game.new_persistent("POR", "GSW", "0021400015")
+          repository.games.save game
           possession = game.possession
-          possession.play = Persistent::Play.new(:jump_ball, team: :home, teammate: 0, player: 0, opponent: 0)
+          possession.play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, teammate: 0, player: 0, opponent: 0)
 
           generator = RandomSecondsGenerator.new(repository)
           seconds = generator.seconds(possession)

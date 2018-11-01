@@ -1,10 +1,25 @@
-require "play_by_play/persistent/game"
+require "play_by_play/mock/game"
 require "play_by_play/persistent/play"
 
 module PlayByPlay
   module Mock
     class Repository
-      def initialize
+      def games
+        @games ||= Games.new(self, nil)
+      end
+
+      def plays
+        @plays ||= Plays.new(self, nil)
+      end
+
+      def teams
+        @teams ||= Teams.new(self, nil)
+      end
+
+      def import!
+        reset!
+        game = Mock::Game.new_persistent
+        games.save game
         plays.save({ game: game } => [ :jump_ball, team: :visitor, seconds: 1, teammate: 0, player: 0, opponent: 0 ])
         plays.save({ game: game, team: :visitor } => [ :fg, seconds: 19, player: 0 ])
         plays.save({ game: game, team: :visitor } => [ :fg, seconds: 8, player: 0 ])
@@ -21,39 +36,32 @@ module PlayByPlay
         plays.save({ game: game, ball_in_play: true } => [ :period_end, seconds: 9 ])
       end
 
-      def game
-        @game ||= new_game
-      end
-
-      def new_game
-        home = Persistent::Team.new(abbreviation: "CLE")
-        visitor = Persistent::Team.new(abbreviation: "GSW")
-        13.times do |index|
-          home.players << Persistent::Player.new(name: "Home Player #{index}")
-          visitor.players << Persistent::Player.new(name: "Visitor Player #{index}")
-        end
-
-        PlayByPlay::Persistent::Game.new(
-          nba_id: "0021400014",
-          home: home,
-          visitor: visitor
-        )
-      end
-
-      def plays
-        @plays ||= Plays.new
-      end
-
       def reset!
+        games.games = []
         plays.sample_plays = []
+        teams.teams = []
       end
 
-      class Plays
-        attr_accessor :sample_plays
+      class Games < RepositoryModule::Base
+        attr_accessor :games
 
-        def initialize
-          @sample_plays = []
+        def all
+          games
         end
+
+        def games
+          @game ||= []
+        end
+
+        def save(game)
+          games << game
+          game.home = repository.teams.first_or_create(game.home)
+          game.visitor = repository.teams.first_or_create(game.visitor)
+        end
+      end
+
+      class Plays < RepositoryModule::Base
+        attr_accessor :sample_plays
 
         def count(possession_key, _, _, play)
           sample_plays.count do |a|
@@ -63,6 +71,10 @@ module PlayByPlay
               a.possession_key == possession_key && a.key == play
             end
           end
+        end
+
+        def sample_plays
+          @sample_plays ||= []
         end
 
         def save(hash)
@@ -75,6 +87,24 @@ module PlayByPlay
             .select { |play| play.key == play_key }
             .group_by(&:seconds)
             .map { |count, play| { count: count, seconds: play.first.seconds } }
+        end
+      end
+
+      class Teams < RepositoryModule::Base
+        attr_accessor :teams
+
+        def first_or_create(team)
+          raise("Team abbreviation can't be nil") unless team.abbreviation
+          existing_team = teams.detect { |t| t.abbreviation == team.abbreviation }
+          return existing_team if existing_team
+
+          team.id = teams.size
+          teams << team
+          team
+        end
+
+        def teams
+          @teams ||= []
         end
       end
     end
