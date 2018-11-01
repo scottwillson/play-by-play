@@ -36,7 +36,8 @@ module PlayByPlay
         context "equal choices" do
           it "chooses equally" do
             repository.reset!
-            game = repository.game
+            game = Mock::Game.new_persistent
+            repository.games.save game
             repository.plays.save({ game: game } => [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0 ])
             repository.plays.save({ game: game } => [ :jump_ball, team: :visitor, teammate: 0, player: 0, opponent: 0 ])
             generator = RandomPlayGenerator.new(repository)
