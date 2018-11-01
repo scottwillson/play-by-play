@@ -86,7 +86,7 @@ module PlayByPlay
           Integer :visitor_margin, null: false, default: 0
 
           foreign_key :opponent_id, :players
-          foreign_key :player_id
+          foreign_key :player_id, null: false
           foreign_key :teammate_id, :players
 
           index :defense_id
