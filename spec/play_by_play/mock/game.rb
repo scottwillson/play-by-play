@@ -1,5 +1,5 @@
-require "play_by_play/persistent/game"
 require "play_by_play/persistent/play"
+require "play_by_play/sample/game"
 
 module PlayByPlay
   module Mock
