@@ -48,8 +48,16 @@ module PlayByPlay
         context "no choices" do
           it "raises an exception" do
             repository.reset!
-            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :visitor, teammate: 0, player: 0, opponent: 0)
+            game = Mock::Game.new_persistent
+            repository.games.save game
+            game.possession.play = Persistent::Play.new(
+              :jump_ball,
+              possession: game.possession,
+              team: :visitor,
+              teammate: 0,
+              player: 0,
+              opponent: 0
+            )
             expect { RandomSecondsGenerator.new(repository).seconds(game.possession, 0.5) }.to raise_error(ArgumentError)
           end
         end
