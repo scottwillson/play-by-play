@@ -12,7 +12,7 @@ module PlayByPlay
 
       describe ".seconds" do
         it "returns random sample of play seconds" do
-          repository.import!
+          repository.populate!
 
           game = repository.games.all[0]
           play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, teammate: 0, player: 0, opponent: 0, seconds: 2)

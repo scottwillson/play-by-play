@@ -16,7 +16,7 @@ module PlayByPlay
         @teams ||= Teams.new(self, nil)
       end
 
-      def import!
+      def populate!
         reset!
         game = Mock::Game.new_persistent
         games.save game

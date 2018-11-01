@@ -10,7 +10,7 @@ module PlayByPlay
 
       describe ".choose_play" do
         it "returns an Play" do
-          repository.import!
+          repository.populate!
           generator = RandomPlayGenerator.new(repository)
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
           play = generator.new_play(game.possession)
