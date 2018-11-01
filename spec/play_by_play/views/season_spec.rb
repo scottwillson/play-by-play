@@ -10,8 +10,8 @@ module PlayByPlay
         it "prints records" do
           season = Simulation::Season.new_random
           view = Views::Season.new(season)
-          expect(view.to_s).to include "team_1 0 0\n"
-          expect(view.to_s).to include "team_30 0 0"
+          expect(view.to_s).to include "team_0 0 0\n"
+          expect(view.to_s).to include "team_29 0 0"
         end
       end
     end
