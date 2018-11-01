@@ -87,6 +87,12 @@ module PlayByPlay
           row = Row.new(file, %w[ pctimestring ], [ "5:12" ])
           expect(row.seconds_remaining).to eq(312)
         end
+
+        it "parses game end correctly" do
+          file = Game.new_game("0021400001", "ORL", "NOP")
+          row = Row.new(file, %w[ pctimestring ], [ "0:00" ])
+          expect(row.seconds_remaining).to eq(0)
+        end
       end
 
       describe ".play_team" do

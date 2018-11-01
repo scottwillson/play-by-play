@@ -99,6 +99,10 @@ module PlayByPlay
         @player_id = @player&.id
       end
 
+      def player_id
+        player&.id || @player_id
+      end
+
       def player_id=(value)
         @player_id = value
         if @player && value != @player.id

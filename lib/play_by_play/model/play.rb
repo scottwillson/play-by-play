@@ -234,6 +234,10 @@ module PlayByPlay
           raise(ArgumentError, "opponent required for #{type} in #{key}")
         end
 
+        if seconds.nil?
+          raise(ArgumentError, "seconds cannot be nil")
+        end
+
         %w[ opponent player teammate ]
           .each { |attribute| validate_player_attribute(attribute) }
       end

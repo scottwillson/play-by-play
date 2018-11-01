@@ -24,32 +24,32 @@ module PlayByPlay
           visitor_margin: possession.visitor_margin
         }
 
-        if possession.play
-          raise(ArgumentError, "play seconds cannot be nil") unless possession.play.seconds
+        play = possession.play
+        if play
           attributes = attributes.merge(
-            play_team: possession.play.team.to_s,
-            and_one: possession.play.and_one?,
-            assisted: possession.play.assisted?,
-            away_from_play: possession.play.away_from_play?,
-            clear_path: possession.play.clear_path?,
-            flagrant: possession.play.flagrant?,
-            intentional: possession.play.intentional?,
-            opponent_id: possession.play.opponent_id,
-            play_type: possession.play.type.to_s,
-            player_id: possession.play.player_id,
-            seconds: possession.play.seconds,
-            teammate_id: possession.play.teammate_id
+            play_team: play.team.to_s,
+            and_one: play.and_one?,
+            assisted: play.assisted?,
+            away_from_play: play.away_from_play?,
+            clear_path: play.clear_path?,
+            flagrant: play.flagrant?,
+            intentional: play.intentional?,
+            opponent_id: play.opponent_id,
+            play_type: play.type.to_s,
+            player_id: play.player_id,
+            seconds: play.seconds,
+            teammate_id: play.teammate_id
           )
 
-          if possession.play.point_value == 3
+          if play.point_value == 3
             attributes = attributes.merge(point_value: 3)
           end
         end
 
         possession.id = @db[:possessions].insert(attributes)
 
-        if possession.play
-          repository.rows.update possession.play.row, possession.id
+        if play
+          repository.rows.update play.row, possession.id
         end
 
         possession

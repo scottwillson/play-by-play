@@ -247,8 +247,6 @@ module PlayByPlay
       end
 
       def seconds_remaining
-        return unless pctimestring
-
         minutes, seconds = pctimestring.split(":")
         minutes.to_i * 60 + seconds.to_i
       end
@@ -410,18 +408,24 @@ module PlayByPlay
       end
 
       def player
+        return unless player1_id || player3_id
+
         if Model::Play.foul?(play_type) || rebound? || shot? || steal? || turnover?
           if team == :home
             game.home.players.index { |player| player.nba_id == player1_id }
           else
             game.visitor.players.index { |player| player.nba_id == player1_id }
           end
-        elsif jump_ball?
+        elsif jump_ball? || block?
           if team == :home
             game.home.players.index { |player| player.nba_id == player3_id }
           else
             game.visitor.players.index { |player| player.nba_id == player3_id }
           end
+        elsif period_end? || team_rebound?
+          nil
+        else
+          raise ArgumentError, "Could not find player for #{play_type}"
         end
       end
 
