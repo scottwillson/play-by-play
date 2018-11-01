@@ -82,12 +82,12 @@ module PlayByPlay
         @clear_path = clear_path
         @flagrant = flagrant
         @intentional = intentional
-        @opponent = opponent
+        self.opponent = opponent
         @point_value = point_value || 2
-        @player = player unless @player
+        self.player = player
         @seconds = seconds
         @team = team
-        @teammate = teammate
+        self.teammate = teammate
         @type = type
 
         validate!
@@ -152,6 +152,14 @@ module PlayByPlay
         end
       end
 
+      def opponent=(value)
+        @opponent = value
+      end
+
+      def player=(value)
+        @player = value
+      end
+
       def possession_key
         possession.key
       end
@@ -178,6 +186,10 @@ module PlayByPlay
 
       def steal?
         Play.steal? type
+      end
+
+      def teammate=(value)
+        @teammate = value
       end
 
       def turnover?

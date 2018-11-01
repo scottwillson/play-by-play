@@ -5,11 +5,6 @@ module PlayByPlay
   module Mock
     class Repository
       def initialize
-        game = PlayByPlay::Persistent::Game.new(
-          nba_id: "0021400014",
-          home: PlayByPlay::Persistent::Team.new(abbreviation: "CLE"),
-          visitor: PlayByPlay::Persistent::Team.new(abbreviation: "GSW")
-        )
         plays.save({ game: game } => [ :jump_ball, team: :visitor, seconds: 1, teammate: 0, player: 0, opponent: 0 ])
         plays.save({ game: game, team: :visitor } => [ :fg, seconds: 19, player: 0 ])
         plays.save({ game: game, team: :visitor } => [ :fg, seconds: 8, player: 0 ])
@@ -24,6 +19,25 @@ module PlayByPlay
         plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 0 ])
         plays.save({ game: game, ball_in_play: true } => [ :rebound, team: :defense, player: 0, seconds: 3 ])
         plays.save({ game: game, ball_in_play: true } => [ :period_end, seconds: 9 ])
+      end
+
+      def game
+        @game ||= new_game
+      end
+
+      def new_game
+        home = Persistent::Team.new(abbreviation: "CLE")
+        visitor = Persistent::Team.new(abbreviation: "GSW")
+        13.times do |index|
+          home.players << Persistent::Player.new(name: "Home Player #{index}")
+          visitor.players << Persistent::Player.new(name: "Visitor Player #{index}")
+        end
+
+        PlayByPlay::Persistent::Game.new(
+          nba_id: "0021400014",
+          home: home,
+          visitor: visitor
+        )
       end
 
       def plays

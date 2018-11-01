@@ -35,11 +35,11 @@ module PlayByPlay
         context "equal choices" do
           it "chooses equally" do
             repository.reset!
-            repository.plays.save({} => [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0 ])
-            repository.plays.save({} => [ :jump_ball, team: :visitor, teammate: 0, player: 0, opponent: 0 ])
+            game = repository.game
+            repository.plays.save({ game: game } => [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0 ])
+            repository.plays.save({ game: game } => [ :jump_ball, team: :visitor, teammate: 0, player: 0, opponent: 0 ])
             generator = RandomPlayGenerator.new(repository)
 
-            game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             # rely on ordering in mock and RandomPlayGenerator
             expect_play(0, game, generator).to eq([ :jump_ball, team: :home ])
             expect_play(0.2499, game, generator).to eq([ :jump_ball, team: :home ])

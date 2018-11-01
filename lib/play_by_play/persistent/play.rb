@@ -47,22 +47,11 @@ module PlayByPlay
         self.possession = attributes.delete(:possession)
         self.possession_id = attributes.delete(:possession_id)
 
-        if attributes[:player].is_a?(Integer)
-          team = possession.game.team(possession.team)
-          self.player = team.players[attributes[:player]]
-        end
-
-        if attributes[:opponent].is_a?(Integer)
-          team = possession.game.other_team(possession.team)
-          self.opponent = team.players[attributes[:opponent]]
-        end
-
-        if attributes[:teammate].is_a?(Integer)
-          team = possession.game.team(possession.team)
-          self.player = team.players[attributes[:teammate]]
-        end
-
         @id = attributes.delete(:id)
+        self.opponent = attributes.delete(:opponent)
+        self.player = attributes.delete(:player)
+        self.teammate = attributes.delete(:teammate)
+
         self.opponent_id = attributes.delete(:opponent_id)
         self.player_id = attributes.delete(:player_id)
         self.teammate_id = attributes.delete(:teammate_id)
@@ -71,15 +60,20 @@ module PlayByPlay
         super type, attributes
       end
 
-      def opponent=(opponent)
-        return unless opponent
+      def opponent=(value)
+        return unless value
 
-        if !opponent.instance_of?(Persistent::Player)
-          raise ArgumentError, "opponent must be a Persistent::Player but was #{opponent.class}"
+        case value
+        when Player
+          @opponent = value
+        when Integer
+          team = possession.game.other_team(possession.team)
+          @opponent = team.players[value]
+        else
+          raise ArgumentError, "opponent must be a Persistent::Player or Integer but was #{value.class}"
         end
 
-        @opponent = opponent
-        @opponent_id = opponent&.id
+        @opponent_id = @opponent&.id
       end
 
       def opponent_id=(value)
@@ -89,15 +83,20 @@ module PlayByPlay
         end
       end
 
-      def player=(player)
-        return unless player
+      def player=(value)
+        return unless value
 
-        if !player.instance_of?(Player)
-          raise ArgumentError, "player must be a Persistent::Player but was #{player.class}"
+        case value
+        when Player
+          @player = value
+        when Integer
+          team = possession.game.team(possession.team)
+          @player = team.players[value]
+        else
+          raise ArgumentError, "player must be a Persistent::Player or Integer but was #{value.class}"
         end
 
-        @player = player
-        @player_id = player&.id
+        @player_id = @player&.id
       end
 
       def player_id=(value)
@@ -121,15 +120,20 @@ module PlayByPlay
         end
       end
 
-      def teammate=(teammate)
-        return unless teammate
+      def teammate=(value)
+        return unless value
 
-        if !teammate.instance_of?(Player)
-          raise ArgumentError, "teammate must be a Persistent::Player but was #{teammate.class}"
+        case value
+        when Player
+          @teammate = value
+        when Integer
+          team = possession.game.team(possession.team)
+          @teammate = team.players[value]
+        else
+          raise ArgumentError, "teammate must be a Persistent::Player or Integer but was #{value.class}"
         end
 
-        @teammate = teammate
-        @teammate_id = teammate&.id
+        @teammate_id = @teammate&.id
       end
 
       def teammate_id=(value)
