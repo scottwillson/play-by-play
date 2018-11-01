@@ -55,6 +55,7 @@ module PlayByPlay
 
       def save_players(game)
         game.players.each do |player|
+          pp player
           repository.players.save player
         end
       end
@@ -154,7 +155,7 @@ module PlayByPlay
           else
             attributes[:technical_free_throws] = []
           end
-          
+
           attributes = repository.plays.add(attributes)
 
           attributes.delete(:seconds)
