@@ -1,4 +1,5 @@
 require "spec_helper"
+require "play_by_play/mock/game"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/sample/game"
@@ -11,7 +12,7 @@ module PlayByPlay
     RSpec.describe PlayProbabilityDistribution do
       describe ".for" do
         it "returns instances of PlayProbability", database: true do
-          sample_game = Game.new_game("001", "GSW", "POR")
+          sample_game = Mock::Game.new_persistent("001", "GSW", "POR")
 
           Game.play! sample_game, :jump_ball, team: :visitor, teammate: 0, opponent: 0, player: 0
           Game.play! sample_game, :personal_foul, team: :defense, player: 0, opponent: 0 # home (visitor on offense)

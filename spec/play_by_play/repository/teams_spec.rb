@@ -1,4 +1,5 @@
 require "spec_helper"
+require "play_by_play/mock/game"
 require "play_by_play/repository"
 require "play_by_play/sample/season"
 
@@ -43,7 +44,7 @@ module PlayByPlay
 
         season = Sample::Season.new_persistent
         day = Persistent::Day.new(season: season)
-        sample_game = Sample::Game.new_game("001", "GSW", "POR")
+        sample_game = Mock::Game.new_persistent("001", "GSW", "POR")
         sample_game.day = day
 
         Sample::Game.play! sample_game, :jump_ball, team: :visitor, teammate: 0, opponent: 0, player: 0
