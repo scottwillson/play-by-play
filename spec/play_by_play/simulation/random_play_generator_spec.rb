@@ -23,7 +23,9 @@ module PlayByPlay
           it "always chooses the play" do
             play = [ :jump_ball, team: :home, teammate: 0, player: 0, opponent: 0 ]
             repository.reset!
-            repository.plays.save({} => play)
+            game = Mock::Game.new_persistent
+            repository.games.save game
+            repository.plays.save({game: game} => play)
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
