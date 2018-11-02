@@ -163,6 +163,10 @@ module PlayByPlay
         end.reverse
       end
 
+      def possessions_count(game_id)
+        @db[:possessions].where(game_id: game_id).count
+      end
+
       def rows(nba_id)
         game_id = db[:games].where(nba_id: nba_id).first[:id]
         db[:rows].where(game_id: game_id).all

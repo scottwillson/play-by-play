@@ -65,7 +65,7 @@ module PlayByPlay
           expect(game.nba_id).to eq("0021400001")
           expect(game.rows.size).to eq(512)
 
-          expect(repository.games.possessions(game.id).size).to eq(426)
+          expect(repository.games.possessions_count(game.id)).to eq(426)
           plays = repository.games.plays(game.id)
           expect(plays.size).to eq(425)
 
