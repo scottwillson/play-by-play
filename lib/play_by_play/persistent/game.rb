@@ -37,10 +37,11 @@ module PlayByPlay
         self.home = home.merge(key: :home)
         @id = id
         @nba_id = nba_id
-        @possessions = [ Persistent::Possession.new(game: self) ]
         @rows = []
         self.visitor_id = visitor_id
         self.visitor = visitor.merge(key: :visitor)
+
+        @possessions = [ Persistent::Possession.new(game: self) ]
 
         raise(ArgumentError, "Vistor team cannot be nil") if @visitor.nil?
         raise(ArgumentError, "Home team cannot be nil") if @home.nil?
@@ -64,6 +65,7 @@ module PlayByPlay
 
       def home
         raise "Team not set" if @home_id && @home.nil?
+
         @home
       end
 
@@ -141,6 +143,7 @@ module PlayByPlay
 
       def visitor
         raise "Team not set" if @visitor_id && @visitor.nil?
+
         @visitor
       end
 

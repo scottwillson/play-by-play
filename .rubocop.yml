@@ -4,7 +4,7 @@ AllCops:
 Layout/SpaceInsideArrayPercentLiteral:
   Enabled: false
 
-Layout/SpaceInsideBrackets:
+Layout/SpaceInsideArrayLiteralBrackets:
   Enabled: false
 
 Layout/SpaceInsidePercentLiteralDelimiters:
@@ -70,5 +70,5 @@ Style/StringLiterals:
 Style/SymbolArray:
   MinSize: 6
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   Enabled: false

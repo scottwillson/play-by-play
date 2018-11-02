@@ -10,7 +10,6 @@ module PlayByPlay
       attr_reader :opponent
       attr_reader :opponent_id
       attr_reader :player
-      attr_reader :player_id
       attr_reader :possession
       attr_reader :possession_id
       attr_reader :teammate
@@ -78,7 +77,7 @@ module PlayByPlay
 
       def opponent_id=(value)
         @opponent_id = value
-        if @opponent && value != @opponent.id
+        if @opponent && value && value != @opponent.id
           raise ArgumentError, "Can't set opponent_id to #{value} with opponent already set with ID #{value}"
         end
       end
@@ -105,13 +104,14 @@ module PlayByPlay
 
       def player_id=(value)
         @player_id = value
-        if @player && value != @player.id
+        if @player && value && value != @player.id
           raise ArgumentError, "Can't set player_id to #{value} with player already set with ID #{value}"
         end
       end
 
       def possession=(possession)
         return unless possession
+
         @possession = possession
         @possession_id = possession&.id
         possession.play = self
@@ -142,7 +142,7 @@ module PlayByPlay
 
       def teammate_id=(value)
         @teammate_id = value
-        if @teammate && value != @teammate.id
+        if @teammate && value && value != @teammate.id
           raise ArgumentError, "Can't set teammate_id to #{value} with teammate already set with ID #{value}"
         end
       end

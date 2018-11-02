@@ -112,7 +112,6 @@ module PlayByPlay
         teammate_id = attributes.delete(:teammate_id)
         type = attributes.delete(:play_type)
 
-
         if type && type != ""
           type = type.to_sym
 

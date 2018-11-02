@@ -50,8 +50,9 @@ module PlayByPlay
 
         db.send(create_table_method, :players) do
           primary_key :id
-          String :name, unique: true
+          String :name
           Integer :nba_id, unique: true
+          Integer :team_id
         end
 
         db.send(create_table_method, :possessions) do

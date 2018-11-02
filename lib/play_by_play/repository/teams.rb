@@ -36,6 +36,12 @@ module PlayByPlay
         end
       end
 
+      def find_by_abbrevation_with_players(abbreviation)
+        team = find_by_abbrevation(abbreviation)
+        add_players team
+        team
+      end
+
       def first_or_create(team)
         find_by_abbrevation(team.abbreviation) || create(team)
       end
@@ -46,6 +52,9 @@ module PlayByPlay
           name: team.name
         )
         team.id = id
+
+        save_players team
+
         team
       end
 
@@ -99,6 +108,19 @@ module PlayByPlay
         team[:points_differential] = team[:points] - team[:opponent_points]
 
         team
+      end
+
+      def add_players(team)
+        @db[:players].where(team_id: team.id).all.each do |attributes|
+          team.players << Persistent::Player.new(attributes)
+        end
+      end
+
+      def save_players(team)
+        team.players.each do |player|
+          player.team_id = team.id
+          repository.players.save player
+        end
       end
 
       # rubocop:disable Metrics/AbcSize
