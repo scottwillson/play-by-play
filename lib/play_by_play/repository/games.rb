@@ -87,7 +87,7 @@ module PlayByPlay
         end
       end
 
-      def plays(game_id)
+      def plays(game)
         @db[:possessions]
           .select(
             :and_one,
@@ -96,14 +96,14 @@ module PlayByPlay
             :clear_path,
             :flagrant,
             :intentional,
-            :opponent,
+            :opponent_id,
             :point_value,
             :play_team,
             :play_type,
-            :player,
-            :teammate
+            :player_id,
+            :teammate_id
           )
-          .where(game_id: game_id)
+          .where(game_id: game.id)
           .exclude(play_type: nil)
           .exclude(play_type: "")
           .map do |attributes|
@@ -115,6 +115,10 @@ module PlayByPlay
             else
               attributes[:team] = nil
             end
+
+            attributes[:opponent] = repository.players.find(attributes[:opponent_id])
+            attributes[:player] = repository.players.find(attributes[:player_id])
+            attributes[:teammate] = repository.players.find(attributes[:teammate_id])
 
             Persistent::Play.new(type, attributes)
           end

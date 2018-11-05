@@ -8,12 +8,10 @@ module PlayByPlay
       attr_accessor :id
       attr_accessor :row
       attr_reader :opponent
-      attr_reader :opponent_id
       attr_reader :player
       attr_reader :possession
       attr_reader :possession_id
       attr_reader :teammate
-      attr_reader :teammate_id
 
       # [ :fg, point_value: 3 ], Persistent::Possession
       def self.from_array(array, possession)
@@ -75,6 +73,10 @@ module PlayByPlay
         @opponent_id = @opponent&.id
       end
 
+      def opponent_id
+        opponent&.id || @opponent_id
+      end
+
       def opponent_id=(value)
         @opponent_id = value
         if @opponent && value && value != @opponent.id
@@ -119,7 +121,7 @@ module PlayByPlay
 
       def possession_id=(value)
         @possession_id = value
-        if @possession && value != @possession.id
+        if @possession && value && value != @possession.id
           raise ArgumentError, "Can't set possession_id to #{value} with possession already set with ID #{value}"
         end
       end
@@ -138,6 +140,10 @@ module PlayByPlay
         end
 
         @teammate_id = @teammate&.id
+      end
+
+      def teammate_id
+        teammate&.id || @teammate_id
       end
 
       def teammate_id=(value)

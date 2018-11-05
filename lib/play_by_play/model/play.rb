@@ -22,6 +22,9 @@ module PlayByPlay
       ].freeze
 
       attr_accessor :seconds
+      attr_accessor :opponent
+      attr_accessor :player
+      attr_accessor :teammate
 
       attr_reader :and_one
       attr_reader :assisted
@@ -29,11 +32,8 @@ module PlayByPlay
       attr_reader :clear_path
       attr_reader :flagrant
       attr_reader :intentional
-      attr_reader :opponent
       attr_reader :point_value
-      attr_reader :player
       attr_reader :team
-      attr_reader :teammate
       attr_reader :type
 
       def self.foul?(type)
@@ -152,14 +152,6 @@ module PlayByPlay
         end
       end
 
-      def opponent=(value)
-        @opponent = value
-      end
-
-      def player=(value)
-        @player = value
-      end
-
       def possession_key
         possession.key
       end
@@ -188,10 +180,6 @@ module PlayByPlay
         Play.steal? type
       end
 
-      def teammate=(value)
-        @teammate = value
-      end
-
       def turnover?
         Play.turnover? type
       end
@@ -210,7 +198,7 @@ module PlayByPlay
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
 
-        raise(ArgumentError, "player required for #{type} in #{key}") if assisted? && teammate.nil?
+        raise(ArgumentError, "teammate required for #{type} in #{key}") if assisted? && teammate.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if steal? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if turnover? && player.nil?

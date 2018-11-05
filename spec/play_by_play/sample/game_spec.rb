@@ -66,7 +66,7 @@ module PlayByPlay
           expect(game.rows.size).to eq(512)
 
           expect(repository.games.possessions_count(game.id)).to eq(426)
-          plays = repository.games.plays(game.id)
+          plays = repository.games.plays(game)
           expect(plays.size).to eq(425)
 
           play = plays.first

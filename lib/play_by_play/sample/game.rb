@@ -56,6 +56,7 @@ module PlayByPlay
             break if game.possession.errors?
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if invalid_state_error
+
             game.error_eventnum = row.eventnum
             game.errors << e.message
             break
@@ -122,17 +123,20 @@ module PlayByPlay
       def self.find_play_by_eventnum!(game, eventnum)
         play = game.plays.detect { |p| p.row.eventnum == eventnum }
         raise(ArgumentError, "No play with eventnum #{eventnum}") unless play
+
         play
       end
 
       def self.debug(possession, row)
         return unless PlayByPlay.logger.debug?
+
         PlayByPlay.logger.debug possession.to_h
         PlayByPlay.logger.debug row
       end
 
       def self.debug_play(possession, model_play)
         return unless PlayByPlay.logger.debug?
+
         PlayByPlay.logger.debug possession.key => model_play.key
       end
     end

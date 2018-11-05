@@ -52,6 +52,7 @@ module PlayByPlay
 
       def game_id=(value)
         return unless value
+
         @game_id = value
         if @game && value != @game.id
           raise ArgumentError, "Can't set game_id to #{value} with game already set with ID #{@game.id}"

@@ -1,8 +1,19 @@
+require "play_by_play/persistent/player"
 require "play_by_play/repository/base"
 
 module PlayByPlay
   module RepositoryModule
     class Players < Base
+      def find(id)
+        return unless id
+
+        attributes = @db[:players].where(id: id).first
+
+        if attributes
+          Persistent::Player.new(attributes)
+        end
+      end
+
       def save(player)
         if player.nba_id
           attributes = @db[:players].where(nba_id: player.nba_id).first

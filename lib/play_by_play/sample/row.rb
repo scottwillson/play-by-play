@@ -151,6 +151,10 @@ module PlayByPlay
         event == :jump_ball
       end
 
+      def misidentified_shooting_foul?
+        personal_foul? && !Model::GamePlay.next_foul_in_penalty?(possession, team) && next_row.event == :ft
+      end
+
       def miss?
         fg_miss? || ft_miss?
       end
@@ -171,13 +175,13 @@ module PlayByPlay
       end
 
       def opponent
-        if Model::Play.foul?(play_type)
+        if Model::Play.foul?(play_type) || rebound? || shot? || steal? || turnover?
           if team == :home
             game.visitor.players.index { |player| player.nba_id == player2_id }
           else
             game.home.players.index { |player| player.nba_id == player2_id }
           end
-        elsif jump_ball?
+        elsif jump_ball? || block?
           if team == :home
             game.visitor.players.index { |player| player.nba_id == player2_id }
           else
@@ -189,11 +193,11 @@ module PlayByPlay
           else
             game.home.players.index { |player| player.nba_id == player2_id }
           end
+        elsif period_end? || team_rebound?
+          nil
+        else
+          raise "unkown #{play_type}"
         end
-      end
-
-      def misidentified_shooting_foul?
-        personal_foul? && !Model::GamePlay.next_foul_in_penalty?(possession, team) && next_row.event == :ft
       end
 
       def period_end?

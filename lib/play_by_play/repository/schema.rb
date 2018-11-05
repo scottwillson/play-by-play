@@ -166,6 +166,7 @@ module PlayByPlay
         @db[:games].truncate
         @db[:leagues].truncate
         @db[:possessions].truncate
+        @db[:players].delete
         @db[:seasons].truncate
         @db[:rows].truncate
         @db[:teams].truncate
@@ -173,3 +174,5 @@ module PlayByPlay
     end
   end
 end
+
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength

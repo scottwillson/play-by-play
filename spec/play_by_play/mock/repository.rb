@@ -47,14 +47,14 @@ module PlayByPlay
       end
 
       class Games < RepositoryModule::Base
-        attr_accessor :games
+        attr_writer :games
 
         def all
           games
         end
 
         def games
-          @game ||= []
+          @games ||= []
         end
 
         def save(game)
@@ -65,9 +65,9 @@ module PlayByPlay
       end
 
       class Plays < RepositoryModule::Base
-        attr_accessor :sample_plays
+        attr_writer :sample_plays
 
-        def count(possession_key, _, _, play)
+        def count(possession_key, _team, _team_id, play)
           sample_plays.count do |a|
             if play.size > 1 && play.last[:team]
               a.possession_key == possession_key && a.key == play && a.team == play.last[:team]
@@ -86,7 +86,7 @@ module PlayByPlay
         end
 
         # Incorrectly ignore play team
-        def seconds_counts(play_key, _, _)
+        def seconds_counts(play_key, _team, _team_id)
           sample_plays
             .select { |play| play.key == play_key }
             .group_by(&:seconds)
@@ -103,10 +103,11 @@ module PlayByPlay
       end
 
       class Teams < RepositoryModule::Base
-        attr_accessor :teams
+        attr_writer :teams
 
         def first_or_create(team)
           raise("Team abbreviation can't be nil") unless team.abbreviation
+
           existing_team = teams.detect { |t| t.abbreviation == team.abbreviation }
           return existing_team if existing_team
 
