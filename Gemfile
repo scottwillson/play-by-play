@@ -1,3 +1,6 @@
+# https://github.com/sinatra/sinatra/issues/1476
+$LOADED_FEATURES << "fake/active_support/core_ext/hash"
+
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 

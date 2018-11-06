@@ -1,3 +1,13 @@
+* players
+  * store players in repository
+  * make play distributions by player
+  * replace random player with distribution sample
+  * shot becomes part of play key?
+  * remove assisted? and just use assist ?
+  * consolidate game.visitor.players.index { |player| player.nba_id == player1_id } in Row
+* Don't subclass Persistent classes from Model?
+* `fouled` should be optional for technical_fouls
+* Replace game.home and game.visitor with game.team(:home|visitor) where it makes sense
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
@@ -47,7 +57,6 @@
  * cache play count query (if not already)
  * remove dupe webpacking
  * remove possessions home_id and visitor_id?
- * row sorting is out of whack?
  * add progress animation to teams page
  * Only apply other team's probabilities when they can affect outcome. E.g., other team should no affect FT%.
  * Collapse duplicate PlayProbabilityDistributions?
@@ -66,4 +75,36 @@
  * Repository.league should be leagues?
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
- * Update "babel-preset-env now: please read babeljs.io/env"
+* replace Play#team with Play#player
+* ensure database: true if spec uses real repository
+* ensure database: false makes a mock repository
+* change FTs from list of teams to list of players
+* play player validation
+  * 6 PFs -> ejection
+  * 2 techs -> ejection
+  * fouled player must be one shooting
+  * player must be in game
+  * assist and shot must be different
+  * jump and tip must be different
+* How to account for assist influence when players are on/off court?
+  * How do players influence teammates?
+  * How do players influence opponents?
+  * Draft:
+    * player sample previous year * 4
+    * player sample (year - 2) * 2
+    * player sample (year - 3)
+    * player as teammate for each teammate * 0.2
+    * opponent previous year
+    * opponent (year - 2) * 0.5
+    * opponent (year - 3) * 0.25
+    * regress towards mean based on minutes (if player averages 5 minutes a game and is now playing 30 minutes, weight average of players who play 5 min/game)
+    * adjust for fatigue (more than 30 minutes)
+    * adjust for warmup (less than ~5 minutes)
+* Decompose Sample#Row
+* Mock::Repository inherit from real Repository?
+  * Pass in mock DB instead?
+  * is mock repository useful?
+* Ditch Model?
+* Ensure sample play players are correct
+* player-team associations need to be more varied (rosters vary by day/year/game)
+* Rename to BallDontLie

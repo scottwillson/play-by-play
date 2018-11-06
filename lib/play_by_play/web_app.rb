@@ -1,7 +1,3 @@
-# Suppress Sinatra's Active Support warning by tricking it into thinking Active Support's Hash extensions are already loaded
-# TODO: Remove once the Sintra resolves the issue: https://github.com/sinatra/sinatra/issues/1476
-$LOADED_FEATURES << "fake/active_support/core_ext/hash"
-
 require "json"
 require "sinatra/base"
 require "sinatra/json"
