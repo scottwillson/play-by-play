@@ -31,7 +31,7 @@ module PlayByPlay
 
           it "decrements technical free throws" do
             possession = Possession.new(team: :home, technical_free_throws: [ :home ], next_team: :visitor)
-            next_possession = GamePlay.play!(possession, [ :ft ])
+            next_possession = GamePlay.play!(possession, Play.ft)
             expect(next_possession.free_throws).to eq([])
             expect(next_possession.technical_free_throws).to eq([])
           end

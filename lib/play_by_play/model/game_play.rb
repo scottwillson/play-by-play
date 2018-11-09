@@ -11,7 +11,8 @@ module PlayByPlay
     module GamePlay
       def self.play!(possession, play)
         unless play.is_a?(Model::Play)
-          play = Model::Play.new(play.first, *play[1..-1])
+          raise ArgumentError, "play must be a Play, but is #{play.class} #{play}"
+          # play = Model::Play.new(play.first, *play[1..-1])
         end
 
         possession
@@ -42,13 +43,13 @@ module PlayByPlay
       end
 
       def self.add_points(possession, points)
-        instance = possession.team_instance
-        { instance.key => { points: instance.points + points } }
+        team = possession.team
+        { team.key => { points: team.points + points } }
       end
 
       def self.increment_period_personal_fouls(possession, team)
-        instance = possession.team_instance(team)
-        attributes = { period_personal_fouls: instance.period_personal_fouls + 1 }
+        possession_team = possession.team(team)
+        attributes = { period_personal_fouls: possession_team.period_personal_fouls + 1 }
 
         if possession.seconds_remaining <= 120
           attributes = attributes.merge(personal_foul_in_last_two_minutes: true)

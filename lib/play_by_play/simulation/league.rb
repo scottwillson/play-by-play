@@ -1,7 +1,7 @@
 require "play_by_play/persistent/conference"
 require "play_by_play/persistent/division"
 require "play_by_play/persistent/league"
-require "play_by_play/persistent/team"
+require "play_by_play/model/team"
 
 module PlayByPlay
   module Simulation

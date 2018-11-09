@@ -1,10 +1,10 @@
 require "spec_helper"
+require "play_by_play/model/game_team"
 require "play_by_play/model/possession"
-require "play_by_play/model/team"
 
 module PlayByPlay
   module Model
-    RSpec.describe Team do
+    RSpec.describe GameTeam do
       describe "#merge" do
         let(:possession) { Possession.new }
 
@@ -22,8 +22,8 @@ module PlayByPlay
 
       describe "#==" do
         it "considers key" do
-          expect(Team.new(key: :home)).to eq(Team.new(key: :home))
-          expect(Team.new(key: :visitor)).not_to eq(Team.new(key: :home))
+          expect(GameTeam.new(key: :home)).to eq(GameTeam.new(key: :home))
+          expect(GameTeam.new(key: :visitor)).not_to eq(GameTeam.new(key: :home))
         end
       end
     end

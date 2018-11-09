@@ -26,7 +26,6 @@ module PlayByPlay
       end
 
       def self.next_foul_in_penalty?(possession, team)
-        team = possession.team_instance(team)
         team.period_personal_fouls >= 4 || team.personal_foul_in_last_two_minutes
       end
     end

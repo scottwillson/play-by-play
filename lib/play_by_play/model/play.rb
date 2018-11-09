@@ -37,6 +37,10 @@ module PlayByPlay
         %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
       end
 
+      def ft
+        self.new(type: :ft)
+      end
+
       def self.jump_ball?(type)
         type == :jump_ball
       end

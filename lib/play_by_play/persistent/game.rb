@@ -1,5 +1,5 @@
 require "play_by_play/persistent/possession"
-require "play_by_play/persistent/team"
+require "play_by_play/model/team"
 
 module PlayByPlay
   module Persistent

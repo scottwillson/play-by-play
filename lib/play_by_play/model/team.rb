@@ -1,40 +1,62 @@
-require "play_by_play/model/duplication"
-
 module PlayByPlay
   module Model
-    # Detail of possession's team state in a game
     class Team
       include Duplication
 
-      attr_reader :key
-      attr_reader :period_personal_fouls
-      attr_accessor :personal_foul_in_last_two_minutes
-      attr_reader :points
+      attr_accessor :id
 
-      def initialize(key: :visitor, period_personal_fouls: 0, personal_foul_in_last_two_minutes: false, points: 0)
-        @key = key
-        @period_personal_fouls = period_personal_fouls
-        @personal_foul_in_last_two_minutes = personal_foul_in_last_two_minutes
-        @points = points
+      attr_reader :abbreviation
+      attr_reader :division_id
+      attr_reader :games
+      attr_reader :name
 
-        validate!
+      def initialize(attributes)
+        @games = []
+
+        attributes = attributes.dup
+        @abbreviation = attributes.delete(:abbreviation)
+        @division_id = attributes.delete(:division_id)
+        @id = attributes.delete(:id)
+        @name = attributes.delete(:name)
       end
 
       def attributes
         @attributes ||= {
+          abbreviation: abbreviation,
+          division_id: division_id,
+          id: id,
           key: key,
+          name: name,
           period_personal_fouls: period_personal_fouls,
           personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
           points: points
         }
       end
 
-      def validate!
-        raise(ArgumentError, "key must be :home or :visitor") unless key == :home || key == :visitor
+      def wins
+        games.select { |game| game.winner == self }.size
+      end
+
+      def losses
+        games.select { |game| game.loser == self }.size
+      end
+
+      def inspect
+        "#<PlayByPlay::Persistent::Team #{id} #{name} #{abbreviation} #{key}>"
       end
 
       def ==(other)
-        self.class == other.class && key == other.key
+        return false unless self.class == other.class
+
+        if id
+          id == other.id
+        else
+          super
+        end
+      end
+
+      def to_s
+        name.to_s
       end
     end
   end

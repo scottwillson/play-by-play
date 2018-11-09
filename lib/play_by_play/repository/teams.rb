@@ -1,4 +1,4 @@
-require "play_by_play/persistent/team"
+require "play_by_play/model/team"
 require "play_by_play/repository/base"
 
 module PlayByPlay

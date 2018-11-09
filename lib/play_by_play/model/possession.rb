@@ -1,7 +1,7 @@
 require "play_by_play/model/duplication"
+require "play_by_play/model/game_team"
 require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/play_matrix"
-require "play_by_play/model/team"
 
 module PlayByPlay
   module Model
@@ -40,8 +40,8 @@ module PlayByPlay
         period: 1,
         team: nil,
         seconds_remaining: 720,
-        visitor: {},
-        home: {},
+        visitor: GameTeam.new(key: :visitor),
+        home:  GameTeam.new(key: :home),
         technical_free_throws: []
       )
 
@@ -53,16 +53,16 @@ module PlayByPlay
         @seconds_remaining = seconds_remaining
         @technical_free_throws = technical_free_throws
 
-        @visitor = merge_team(visitor, :visitor)
-        @home = merge_team(home, :home)
+        @visitor = visitor
+        @home = home
 
         @offense = offense
         @next_team = next_team
-        @team = to_visitor_or_home_symbol(team)
+        @team = to_game_team(team)
         @offense = @team if @team
 
-        @offense = to_visitor_or_home_symbol(@offense)
-        @next_team = to_visitor_or_home_symbol(@next_team)
+        @offense = to_game_team(@offense)
+        @next_team = to_game_team(@next_team)
 
         validate!
       end
@@ -107,9 +107,9 @@ module PlayByPlay
       def margin(team)
         case team
         when :home
-          team_instance(:home).points - team_instance(:visitor).points
+          home.points - visitor.points
         when :visitor
-          team_instance(:visitor).points - team_instance(:home).points
+          visitor.points - home.points
         else
           raise(ArgumentError, "team must be :home or :visitor, but was #{team.class} #{team}")
         end
@@ -144,55 +144,39 @@ module PlayByPlay
       end
 
       def merge_team(team, key)
-        if team.is_a?(Team)
+        if team.is_a?(GameTeam)
           team
         else
-          Team.new(key: key).merge(team)
+          GameTeam.new(key: key).merge(team)
         end
       end
 
-      # :home or :visitor to Team
-      def team_instance(team = :team, key = nil)
-        case team
-        when Team
-          return team
-        when Hash
-          return team_instance(key).merge(team)
-        end
-
-        case to_visitor_or_home_symbol(team)
-        when :visitor
-          visitor
-        when :home
-          home
-        when nil
-          nil
-        else
-          raise ArgumentError, "team #{team} must be nil, :home, :visitor, or a Hash but is a #{team.class} #{team}"
-        end
-      end
-
-      def to_visitor_or_home_symbol(value)
+      def to_game_team(value)
         case value
         when :defense
           other_team offense
         when :home
-          :home
+          home
         when :offense
-          to_visitor_or_home_symbol offense
+          to_game_team offense
         when :team
           team
         when :visitor
-          :visitor
+          visitor
         when nil
           nil
+        when GameTeam
+          value
         else
-          raise ArgumentError, "team must be nil, :defense, :home, :offense, :team, or :visitor but is a #{value.class} #{value}"
+          raise(
+            ArgumentError,
+            "team must be GameTeam, nil, :defense, :home, :offense, :team, or :visitor but is a #{value.class} #{value}"
+          )
         end
       end
 
       def other_team(value = team)
-        case to_visitor_or_home_symbol(value)
+        case to_game_team(value)
         when :visitor
           :home
         when :home
@@ -294,8 +278,8 @@ module PlayByPlay
         raise(ArgumentError, "next_team must be nil, visitor, or home but was #{next_team.class} #{next_team}") unless valid_team?(next_team)
         raise(ArgumentError, "offense must be nil, visitor, or home but was #{offense.class} #{offense}") unless valid_team?(offense)
         raise(ArgumentError, "team must be nil, visitor, or home but was #{team.class} #{team}") unless valid_team?(team)
-        raise(ArgumentError, "visitor must be Team") unless visitor.is_a?(Team)
-        raise(ArgumentError, "home must be Team") unless home.is_a?(Team)
+        raise(ArgumentError, "visitor must be GameTeam, but was #{visitor.class}") unless visitor.is_a?(GameTeam)
+        raise(ArgumentError, "home must be GameTeam, but was #{visitor.class}") unless home.is_a?(GameTeam)
       end
 
       def valid_team?(team)

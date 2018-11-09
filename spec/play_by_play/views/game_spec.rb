@@ -1,6 +1,6 @@
 require "spec_helper"
 require "play_by_play/persistent/game"
-require "play_by_play/persistent/team"
+require "play_by_play/model/team"
 require "play_by_play/views/game"
 
 module PlayByPlay

@@ -2,7 +2,7 @@ require "spec_helper"
 require "play_by_play/persistent/day"
 require "play_by_play/persistent/game"
 require "play_by_play/persistent/season"
-require "play_by_play/persistent/team"
+require "play_by_play/model/team"
 
 RSpec.describe "teams index page", web: true, js: true do
   before do

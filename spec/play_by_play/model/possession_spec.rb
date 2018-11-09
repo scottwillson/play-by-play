@@ -1,4 +1,5 @@
 require "spec_helper"
+require "play_by_play/model/game_team"
 require "play_by_play/model/possession"
 
 module PlayByPlay
@@ -15,8 +16,8 @@ module PlayByPlay
       describe ".new" do
         it "creates a Possession with teams" do
           possession = Possession.new
-          expect(possession.home).to eq(Team.new(key: :home, period_personal_fouls: 0, points: 0))
-          expect(possession.visitor).to eq(Team.new(key: :visitor, period_personal_fouls: 0, points: 0))
+          expect(possession.home).to eq(GameTeam.new(key: :home))
+          expect(possession.visitor).to eq(GameTeam.new(key: :visitor))
         end
 
         it "validates state" do
@@ -90,8 +91,8 @@ module PlayByPlay
           expect(possession.margin(:visitor)).to eq(0)
 
           possession = Possession.new(
-            home: Team.new(key: :home, points: 85),
-            visitor: Team.new(key: :visitor, points: 79)
+            home: GameTeam.new(key: :home, points: 85),
+            visitor: GameTeam.new(key: :visitor, points: 79)
           )
           expect(possession.margin(:home)).to eq(6)
           expect(possession.margin(:visitor)).to eq(-6)
