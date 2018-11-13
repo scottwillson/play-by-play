@@ -1,9 +1,6 @@
-require "play_by_play/model/play"
-require "play_by_play/model/possession"
-
 module PlayByPlay
   module Persistent
-    class Play < Model::Play
+    class Play
       attr_accessor :id
       attr_accessor :row
       attr_reader :possession
@@ -39,8 +36,6 @@ module PlayByPlay
         self.possession = attributes.delete(:possession)
         self.possession_id = attributes.delete(:possession_id)
         @row = attributes.delete(:row)
-
-        super type, attributes
       end
 
       def possession=(possession)

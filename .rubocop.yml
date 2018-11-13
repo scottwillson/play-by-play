@@ -1,6 +1,12 @@
 AllCops:
   TargetRubyVersion: 2.5
 
+Layout/EmptyLineAfterGuardClause:
+  Enabled: false
+
+Layout/SpaceInsideArrayLiteralBrackets:
+  Enabled: false
+
 Layout/SpaceInsideArrayPercentLiteral:
   Enabled: false
 
@@ -70,5 +76,5 @@ Style/StringLiterals:
 Style/SymbolArray:
   MinSize: 6
 
-Style/TrailingCommaInLiteral:
+Style/TrailingCommaInArrayLiteral:
   Enabled: false

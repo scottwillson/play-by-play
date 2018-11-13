@@ -1,8 +1,6 @@
-require "play_by_play/model/possession"
-
 module PlayByPlay
   module Persistent
-    class Possession < Model::Possession
+    class Possession
       attr_accessor :id
 
       attr_reader :game
@@ -18,18 +16,16 @@ module PlayByPlay
         self.play = attributes.delete(:play)
         self.play_id = attributes.delete(:play_id)
         @visitor_margin = attributes.delete(:visitor_margin)
-
-        super attributes
       end
 
       def attributes
-        super.merge(
+        {
           game: game,
           game_id: game_id,
           id: id,
           play: play,
           play_id: play_id
-        )
+        }
       end
 
       def defense_id

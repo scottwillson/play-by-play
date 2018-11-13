@@ -27,15 +27,7 @@ module PlayByPlay
 
         until game.possession.game_over?
           play = random_play_generator.new_play(game.possession)
-          play = Persistent::Play.from_array(play)
-          play.possession = game.possession
-          game.possession.play = play
-
-          seconds = random_seconds_generator.seconds(game.possession)
-          play.seconds = seconds
-
-          possession = Model::GamePlay.play!(game.possession, play)
-          game.possessions << possession
+          GamePlay.play! game, play
 
           if game.possessions.size > 3_000
             raise Model::InvalidStateError, "Game not over after #{game.possessions.size} plays"

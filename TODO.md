@@ -1,3 +1,4 @@
+ * Check for unused methods
  * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
    * bad FGs counts: fixed, need tests
    * OPP FGs FG% is OK
@@ -67,3 +68,5 @@
  * possessions table should have position field for ordering and repository should read possessions in order
  * ES6
  * Update "babel-preset-env now: please read babeljs.io/env"
+ * Make seconds generator (source?) a dependency for play generator?
+ * Move "Game not over" check to Game or GamePlay? Need an add possession method.

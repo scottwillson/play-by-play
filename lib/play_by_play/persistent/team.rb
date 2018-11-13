@@ -2,7 +2,9 @@ require "play_by_play/model/team"
 
 module PlayByPlay
   module Persistent
-    class Team < Model::Team
+    class Team
+      include Model::Duplication
+
       attr_accessor :id
 
       attr_reader :abbreviation
@@ -18,7 +20,6 @@ module PlayByPlay
         @division_id = attributes.delete(:division_id)
         @id = attributes.delete(:id)
         @name = attributes.delete(:name)
-        super attributes
       end
 
       def attributes
@@ -26,11 +27,7 @@ module PlayByPlay
           abbreviation: abbreviation,
           division_id: division_id,
           id: id,
-          key: key,
-          name: name,
-          period_personal_fouls: period_personal_fouls,
-          personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
-          points: points
+          name: name
         }
       end
 
@@ -51,8 +48,6 @@ module PlayByPlay
 
         if id
           id == other.id
-        else
-          super
         end
       end
 
