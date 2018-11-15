@@ -4,6 +4,7 @@ module PlayByPlay
       attr_accessor :id
 
       attr_reader :game
+      attr_reader :period
       attr_reader :play
 
       def initialize(attributes = {})

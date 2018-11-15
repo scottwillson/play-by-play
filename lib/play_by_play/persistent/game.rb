@@ -47,6 +47,15 @@ module PlayByPlay
         raise(Model::InvalidStateError, "Team cannot play itself. Visitor: #{@visitor}, home: #{@home}") if @home == @visitor
       end
 
+      def add_possession(model_possession)
+        if possessions.size > 3_000
+          raise Model::InvalidStateError, "Game not over after #{possessions.size} plays"
+        end
+
+        possession = Possession.new_from_model model_possession
+        possessions << possession
+      end
+
       def day=(day)
         if day&.games && !day.games.include?(self)
           day.games << self

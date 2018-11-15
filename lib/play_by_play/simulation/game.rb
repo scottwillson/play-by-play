@@ -25,14 +25,7 @@ module PlayByPlay
           begin: Time.now
         )
 
-        until game.possession.game_over?
-          play = random_play_generator.new_play(game.possession)
-          GamePlay.play! game, play
-
-          if game.possessions.size > 3_000
-            raise Model::InvalidStateError, "Game not over after #{game.possessions.size} plays"
-          end
-        end
+        Persistent::GamePlay.play! game, random_play_generator, random_seconds_generator
 
         PlayByPlay.logger.debug(
           simulation_game: :play!,

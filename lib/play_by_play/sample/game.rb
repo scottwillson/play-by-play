@@ -4,6 +4,7 @@ require "play_by_play/model/invalid_state_error"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/persistent/game"
+require "play_by_play/persistent/game_play"
 require "play_by_play/persistent/play"
 require "play_by_play/persistent/possession"
 require "play_by_play/repository"
@@ -11,14 +12,15 @@ require "play_by_play/sample/row"
 
 module PlayByPlay
   module Sample
-    module Game
-      def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
-        Persistent::Game.new(
-          home: Persistent::Team.new(abbreviation: home_abbreviation),
-          nba_id: nba_id,
-          visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
-        )
-      end
+    class Game
+      attr_reader :rows
+      # def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
+      #   Persistent::Game.new(
+      #     home: Persistent::Team.new(abbreviation: home_abbreviation),
+      #     nba_id: nba_id,
+      #     visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
+      #   )
+      # end
 
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
         return false if repository.games.exists?(game.nba_id)
@@ -36,30 +38,33 @@ module PlayByPlay
       end
 
       def self.parse(game, json, invalid_state_error = true)
-        add_rows(game, json, json["resultSets"].first["headers"])
+        @rows = parse_rows(game, json, json["resultSets"].first["headers"])
 
-        game.rows.each do |row|
-          debug(game.possession, row)
-          next if ignore?(game.possession, row)
+        Persistent::GamePlay.play! game, game, game
 
-          begin
-            row.possession = game.possession
-            row = correct_row(row)
-
-            model_play = Model::Play.new(play_type, play_attributes)
-            GamePlay.play! game, model_play
-
-            game.possession.play.row = row
-
-            validate_score! game.possession, row
-            break if game.possession.errors?
-          rescue Model::InvalidStateError, ArgumentError => e
-            raise e if invalid_state_error
-            game.error_eventnum = row.eventnum
-            game.errors << e.message
-            break
-          end
-        end
+        # TODO Can this be replaced with generic play! loop?
+        # game.rows.each do |row|
+        #   debug(game.possession, row)
+        #   next if ignore?(game.possession, row)
+        #
+        #   begin
+        #     row.possession = game.possession
+        #     row = correct_row(row)
+        #
+        #     model_play = Model::Play.new(play_type, play_attributes)
+        #     GamePlay.play! game, model_play
+        #
+        #     game.possession.play.row = row
+        #
+        #     validate_score! game.possession, row
+        #     break if game.possession.errors?
+        #   rescue Model::InvalidStateError, ArgumentError => e
+        #     raise e if invalid_state_error
+        #     game.error_eventnum = row.eventnum
+        #     game.errors << e.message
+        #     break
+        #   end
+        # end
 
         PlayByPlay.logger.info(sample_game: :parse, nba_id: game.nba_id, errors: game.errors)
 
@@ -67,7 +72,7 @@ module PlayByPlay
       end
 
       # Map JSON array to Sample::Row
-      def self.add_rows(game, json, headers)
+      def self.parse_rows(game, json, headers)
         json["resultSets"].first["rowSet"].map do |json_row|
           Row.new(game, headers, json_row)
         end
@@ -120,6 +125,30 @@ module PlayByPlay
       def self.debug_play(possession, model_play)
         return unless PlayByPlay.logger.debug?
         PlayByPlay.logger.debug possession.key => model_play.key
+      end
+
+      def initialize(nba_id)
+        @row_index = 0
+        @nba_id = nba_id
+        @rows = []
+      end
+
+      def new_play(possession)
+        row = nil
+
+        until row
+          row = rows[@row_index]
+          @row_index += 1
+          row = nil if Game.ignore?(possession, row)
+          row&.possession = possession
+        end
+
+        Game.debug possession, row
+        Model::Play.new row.play_type, row.play_attributes
+      end
+
+      def seconds(possession)
+        7
       end
     end
   end

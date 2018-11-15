@@ -14,6 +14,10 @@ module PlayByPlay
           play = Model::Play.new(play.first, *play[1..-1])
         end
 
+        unless possession.is_a?(Model::Possession)
+          raise ArgumentError, "possession must be a Model::Possession, but is a #{possession.class}"
+        end
+
         possession
           .merge(play_updates(possession, play))
           .merge(seconds_remaining(possession, play))
