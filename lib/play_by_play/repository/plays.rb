@@ -46,7 +46,7 @@ module PlayByPlay
           query = query.where(technical_free_throws: false, free_throws: false, team: true)
         when :ball_in_play
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: true)
-        when :seconds_remaining
+        when :no_seconds_remaining
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false, seconds_remaining: 0)
         else
           query = query.where(technical_free_throws: false, free_throws: false, team: false, ball_in_play: false)
