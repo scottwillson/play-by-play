@@ -247,7 +247,7 @@ module PlayByPlay
         elsif ball_in_play?
           :ball_in_play
         elsif !seconds_remaining?
-          :seconds_remaining
+          :no_seconds_remaining
         end
       end
 

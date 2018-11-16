@@ -70,7 +70,7 @@ module PlayByPlay
           [ :technical_foul, flagrant: true, team: :defense ],
           [ :technical_foul, flagrant: true, team: :offense ],
         ],
-        seconds_remaining: [
+        no_seconds_remaining: [
           [ :period_end ],
         ],
         nil => [
