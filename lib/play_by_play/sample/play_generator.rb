@@ -6,8 +6,7 @@ module PlayByPlay
         @rows = rows
       end
 
-      def new_play(game)
-        possession = game.possession
+      def new_play(possession)
         row = next_row(possession)
         row.possession = possession
         Game.debug possession, row
@@ -26,7 +25,7 @@ module PlayByPlay
         @rows[@row_index]
       end
 
-      def seconds(game)
+      def seconds(_possession)
         row.seconds
       end
     end

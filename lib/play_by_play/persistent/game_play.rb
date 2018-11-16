@@ -14,8 +14,9 @@ module PlayByPlay
         end
 
         until game.over?
-          play = play_generator.new_play(game)
-          seconds = seconds_generator.seconds(game)
+          possession = game.possession
+          play = play_generator.new_play(possession)
+          seconds = seconds_generator.seconds(possession)
           play.seconds = seconds
 
           possession = game.possession.to_model

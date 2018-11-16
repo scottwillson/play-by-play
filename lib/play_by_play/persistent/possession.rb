@@ -1,19 +1,26 @@
+require "play_by_play/model/possession"
+
 module PlayByPlay
   module Persistent
     class Possession
       extend Forwardable
       def_delegators :@model,
+                     :ball_in_play?,
                      :errors,
                      :errors?,
                      :free_throws?,
                      :game_over?,
                      :home,
                      :key,
+                     :margin,
+                     :next_team,
                      :offense,
                      :opening_tip,
                      :period,
                      :seconds_remaining,
                      :team,
+                     :technical_free_throws?,
+                     :team?,
                      :visitor
 
       attr_accessor :id
