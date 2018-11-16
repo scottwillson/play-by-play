@@ -199,6 +199,9 @@ module PlayByPlay
           expect(play.possession.period).to eq(4)
           expect(play.possession.home.period_personal_fouls).to eq(3)
 
+          play = game.plays.last
+          expect(play.possession_key => play.key).to eq(team: [ :period_end ])
+
           expected = {
             visitor: {
               points: 84
