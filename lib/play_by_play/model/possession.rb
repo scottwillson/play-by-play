@@ -116,7 +116,7 @@ module PlayByPlay
       end
 
       def game_over?
-        period >= 4 && !seconds_remaining? && !tied?
+        period >= 4 && !seconds_remaining? && !tied? && key == :no_seconds_remaining
       end
 
       def pending_free_throws?
