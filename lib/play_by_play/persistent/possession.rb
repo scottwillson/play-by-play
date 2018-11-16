@@ -20,6 +20,7 @@ module PlayByPlay
                      :seconds_remaining,
                      :team,
                      :technical_free_throws?,
+                     :team,
                      :team?,
                      :visitor
 

@@ -4,7 +4,8 @@ module PlayByPlay
       extend Forwardable
       def_delegators :@model,
                      :key,
-                     :seconds
+                     :seconds,
+                     :team
 
       attr_accessor :id
       attr_accessor :row
