@@ -1,10 +1,24 @@
 module PlayByPlay
   module Persistent
     class Possession
+      extend Forwardable
+      def_delegators :@model,
+                     :errors,
+                     :errors?,
+                     :free_throws?,
+                     :game_over?,
+                     :home,
+                     :key,
+                     :offense,
+                     :opening_tip,
+                     :period,
+                     :seconds_remaining,
+                     :team,
+                     :visitor
+
       attr_accessor :id
 
       attr_reader :game
-      attr_reader :period
       attr_reader :play
 
       def initialize(attributes = {})
@@ -17,6 +31,8 @@ module PlayByPlay
         self.play = attributes.delete(:play)
         self.play_id = attributes.delete(:play_id)
         @visitor_margin = attributes.delete(:visitor_margin)
+
+        @model = Model::Possession.new(attributes)
       end
 
       def attributes
@@ -73,6 +89,10 @@ module PlayByPlay
       end
 
       def play=(value)
+        if play
+          raise Model::InvalidStateError, "Persistent::Possession #{to_s} already has play #{play.to_s}"
+        end
+
         @play = value
         @play_id = value&.id
       end
@@ -94,6 +114,14 @@ module PlayByPlay
 
       def visitor_margin
         @visitor_margin || margin(:visitor)
+      end
+
+      def to_h
+        @model.to_h
+      end
+
+      def to_model
+        @model
       end
 
       def to_s

@@ -70,3 +70,5 @@
  * Update "babel-preset-env now: please read babeljs.io/env"
  * Make seconds generator (source?) a dependency for play generator?
  * Move "Game not over" check to Game or GamePlay? Need an add possession method.
+ * Replace code like self.possession = attributes.delete(:possession) with whitelisted attributes
+ * Better solution than `game.add_play play, play_generator.row`?

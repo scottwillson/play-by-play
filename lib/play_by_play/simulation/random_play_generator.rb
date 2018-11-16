@@ -2,6 +2,7 @@ require "play_by_play/sample/play_probability_distribution"
 
 module PlayByPlay
   module Simulation
+    # TODO remove "Random" prefix
     class RandomPlayGenerator
       attr_reader :play_probability_distribution
 

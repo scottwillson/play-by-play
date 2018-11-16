@@ -143,10 +143,6 @@ module PlayByPlay
         end
       end
 
-      def possession_key
-        possession.key
-      end
-
       def rebound?
         Play.rebound? type
       end

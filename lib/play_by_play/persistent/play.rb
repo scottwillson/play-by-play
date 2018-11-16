@@ -1,12 +1,18 @@
 module PlayByPlay
   module Persistent
     class Play
+      extend Forwardable
+      def_delegators :@model,
+                     :key,
+                     :seconds
+
       attr_accessor :id
       attr_accessor :row
       attr_reader :possession
       attr_reader :possession_id
 
       # [ :fg, point_value: 3 ]
+      # TODO move to model or remove?
       def self.from_array(array)
         type = array.first
         attributes = if array.size > 1
@@ -18,6 +24,7 @@ module PlayByPlay
       end
 
       # { team: :visitor } => [ :fg, point_value: 3 ]
+      # TODO move to model or remove?
       def self.from_hash(hash)
         return hash unless hash.is_a?(Hash)
 
@@ -29,6 +36,10 @@ module PlayByPlay
         Play.new(type, play_attributes.merge(possession: possession))
       end
 
+      def self.from_model(model)
+        Persistent::Play.new(model.type, model.attributes.merge(seconds: model.seconds))
+      end
+
       def initialize(type, *attributes)
         attributes = attributes.first.dup || {}
 
@@ -36,12 +47,18 @@ module PlayByPlay
         self.possession = attributes.delete(:possession)
         self.possession_id = attributes.delete(:possession_id)
         @row = attributes.delete(:row)
+        @model = Model::Play.new(type, attributes)
       end
 
-      def possession=(possession)
-        return unless possession
-        @possession = possession
-        @possession_id = possession&.id
+      def possession=(value)
+        return unless value
+
+        if possession
+          raise Model::InvalidStateError, "Persistent::Play #{to_s} already has possession #{possession.to_s}"
+        end
+
+        @possession = value
+        @possession_id = value&.id
         possession.play = self
       end
 
@@ -50,6 +67,10 @@ module PlayByPlay
         if @possession && value != @possession.id
           raise ArgumentError, "Can't set possession_id to #{value} with possession already set with ID #{value}"
         end
+      end
+
+      def possession_key
+        possession.key
       end
     end
   end

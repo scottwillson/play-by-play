@@ -8,12 +8,12 @@ require "play_by_play/persistent/game_play"
 require "play_by_play/persistent/play"
 require "play_by_play/persistent/possession"
 require "play_by_play/repository"
+require "play_by_play/sample/play_generator"
 require "play_by_play/sample/row"
 
 module PlayByPlay
   module Sample
-    class Game
-      attr_reader :rows
+    module Game
       # def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
       #   Persistent::Game.new(
       #     home: Persistent::Team.new(abbreviation: home_abbreviation),
@@ -38,9 +38,9 @@ module PlayByPlay
       end
 
       def self.parse(game, json, invalid_state_error = true)
-        @rows = parse_rows(game, json, json["resultSets"].first["headers"])
-
-        Persistent::GamePlay.play! game, game, game
+        rows = parse_rows(game, json, json["resultSets"].first["headers"])
+        play_generator = PlayGenerator.new(rows)
+        Persistent::GamePlay.play! game, play_generator, play_generator
 
         # TODO Can this be replaced with generic play! loop?
         # game.rows.each do |row|
@@ -125,30 +125,6 @@ module PlayByPlay
       def self.debug_play(possession, model_play)
         return unless PlayByPlay.logger.debug?
         PlayByPlay.logger.debug possession.key => model_play.key
-      end
-
-      def initialize(nba_id)
-        @row_index = 0
-        @nba_id = nba_id
-        @rows = []
-      end
-
-      def new_play(possession)
-        row = nil
-
-        until row
-          row = rows[@row_index]
-          @row_index += 1
-          row = nil if Game.ignore?(possession, row)
-          row&.possession = possession
-        end
-
-        Game.debug possession, row
-        Model::Play.new row.play_type, row.play_attributes
-      end
-
-      def seconds(possession)
-        7
       end
     end
   end
