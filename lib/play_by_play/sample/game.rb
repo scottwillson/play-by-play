@@ -14,13 +14,13 @@ require "play_by_play/sample/row"
 module PlayByPlay
   module Sample
     module Game
-      # def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
-      #   Persistent::Game.new(
-      #     home: Persistent::Team.new(abbreviation: home_abbreviation),
-      #     nba_id: nba_id,
-      #     visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
-      #   )
-      # end
+      def self.new_game(nba_id, visitor_abbreviation, home_abbreviation)
+        Persistent::Game.new(
+          home: Persistent::Team.new(abbreviation: home_abbreviation),
+          nba_id: nba_id,
+          visitor: Persistent::Team.new(abbreviation: visitor_abbreviation)
+        )
+      end
 
       def self.import(game, path, repository: Repository.new, invalid_state_error: true)
         return false if repository.games.exists?(game.nba_id)
