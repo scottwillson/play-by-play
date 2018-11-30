@@ -59,6 +59,7 @@ module PlayByPlay
         end
 
         possession = Persistent::Possession.new(model_possession.attributes)
+        possession.game = self
         possessions << possession
       end
 

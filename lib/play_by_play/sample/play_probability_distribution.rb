@@ -17,16 +17,22 @@ module PlayByPlay
 
         if period_can_end
           if possession.seconds_remaining.zero?
-            [ PlayProbability.new(1, [ :period_end ]) ]
+            [ PlayProbability.new(1, Model::Play.new(:period_end)) ]
           elsif possession.offense
-            @distribution[Key.new_from_possession(possession, :offense)] + @distribution[Key.new_from_possession(possession, :defense)]
+            @distribution[Key.new_from_possession(possession, :offense)] +
+              @distribution[Key.new_from_possession(possession, :defense)]
           else
-            @distribution[Key.new_from_possession(possession, :home)] + @distribution[Key.new_from_possession(possession, :visitor)]
+            @distribution[Key.new_from_possession(possession, :home)] +
+              @distribution[Key.new_from_possession(possession, :visitor)]
           end
         elsif possession.offense
-          (@distribution[Key.new_from_possession(possession, :offense)] + @distribution[Key.new_from_possession(possession, :defense)]).reject { |ap| ap.play == [ :period_end ] }
+          (@distribution[Key.new_from_possession(possession, :offense)] +
+            @distribution[Key.new_from_possession(possession, :defense)])
+            .reject { |ap| ap.play.period_end? }
         else
-          (@distribution[Key.new_from_possession(possession, :home)] + @distribution[Key.new_from_possession(possession, :visitor)]).reject { |ap| ap.play == [ :period_end ] }
+          (@distribution[Key.new_from_possession(possession, :home)] +
+            @distribution[Key.new_from_possession(possession, :visitor)])
+            .reject { |ap| ap.play.period_end? }
         end
       end
 
@@ -35,7 +41,7 @@ module PlayByPlay
         Model::PlayMatrix.accessible_plays(key.possession_key).map do |play|
           count = @repository.plays.count(key.possession_key, key.team, key.team_id, play)
           # puts "#{count} #{play}"
-          PlayProbability.new count, play
+          PlayProbability.new count, Model::Play.new(play.first, *play[1..-1])
         end
       end
 

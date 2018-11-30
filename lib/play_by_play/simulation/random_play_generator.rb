@@ -2,7 +2,7 @@ require "play_by_play/sample/play_probability_distribution"
 
 module PlayByPlay
   module Simulation
-    # TODO remove "Random" prefix
+    # TODO: remove "Random" prefix
     class RandomPlayGenerator
       attr_reader :play_probability_distribution
 
@@ -28,6 +28,10 @@ module PlayByPlay
         end
 
         raise StandardError, "Did not find play for #{r} in #{probabilities} total #{aggregate_probabilty}"
+      end
+
+      def row
+        nil
       end
 
       def validate!(probabilities, random_number, aggregate_probabilty, possession)

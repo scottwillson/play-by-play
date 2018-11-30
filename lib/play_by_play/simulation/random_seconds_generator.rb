@@ -10,11 +10,11 @@ module PlayByPlay
       end
 
       # +random_number+ argument (0.0 - 1.0) for testing
-      def seconds(possession, random_number = rand)
-        probabilities = @seconds_probability_distribution.for(possession)
+      def seconds(possession, play_key, random_number = rand)
+        probabilities = @seconds_probability_distribution.for(possession, play_key)
         aggregate_probabilty = probabilities.map(&:probability).reduce(:+)
 
-        validate! probabilities, random_number, aggregate_probabilty, possession
+        validate! probabilities, random_number, aggregate_probabilty, possession, play_key
 
         r = random_number * aggregate_probabilty
         previous_probability = 0
@@ -29,9 +29,9 @@ module PlayByPlay
         raise StandardError, "Did not find seconds for #{r} in #{probabilities} total #{aggregate_probabilty}"
       end
 
-      def validate!(probabilities, random_number, aggregate_probabilty, possession)
+      def validate!(probabilities, random_number, aggregate_probabilty, possession, play_key)
         raise(ArgumentError, "random must be positive number less than 1, but was: #{random_number}") if random_number.negative? || random_number >= 1
-        raise(ArgumentError, "probabilities cannot be empty for #{possession.play.type}") if probabilities.empty?
+        raise(ArgumentError, "probabilities cannot be empty for #{possession.key} => #{play_key}") if probabilities.empty?
         raise(ArgumentError, "At least one SecondsProbability must be greater than 0 for #{possession}") if aggregate_probabilty.zero?
       end
     end

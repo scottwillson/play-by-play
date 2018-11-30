@@ -143,6 +143,10 @@ module PlayByPlay
         end
       end
 
+      def period_end?
+        type == :period_end
+      end
+
       def rebound?
         Play.rebound? type
       end

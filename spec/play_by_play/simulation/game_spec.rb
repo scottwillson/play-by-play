@@ -10,8 +10,9 @@ module PlayByPlay
     RSpec.describe Game do
       describe ".play!" do
         it "plays a game" do
-          random_play_generator = RandomPlayGenerator.new(Mock::Repository.new)
-          random_seconds_generator = RandomSecondsGenerator.new(Mock::Repository.new)
+          repository = Mock::Repository.new
+          random_play_generator = RandomPlayGenerator.new(repository)
+          random_seconds_generator = RandomSecondsGenerator.new(repository)
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
           game = Game.play!(game, random_play_generator, random_seconds_generator)
           expect(game.possession.visitor.points).to be > 0

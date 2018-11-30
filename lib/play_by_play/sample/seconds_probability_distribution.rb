@@ -12,13 +12,14 @@ module PlayByPlay
         end
       end
 
-      def for(possession)
-        raise(ArgumentError, "play is nil for possession #{possession}") unless possession.play
+      def for(possession, play_key)
+        raise(ArgumentError, "possession is required") unless possession
+        raise(ArgumentError, "play_key is required") unless play_key
 
         if possession.offense
-          @distribution[Key.new_from_possession(possession, :offense)] + @distribution[Key.new_from_possession(possession, :defense)]
+          @distribution[Key.new_from_possession(possession, play_key, :offense)] + @distribution[Key.new_from_possession(possession, play_key, :defense)]
         else
-          @distribution[Key.new_from_possession(possession, :home)] + @distribution[Key.new_from_possession(possession, :visitor)]
+          @distribution[Key.new_from_possession(possession, play_key, :home)] + @distribution[Key.new_from_possession(possession, play_key, :visitor)]
         end
       end
 
@@ -54,7 +55,7 @@ module PlayByPlay
         attr_reader :team
         attr_reader :team_id
 
-        def self.new_from_possession(possession, team)
+        def self.new_from_possession(possession, play_key, team)
           if possession.nil?
             raise ArgumentError, "possession nil for team #{team}"
           end
@@ -76,7 +77,7 @@ module PlayByPlay
             raise Model::InvalidStateError, "team_id nil for team #{team} in #{possession}"
           end
 
-          new possession.play.key, team, team_id
+          new play_key, team, team_id
         end
 
         def initialize(play_key, team, team_id)

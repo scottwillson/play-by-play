@@ -1,3 +1,5 @@
+require "play_by_play/model/game_play"
+
 module PlayByPlay
   module Persistent
     # Apply Model::Play to Persistent::Game
@@ -16,7 +18,7 @@ module PlayByPlay
         until game.over?
           possession = game.possession
           play = play_generator.new_play(possession)
-          seconds = seconds_generator.seconds(possession)
+          seconds = seconds_generator.seconds(possession, play.key)
           play.seconds = seconds
 
           possession = game.possession.to_model
