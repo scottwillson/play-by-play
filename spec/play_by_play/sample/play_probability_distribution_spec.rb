@@ -15,7 +15,7 @@ module PlayByPlay
 
           Persistent::GamePlay.add_play sample_game, Model::Play.new(:jump_ball, team: :visitor)
           Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense ) # home (visitor on offense)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
           Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
           Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # home
           Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
