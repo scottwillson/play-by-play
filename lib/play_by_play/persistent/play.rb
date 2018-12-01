@@ -3,9 +3,17 @@ module PlayByPlay
     class Play
       extend Forwardable
       def_delegators :@model,
+                     :and_one?,
+                     :assisted?,
+                     :away_from_play?,
+                     :clear_path?,
+                     :flagrant?,
+                     :intentional?,
                      :key,
+                     :point_value,
                      :seconds,
-                     :team
+                     :team,
+                     :type
 
       attr_accessor :id
       attr_accessor :row
@@ -43,7 +51,7 @@ module PlayByPlay
         return unless value
 
         if possession
-          raise Model::InvalidStateError, "Persistent::Play #{to_s} already has possession #{possession.to_s}"
+          raise Model::InvalidStateError, "Persistent::Play #{self} already has possession #{possession}"
         end
 
         @possession = value

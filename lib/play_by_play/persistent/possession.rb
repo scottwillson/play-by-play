@@ -36,8 +36,11 @@ module PlayByPlay
         self.game_id = attributes.delete(:game_id)
         @home_margin = attributes.delete(:home_margin)
         self.id = attributes.delete(:id)
+        @opponent_id = attributes.delete(:opponent_id)
         self.play = attributes.delete(:play)
         self.play_id = attributes.delete(:play_id)
+        @player_id = attributes.delete(:player_id)
+        @teammate_id = attributes.delete(:teammate_id)
         @visitor_margin = attributes.delete(:visitor_margin)
 
         @model = Model::Possession.new(attributes)
@@ -98,7 +101,7 @@ module PlayByPlay
 
       def play=(value)
         if play
-          raise Model::InvalidStateError, "Persistent::Possession #{to_s} already has play #{play.to_s}"
+          raise Model::InvalidStateError, "Persistent::Possession #{self} already has play #{play}"
         end
 
         @play = value

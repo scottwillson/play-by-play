@@ -80,7 +80,7 @@ module PlayByPlay
           seconds_remaining: seconds_remaining,
           team: team,
           technical_free_throws: technical_free_throws,
-          visitor: dup_value(:visitor),
+          visitor: dup_value(:visitor)
         }
       end
 
