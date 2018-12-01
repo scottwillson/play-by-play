@@ -46,25 +46,15 @@ module PlayByPlay
         sample_game = Sample::Game.new_game("001", "GSW", "POR")
         sample_game.day = day
 
-        possession = game.possession
-        play = play_generator.new_play(possession)
-        seconds = seconds_generator.seconds(possession, play.key)
-        play.seconds = seconds
-
-        possession = game.possession.to_model
-        possession = Model::GamePlay.play!(possession, play)
-        game.add_play play, play_generator.row
-        game.add_possession possession
-
-        Sample::Game.play! sample_game, :jump_ball, team: :visitor
-        Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-        Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-        Sample::Game.play! sample_game, :fg, assisted: true # visitor
-        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true # home
-        Sample::Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
-        Sample::Game.play! sample_game, :fg_miss # home
-        Sample::Game.play! sample_game, :rebound, team: :defense # visitor
-        Sample::Game.play! sample_game, :fg, point_value: 3 # visitor
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:jump_ball, team: :visitor)
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, assisted: true) # visitor
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # home
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg_miss) # home
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:rebound, team: :defense) # visitor
+        Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3) # visitor
 
         repository.seasons.save season
 

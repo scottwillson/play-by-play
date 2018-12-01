@@ -2,6 +2,7 @@ require "spec_helper"
 require "play_by_play/model/play"
 require "play_by_play/model/possession"
 require "play_by_play/sample/game"
+require "play_by_play/sample/season"
 require "play_by_play/sample/play_probability_distribution"
 require "play_by_play/repository"
 
@@ -12,15 +13,15 @@ module PlayByPlay
         it "returns instances of PlayProbability", database: true do
           sample_game = Game.new_game("001", "GSW", "POR")
 
-          Game.play! sample_game, :jump_ball, team: :visitor
-          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-          Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # home
-          Game.play! sample_game, :fg, point_value: 3, assisted: true # visitor
-          Game.play! sample_game, :fg_miss # home
-          Game.play! sample_game, :rebound, team: :defense # visitor
-          Game.play! sample_game, :fg, point_value: 3 # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:jump_ball, team: :visitor)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense ) # home (visitor on offense)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # home
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg_miss) # home
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:rebound, team: :defense) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3) # visitor
 
           repository = Repository.new
           repository.reset!

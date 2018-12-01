@@ -19,15 +19,15 @@ module PlayByPlay
           possession = game.possession
           play = play_generator.new_play(possession)
           seconds = seconds_generator.seconds(possession, play.key)
-          add_play game, play, seconds
+          add_play game, play, seconds, play_generator.row
         end
       end
 
-      def self.add_play(game, play, seconds)
+      def self.add_play(game, play, seconds = 1, row = nil)
         play.seconds = seconds
         possession = game.possession.to_model
         possession = Model::GamePlay.play!(possession, play)
-        game.add_play play, play_generator.row
+        game.add_play play, row
         game.add_possession possession
       end
     end
