@@ -23,7 +23,7 @@ module PlayByPlay
           possession.play = Persistent::Play.new(:jump_ball, team: :home)
 
           generator = RandomSecondsGenerator.new(repository)
-          seconds = generator.seconds(possession)
+          seconds = generator.seconds(possession, [:jump_ball, team: :home])
 
           expect(seconds).to eq(2)
         end
@@ -38,9 +38,9 @@ module PlayByPlay
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             game.possession.play = Persistent::Play.new(:jump_ball, team: :home)
-            expect(generator.seconds(game.possession, 0)).to eq(3)
-            expect(generator.seconds(game.possession, 0.5)).to eq(3)
-            expect(generator.seconds(game.possession, 0.999999)).to eq(3)
+            expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0)).to eq(3)
+            expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0.5)).to eq(3)
+            expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0.999999)).to eq(3)
           end
         end
 
@@ -49,7 +49,7 @@ module PlayByPlay
             repository.reset!
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
             game.possession.play = Persistent::Play.new(:jump_ball, team: :visitor)
-            expect { RandomSecondsGenerator.new(repository).seconds(game.possession, 0.5) }.to raise_error(ArgumentError)
+            expect { RandomSecondsGenerator.new(repository).seconds(game.possession, [:jump_ball, team: :home], 0.5) }.to raise_error(ArgumentError)
           end
         end
       end

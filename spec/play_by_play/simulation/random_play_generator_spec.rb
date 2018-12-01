@@ -26,9 +26,9 @@ module PlayByPlay
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            expect(generator.new_play(game.possession, 0)).to eq(play)
-            expect(generator.new_play(game.possession, 0.5)).to eq(play)
-            expect(generator.new_play(game.possession, 0.999999)).to eq(play)
+            expect(generator.new_play(game.possession, 0).key).to eq(play)
+            expect(generator.new_play(game.possession, 0.5).key).to eq(play)
+            expect(generator.new_play(game.possession, 0.999999).key).to eq(play)
           end
         end
 
@@ -40,10 +40,10 @@ module PlayByPlay
             generator = RandomPlayGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            expect(generator.new_play(game.possession, 0)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(game.possession, 0.49999)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(game.possession, 0.5)).to eq([ :jump_ball, team: :home ])
-            expect(generator.new_play(game.possession, 0.9999)).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0).key).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.49999).key).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.5).key).to eq([ :jump_ball, team: :home ])
+            expect(generator.new_play(game.possession, 0.9999).key).to eq([ :jump_ball, team: :home ])
           end
         end
 

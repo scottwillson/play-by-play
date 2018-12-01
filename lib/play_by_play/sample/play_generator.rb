@@ -25,7 +25,7 @@ module PlayByPlay
         @rows[@row_index]
       end
 
-      def seconds(_possession)
+      def seconds(_possession, _play_key)
         row.seconds
       end
     end

@@ -6,7 +6,7 @@ module PlayByPlay
       end
 
       def team_text(team)
-        team.abbreviation || team.key
+        team.abbreviation
       end
 
       def to_s
