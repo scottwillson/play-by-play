@@ -46,6 +46,16 @@ module PlayByPlay
         sample_game = Sample::Game.new_game("001", "GSW", "POR")
         sample_game.day = day
 
+        possession = game.possession
+        play = play_generator.new_play(possession)
+        seconds = seconds_generator.seconds(possession, play.key)
+        play.seconds = seconds
+
+        possession = game.possession.to_model
+        possession = Model::GamePlay.play!(possession, play)
+        game.add_play play, play_generator.row
+        game.add_possession possession
+
         Sample::Game.play! sample_game, :jump_ball, team: :visitor
         Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
         Sample::Game.play! sample_game, :personal_foul, team: :defense # home (visitor on offense)
