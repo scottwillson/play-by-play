@@ -20,19 +20,6 @@ module PlayByPlay
       attr_reader :possession
       attr_reader :possession_id
 
-      # { team: :visitor } => [ :fg, point_value: 3 ]
-      # TODO move to model or remove?
-      def self.from_hash(hash)
-        return hash unless hash.is_a?(Hash)
-
-        possession = Persistent::Possession.new(hash.keys.first)
-        play_attributes = hash.values.first.dup
-        type = play_attributes.shift
-        play_attributes = play_attributes.first || {}
-
-        Play.new(type, play_attributes.merge(possession: possession))
-      end
-
       def self.from_model(model)
         Persistent::Play.new(model.type, model.attributes.merge(seconds: model.seconds))
       end

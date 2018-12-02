@@ -33,7 +33,7 @@ module PlayByPlay
         context "one choice" do
           it "always chooses the seconds for that play" do
             repository.reset!
-            repository.plays.save({} => [ :jump_ball, team: :home, seconds: 3 ])
+            repository.plays.save_hash({} => [ :jump_ball, team: :home, seconds: 3 ])
             generator = RandomSecondsGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
