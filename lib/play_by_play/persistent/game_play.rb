@@ -23,7 +23,7 @@ module PlayByPlay
           begin
             add_play game, play, seconds, play_generator.row
           rescue Model::InvalidStateError, ArgumentError => e
-            raise e if invalid_state_error
+            raise e if ENV["DBEUG"]
             game.error_eventnum = row.eventnum
             game.errors << e.message
             break

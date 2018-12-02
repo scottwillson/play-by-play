@@ -22,14 +22,14 @@ module PlayByPlay
         )
       end
 
-      def self.import(game, path, repository: Repository.new, invalid_state_error: true)
+      def self.import(game, path, repository: Repository.new)
         return false if repository.games.exists?(game.nba_id)
 
         # All-Star Game
         return false if game.nba_id == "0031400001"
 
         json = read_json(path, game.nba_id)
-        game = parse(game, json, invalid_state_error)
+        game = parse(game, json)
         game
       end
 
@@ -37,34 +37,10 @@ module PlayByPlay
         JSON.parse(File.read("#{path}/#{nba_id}.json"))
       end
 
-      def self.parse(game, json, invalid_state_error = true)
+      def self.parse(game, json)
         rows = parse_rows(game, json, json["resultSets"].first["headers"])
         play_generator = PlayGenerator.new(rows)
         Persistent::GamePlay.play! game, play_generator, play_generator
-
-        # TODO Can this be replaced with generic play! loop?
-        # game.rows.each do |row|
-        #   debug(game.possession, row)
-        #   next if ignore?(game.possession, row)
-        #
-        #   begin
-        #     row.possession = game.possession
-        #     row = correct_row(row)
-        #
-        #     model_play = Model::Play.new(play_type, play_attributes)
-        #     GamePlay.play! game, model_play
-        #
-        #     game.possession.play.row = row
-        #
-        #     validate_score! game.possession, row
-        #     break if game.possession.errors?
-        #   rescue Model::InvalidStateError, ArgumentError => e
-        #     raise e if invalid_state_error
-        #     game.error_eventnum = row.eventnum
-        #     game.errors << e.message
-        #     break
-        #   end
-        # end
 
         PlayByPlay.logger.info(sample_game: :parse, nba_id: game.nba_id, errors: game.errors)
 

@@ -74,7 +74,7 @@ module PlayByPlay
         it "creates plays from JSON file" do
           json = JSON.parse(File.read("spec/data/0021400001.json"))
           game = Persistent::Game.new # ("0021400001") #, "ORL", "NOP"
-          game = Game.parse(game, json, ENV["DEBUG"])
+          game = Game.parse(game, json)
           expect(game).to_not be_nil
           expect(game.errors).to eq([])
           expect(game.possession.errors?).to eq(false)
