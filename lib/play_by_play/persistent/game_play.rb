@@ -19,7 +19,15 @@ module PlayByPlay
           possession = game.possession
           play = play_generator.new_play(possession)
           seconds = seconds_generator.seconds(possession, play.key)
-          add_play game, play, seconds, play_generator.row
+
+          begin
+            add_play game, play, seconds, play_generator.row
+          rescue Model::InvalidStateError, ArgumentError => e
+            raise e if invalid_state_error
+            game.error_eventnum = row.eventnum
+            game.errors << e.message
+            break
+          end
         end
       end
 
