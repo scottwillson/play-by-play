@@ -56,7 +56,7 @@ module PlayByPlay
       end
 
       def inspect
-        "#<PlayByPlay::Persistent::Team #{id} #{name} #{abbreviation} #{key}>"
+        "#<PlayByPlay::Persistent::Team #{id} #{name} #{abbreviation}>"
       end
 
       def ==(other)

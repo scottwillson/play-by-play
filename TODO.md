@@ -22,6 +22,13 @@
  * turnovers are low
  * PFs a little low
  * Points are too averaged
+ * are we using simulated results? (probably not)
+ * Is additive probability correct? Do faster teams get too much weight?
+  * GSW 4 fg, 4 fg miss
+  * NYK opponents 1 fg, 3 fg miss
+  * additive: 5 fg + 7 fg miss = 71.4%
+  * percentage: .5 + .33 = .83
+  * what's denominator in percentage? "team events"
 * do imports concurrently
 * Test season simulation with database
 * Change Simulation::Game.play! signature to use keyed arguments
