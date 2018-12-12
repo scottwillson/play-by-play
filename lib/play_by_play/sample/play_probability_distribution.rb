@@ -81,7 +81,6 @@ module PlayByPlay
       end
 
       def weight(distribution, weight)
-        distribution
         distribution.map do |play_probability|
           probability = play_probability.probability * weight
           PlayProbability.new(probability, play_probability.play)

@@ -1,6 +1,7 @@
 require "spec_helper"
 require "play_by_play/mock/repository"
 require "play_by_play/persistent/game"
+require "play_by_play/sample/season"
 require "play_by_play/simulation/random_play_generator"
 
 module PlayByPlay
@@ -45,6 +46,63 @@ module PlayByPlay
             expect(generator.new_play(game.possession, 0.49999).key).to eq([ :jump_ball, team: :home ])
             expect(generator.new_play(game.possession, 0.5).key).to eq([ :jump_ball, team: :home ])
             expect(generator.new_play(game.possession, 0.9999).key).to eq([ :jump_ball, team: :home ])
+          end
+        end
+
+        context "more choices for one team" do
+          it "adjusts for number of choices" do
+            repository = Repository.new
+            repository.reset!
+
+            season = Sample::Season.new_persistent
+            day = Persistent::Day.new(season: season)
+            game = Sample::Game.new_game("001", "GSW", "POR")
+            game.day = day
+
+            # start game
+            Persistent::GamePlay.add_play(game, Model::Play.new(:jump_ball, team: :home))
+
+            # GSW team is 1 for 2
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg_miss))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:rebound, team: :offense))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg))
+
+            gsw = game.home
+
+            game = Sample::Game.new_game("002", "NYK", "MIN")
+            game.day = day
+
+            # start game
+            Persistent::GamePlay.add_play(game, Model::Play.new(:jump_ball, team: :home))
+
+            # MIN opponents are 1 for 5
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg_miss))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:rebound, team: :offense))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg_miss))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:rebound, team: :offense))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg_miss))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:rebound, team: :offense))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg_miss))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:rebound, team: :offense))
+            Persistent::GamePlay.add_play(game, Model::Play.new(:fg))
+
+            repository.seasons.save season
+
+            wolves = game.visitor
+
+            generator = RandomPlayGenerator.new(repository)
+
+            game = Persistent::Game.new(home: gsw, visitor: wolves)
+
+            Persistent::GamePlay.add_play(game, Model::Play.new(:jump_ball, team: :home))
+
+            # GSW shoots 1-2, MIN opponents shoot 1-4 = 30% (not 40%)
+            # TODO do math right
+            # TODO move to PlayProbabilityDistribution spec
+            expect(generator.new_play(game.possession, 0).key).to eq([ :fg ])
+            expect(generator.new_play(game.possession, 0.29999).key).to eq([ :fg ])
+            expect(generator.new_play(game.possession, 0.3).key).to eq([ :fg_miss ])
+            expect(generator.new_play(game.possession, 0.99999).key).to eq([ :fg_miss ])
           end
         end
 

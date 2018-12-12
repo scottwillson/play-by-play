@@ -12,7 +12,6 @@ module PlayByPlay
         day = Persistent::Day.new(season: season)
         game = Sample::Game.new_game("001", "GSW", "POR")
         game.day = day
-        Persistent::Play.new(:jump_ball, team: :home, teammate: 1, opponent: 0, player: 0, possession: game.possessions.first)
         repository.seasons.save season
 
         home_team = repository.teams.find_by_abbrevation("POR")

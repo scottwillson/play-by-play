@@ -39,7 +39,10 @@ module PlayByPlay
       def new_play(possession, random_number = rand)
         probabilities = @play_probability_distribution.for(possession)
         aggregate_probabilty = probabilities.map(&:probability).reduce(:+)
-
+        # puts ">>> #{possession.to_h} #{aggregate_probabilty}"
+        # probabilities.reject { |p| p.probability == 0 }.each do |x|
+        #   puts "#{x.play.key} #{x.probability}"
+        # end
         validate! probabilities, random_number, aggregate_probabilty, possession
 
         r = random_number * aggregate_probabilty.to_f
