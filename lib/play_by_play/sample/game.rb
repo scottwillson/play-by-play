@@ -22,7 +22,7 @@ module PlayByPlay
         )
       end
 
-      def self.import(game, path, repository: Repository.new)
+      def self.import(game, path, repository: Repository.new, invalid_state_error: true)
         return false if repository.games.exists?(game.nba_id)
 
         # All-Star Game

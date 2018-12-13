@@ -21,6 +21,7 @@ module PlayByPlay
               Game.import(game, path, repository: repository, invalid_state_error: invalid_state_error)
             rescue StandardError => e
               puts "Import error: #{e} for #{file_path}"
+              raise e if invalid_state_error
             end
           end
           day
