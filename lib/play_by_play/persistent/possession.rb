@@ -1,3 +1,4 @@
+require "forwardable"
 require "play_by_play/model/possession"
 
 module PlayByPlay
