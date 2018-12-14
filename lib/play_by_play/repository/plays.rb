@@ -5,7 +5,8 @@ module PlayByPlay
     class Plays < Base
       PLAY_KEYS = %i[and_one assisted away_from_play clear_path flagrant intentional point_value].freeze
 
-      def count(possession_key, team, team_id, play)
+      def count(possession_key, team, team_id, location, play)
+        raise(ArgumentError, "location cannot be nil") unless location
         raise(ArgumentError, "play cannot be nil") unless play
         raise(ArgumentError, "team cannot be nil") unless team
         raise(ArgumentError, "team_id cannot be nil") unless team_id
@@ -55,6 +56,12 @@ module PlayByPlay
 
         query = query.where(Sequel.lit("possessions.#{team}_id = ?", team_id))
                      .where(source: "sample")
+
+        if location == :home
+          query = query.where(Sequel.lit("possessions.home_id = ?", team_id))
+        else
+          query = query.where(Sequel.lit("possessions.visitor_id = ?", team_id))
+        end
 
         PlayByPlay.logger.debug(repository_plays: :count, sql: query.sql) if PlayByPlay.logger.debug?
 

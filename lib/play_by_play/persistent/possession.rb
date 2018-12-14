@@ -5,6 +5,7 @@ module PlayByPlay
   module Persistent
     class Possession
       extend Forwardable
+
       def_delegators :@model,
                      :ball_in_play?,
                      :errors,

@@ -25,7 +25,7 @@ module PlayByPlay
         Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first)
         repository.seasons.save season
 
-        count = repository.plays.count(nil, :home, home_team.id, [ :jump_ball, team: :home ])
+        count = repository.plays.count(nil, :home, home_team.id, :home, [ :jump_ball, team: :home ])
         expect(count).to eq(1)
       end
     end

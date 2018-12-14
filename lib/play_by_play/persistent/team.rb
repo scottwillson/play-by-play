@@ -4,6 +4,9 @@ module PlayByPlay
   module Persistent
     class Team
       include Model::Duplication
+      extend Forwardable
+
+      def_delegators :@model, :key
 
       attr_accessor :id
 
@@ -20,6 +23,8 @@ module PlayByPlay
         @division_id = attributes.delete(:division_id)
         @id = attributes.delete(:id)
         @name = attributes.delete(:name)
+
+        @model = Model::Team.new(attributes)
       end
 
       def attributes

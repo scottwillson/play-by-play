@@ -35,7 +35,7 @@ module PlayByPlay
           @sample_plays = []
         end
 
-        def count(possession_key, _, _, play)
+        def count(possession_key, _, _, _, play)
           sample_plays.count do |a|
             if play.size > 1 && play.last[:team]
               a.possession_key == possession_key && a.key == play && a.team == play.last[:team]
