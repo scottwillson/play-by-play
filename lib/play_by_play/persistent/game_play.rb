@@ -18,10 +18,11 @@ module PlayByPlay
         until game.over?
           possession = game.possession
           play = play_generator.new_play(possession)
+          row = play_generator.row
           seconds = seconds_generator.seconds(possession, play.key)
 
           begin
-            add_play game, play, seconds, play_generator.row
+            add_play game, play, seconds, row
           rescue Model::InvalidStateError, ArgumentError => e
             raise e if ENV["DBEUG"]
             game.error_eventnum = row.eventnum
