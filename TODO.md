@@ -12,10 +12,10 @@
 * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)
  * bad FGs counts: fixed, need tests
  * OPP FGs FG% is OK
- * GSW should probably win at home against NYK 95-99% but is more like 70%
+ * GSW should probably win at home against NYK 95-99% but is more like 83%
+   (accounting for location was worth about 13%)
  * GSW should probably win against MIL (.500 team) ~70% but is more like 63%
- * Removing defense events seems to slightly increase good team stength, but not much
- * Ensure we're accounting for home court
+ * Removing defense events seems to slightly increase good team strength, but not much
  * 3PA seem low and too regular. Should be 14.9-32.7, but is 17.2-26.2. % looks correct, though
  * rebounds are high, esp. offensive rebounds
  * turnovers are low
