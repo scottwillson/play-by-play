@@ -13,9 +13,7 @@ module PlayByPlay
       end
 
       def for(possession)
-        period_can_end = !possession.free_throws? && !possession.technical_free_throws? && possession.seconds_remaining <= 24
-
-        if period_can_end
+        if possession.period_can_end?
           if possession.seconds_remaining.zero?
             [ PlayProbability.new(1, Model::Play.new(:period_end)) ]
           elsif possession.offense

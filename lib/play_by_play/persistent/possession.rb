@@ -19,6 +19,7 @@ module PlayByPlay
                      :offense,
                      :opening_tip,
                      :period,
+                     :period_can_end?,
                      :seconds_remaining,
                      :team,
                      :technical_free_throws?,

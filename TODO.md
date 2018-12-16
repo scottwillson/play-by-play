@@ -1,4 +1,4 @@
-* Check for unused methods
+* Check for unused requires
 * players
   * store players in repository
   * make play distributions by player
@@ -6,7 +6,6 @@
   * shot becomes part of play key?
   * remove assisted? and just use assist ?
   * consolidate game.visitor.players.index { |player| player.nba_id == player1_id } in Row
-* Don't subclass Persistent classes from Model?
 * `fouled` should be optional for technical_fouls
 * Replace game.home and game.visitor with game.team(:home|visitor) where it makes sense
 * Investigate weak correlation between team strength and wins (GSW should win more and NYK less than either do in simulation)

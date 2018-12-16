@@ -123,6 +123,10 @@ module PlayByPlay
         free_throws? || technical_free_throws?
       end
 
+      def period_can_end?
+        !free_throws? && !technical_free_throws? && seconds_remaining <= 24
+      end
+
       def seconds_remaining?
         seconds_remaining > 0
       end
