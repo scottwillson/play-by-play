@@ -36,10 +36,22 @@ module PlayByPlay
 
       def fetch_distribution(key)
         # puts "=== #{key.to_s} ==="
-        Model::PlayMatrix.accessible_plays(key.possession_key).map do |play|
+        distribution = Model::PlayMatrix.accessible_plays(key.possession_key).map do |play|
           count = @repository.plays.count(key.possession_key, key.team, key.team_id, key.location, play)
           # puts "#{count} #{play}"
           PlayProbability.new count, Model::Play.new(play.first, *play[1..-1])
+        end
+
+        map_to_percentages distribution
+      end
+
+      # ensure equal weights when comparing distributions
+      def map_to_percentages(distribution)
+        total = distribution.map(&:probability).sum
+        return distribution if total > 0
+        distribution.map do |play_probability|
+          probability = play_probability.probability.to_f / total
+          PlayProbability.new(play_probability.probability, play_probability.play)
         end
       end
 
