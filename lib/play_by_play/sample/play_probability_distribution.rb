@@ -18,14 +18,14 @@ module PlayByPlay
             [ PlayProbability.new(1, Model::Play.new(:period_end)) ]
           elsif possession.offense
             @distribution[Key.new_from_possession(possession, :offense)] +
-              @distribution[Key.new_from_possession(possession, :defense)]
+              weight(@distribution[Key.new_from_possession(possession, :defense)], 0.5)
           else
             @distribution[Key.new_from_possession(possession, :home)] +
               @distribution[Key.new_from_possession(possession, :visitor)]
           end
         elsif possession.offense
           (@distribution[Key.new_from_possession(possession, :offense)] +
-            @distribution[Key.new_from_possession(possession, :defense)])
+            weight(@distribution[Key.new_from_possession(possession, :defense)], 0.5))
             .reject { |ap| ap.play.period_end? }
         else
           (@distribution[Key.new_from_possession(possession, :home)] +
@@ -51,7 +51,7 @@ module PlayByPlay
         return distribution if total > 0
         distribution.map do |play_probability|
           probability = play_probability.probability.to_f / total
-          PlayProbability.new(play_probability.probability, play_probability.play)
+          PlayProbability.new(probability, play_probability.play)
         end
       end
 
@@ -78,6 +78,14 @@ module PlayByPlay
         end
 
         PlayByPlay.logger.debug(play_probability_distribution: :pre_fetch!, end: Time.now)
+      end
+
+      def weight(distribution, weight)
+        distribution
+        # distribution.map do |play_probability|
+        #   probability = play_probability.probability * weight
+        #   PlayProbability.new(probability, play_probability.play)
+        # end
       end
 
       class Key
