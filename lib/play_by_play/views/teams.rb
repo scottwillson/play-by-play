@@ -238,7 +238,7 @@ module PlayByPlay
       def to_s
         team_table = Text::Table.new(first_row_is_head: true)
         team_table.head = %w[name w l fg fga fg% 3fg 3fga 3fg% ft fta ft% oreb dreb reb ast to stl blk pf points opp_points diff]
-        team_table.rows = @season.teams.sort_by(&:name).map { |team| team_line(team) }
+        team_table.rows = @season.teams.sort_by { |team| wins(team) }.map { |team| team_line(team) }
 
         opponent_table = Text::Table.new(first_row_is_head: true)
         opponent_table.head = %w[name opp_fg% opp_reb]

@@ -48,7 +48,7 @@ module PlayByPlay
       # ensure equal weights when comparing distributions
       def map_to_percentages(distribution)
         total = distribution.map(&:probability).sum
-        return distribution if total > 0
+        return distribution if total == 0
         distribution.map do |play_probability|
           probability = play_probability.probability.to_f / total
           PlayProbability.new(probability, play_probability.play)
@@ -82,10 +82,10 @@ module PlayByPlay
 
       def weight(distribution, weight)
         distribution
-        # distribution.map do |play_probability|
-        #   probability = play_probability.probability * weight
-        #   PlayProbability.new(probability, play_probability.play)
-        # end
+        distribution.map do |play_probability|
+          probability = play_probability.probability * weight
+          PlayProbability.new(probability, play_probability.play)
+        end
       end
 
       class Key
