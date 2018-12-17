@@ -18,14 +18,14 @@ module PlayByPlay
             [ PlayProbability.new(1, Model::Play.new(:period_end)) ]
           elsif possession.offense
             @distribution[Key.new_from_possession(possession, :offense)] +
-              weight(@distribution[Key.new_from_possession(possession, :defense)], 0.5)
+              weight(@distribution[Key.new_from_possession(possession, :defense)], 1)
           else
             @distribution[Key.new_from_possession(possession, :home)] +
               @distribution[Key.new_from_possession(possession, :visitor)]
           end
         elsif possession.offense
           (@distribution[Key.new_from_possession(possession, :offense)] +
-            weight(@distribution[Key.new_from_possession(possession, :defense)], 0.5))
+            weight(@distribution[Key.new_from_possession(possession, :defense)], 1))
             .reject { |ap| ap.play.period_end? }
         else
           (@distribution[Key.new_from_possession(possession, :home)] +
