@@ -1,3 +1,4 @@
+* Change PlayProbability keys back to symbols, not Plays?
 * Check for unused requires
 * players
   * store players in repository
