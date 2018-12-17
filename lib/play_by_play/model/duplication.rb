@@ -6,7 +6,7 @@ module PlayByPlay
       def merge(new_attributes = {})
         return self if new_attributes.nil? || new_attributes.empty?
 
-        old_attributes = attributes
+        old_attributes = attributes.dup
         merged_attributes = old_attributes
 
         new_attributes.each do |key, value|
