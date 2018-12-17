@@ -68,9 +68,12 @@ module PlayByPlay
         clear_path: false,
         flagrant: false,
         intentional: false,
+        opponent: nil,
+        player: nil,
         point_value: 2,
         seconds: 7.7,
-        team: nil
+        team: nil,
+        teammate: nil
       )
 
         @and_one = and_one

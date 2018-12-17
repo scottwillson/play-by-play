@@ -87,7 +87,7 @@ module PlayByPlay
       describe ":fg at end of period" do
         it "updates points" do
           possession = Possession.new(ball_in_play: true, team: :visitor, seconds_remaining: 21)
-          next_possession = GamePlay.play!(possession, [ :fg, assisted: true, seconds: 21 ])
+          next_possession = GamePlay.play!(possession, [ :fg, assisted: true, player: 0, seconds: 21, teammate: 6 ])
           expect(next_possession.visitor.points).to eq(2)
         end
       end
