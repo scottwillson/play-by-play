@@ -48,6 +48,13 @@ module PlayByPlay
           String :name, unique: true
         end
 
+        db.send(create_table_method, :players) do
+          primary_key :id
+          String :name
+          Integer :nba_id, unique: true
+          Integer :team_id
+        end
+
         db.send(create_table_method, :possessions) do
           primary_key :id
           Boolean :and_one, default: false, null: false
@@ -78,16 +85,31 @@ module PlayByPlay
           Boolean :technical_free_throws, default: false, null: false
           Integer :visitor_id, null: false
           Integer :visitor_margin, null: false, default: 0
+
+          foreign_key :opponent_id, :players
+
           index :defense_id
           index :game_id
           index :home_id
           index :offense_id
-          index :visitor_id
-          index %i[ technical_free_throws free_throws team ball_in_play seconds_remaining home_id visitor_id ]
-
           index :play_team
           index :play_type
-          index %i[ and_one assisted away_from_play clear_path flagrant intentional play_team ]
+          index :visitor_id
+          index %i[
+            and_one
+            assisted
+            away_from_play
+            ball_in_play
+            clear_path
+            flagrant
+            free_throws team
+            home_id
+            intentional
+            play_team
+            seconds_remaining
+            technical_free_throws
+            visitor_id
+          ]
         end
 
         db.send(create_table_method, :seasons) do
@@ -153,6 +175,7 @@ module PlayByPlay
         @db[:divisions].truncate
         @db[:games].truncate
         @db[:leagues].truncate
+        @db[:players].delete
         @db[:possessions].truncate
         @db[:seasons].truncate
         @db[:rows].truncate

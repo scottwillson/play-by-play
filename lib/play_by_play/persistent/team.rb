@@ -14,6 +14,7 @@ module PlayByPlay
       attr_reader :division_id
       attr_reader :games
       attr_reader :name
+      attr_reader :players
 
       def initialize(attributes)
         @games = []
@@ -23,6 +24,7 @@ module PlayByPlay
         @division_id = attributes.delete(:division_id)
         @id = attributes.delete(:id)
         @name = attributes.delete(:name)
+        @players = attributes.delete(:players) || []
 
         @model = Model::Team.new(attributes)
       end
@@ -32,7 +34,12 @@ module PlayByPlay
           abbreviation: abbreviation,
           division_id: division_id,
           id: id,
-          name: name
+          key: key,
+          name: name,
+          period_personal_fouls: period_personal_fouls,
+          personal_foul_in_last_two_minutes: personal_foul_in_last_two_minutes,
+          players: players,
+          points: points
         }
       end
 

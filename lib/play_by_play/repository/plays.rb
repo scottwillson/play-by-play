@@ -116,7 +116,22 @@ module PlayByPlay
         if play_type && play_type != ""
           play_type = play_type.to_sym
 
-          play_attributes = { team: play_team }
+          opponent = attributes.delete(:opponent)
+          opponent_id = attributes.delete(:opponent_id)
+          player = attributes.delete(:player)
+          player_id = attributes.delete(:player_id)
+          teammate = attributes.delete(:teammate)
+          teammate_id = attributes.delete(:teammate_id)
+
+          play_attributes = {
+            opponent: opponent,
+            opponent_id: opponent_id,
+            player: player,
+            player_id: player_id,
+            team: play_team,
+            teammate: teammate,
+            teammate_id: teammate_id
+           }
           PLAY_KEYS.each { |key| play_attributes[key] = attributes.delete(key) }
 
           attributes[:play] = Persistent::Play.new(play_type, play_attributes)

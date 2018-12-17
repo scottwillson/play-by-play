@@ -39,6 +39,7 @@ module PlayByPlay
 
       def self.parse(game, json)
         rows = parse_rows(game, json, json["resultSets"].first["headers"])
+        Player.add_players game
         play_generator = PlayGenerator.new(rows)
         Persistent::GamePlay.play! game, play_generator, play_generator
 

@@ -137,12 +137,22 @@ module PlayByPlay
         foul? && eventmsgactiontype == 9
       end
 
+      def home_jump
+        if jump_ball?
+          game.home.players.index { |player| player.nba_id == player1_id }
+        end
+      end
+
       def intentional?
         (foul? && eventmsgactiontype == 5)
       end
 
       def jump_ball?
         event == :jump_ball
+      end
+
+      def misidentified_shooting_foul?
+        personal_foul? && !Model::GamePlay.next_foul_in_penalty?(possession, team) && next_row.event == :ft
       end
 
       def miss?
@@ -164,8 +174,30 @@ module PlayByPlay
         turnover? && (eventmsgactiontype == 5 || eventmsgactiontype == 37)
       end
 
-      def misidentified_shooting_foul?
-        personal_foul? && !Model::GamePlay.next_foul_in_penalty?(possession, team) && next_row.event == :ft
+      def opponent
+        if Model::Play.foul?(play_type) || rebound? || shot? || steal? || turnover?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player2_id }
+          end
+        elsif jump_ball? || block?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player1_id }
+          end
+        elsif steal?
+          if team == :home
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          else
+            game.home.players.index { |player| player.nba_id == player2_id }
+          end
+        elsif period_end? || team_rebound?
+          nil
+        else
+          raise "unkown #{play_type}"
+        end
       end
 
       def period_end?
@@ -219,14 +251,16 @@ module PlayByPlay
       end
 
       def seconds_remaining
-        return unless pctimestring
-
         minutes, seconds = pctimestring.split(":")
         minutes.to_i * 60 + seconds.to_i
       end
 
       def shooting_foul?
         foul? && (eventmsgactiontype == 2 || eventmsgactiontype == 29 || (away_from_play? && previous_row&.fg? && previous_row.team != team))
+      end
+
+      def shot?
+        Model::Play.shot? play_type
       end
 
       def start_of_game?
@@ -356,9 +390,12 @@ module PlayByPlay
           clear_path: clear_path_foul?,
           flagrant: flagrant?,
           intentional: intentional?,
+          opponent: opponent,
+          player: player,
           point_value: point_value,
           seconds: seconds,
-          team: play_team
+          team: play_team,
+          teammate: teammate
         }
       end
 
@@ -378,6 +415,36 @@ module PlayByPlay
         end
       end
 
+      def player
+        return unless player1_id || player3_id
+
+        if Model::Play.foul?(play_type) || rebound? || shot? || steal? || turnover?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player1_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player1_id }
+          end
+        elsif jump_ball? || block?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player3_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player3_id }
+          end
+        elsif period_end? || team_rebound?
+          nil
+        else
+          raise ArgumentError, "Could not find player for #{play_type}"
+        end
+      end
+
+      def player_attributes
+        [
+          [ person1type, player1_id, player1_name ],
+          [ person2type, player2_id, player2_name ],
+          [ person3type, player3_id, player3_name ]
+        ]
+      end
+
       def team
         if person3type && person3type > 1
           person_type = person3type
@@ -390,6 +457,22 @@ module PlayByPlay
           :home
         when 1, 3, 5, 7
           :visitor
+        end
+      end
+
+      def teammate
+        if assist?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player2_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          end
+        elsif jump_ball?
+          if team == :home
+            game.home.players.index { |player| player.nba_id == player1_id }
+          else
+            game.visitor.players.index { |player| player.nba_id == player2_id }
+          end
         end
       end
 

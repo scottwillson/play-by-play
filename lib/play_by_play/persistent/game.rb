@@ -109,6 +109,10 @@ module PlayByPlay
         possession.game_over?
       end
 
+      def players
+        teams.map(&:players).flatten
+      end
+
       def plays
         possessions.map(&:play).compact
       end

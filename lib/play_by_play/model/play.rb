@@ -21,7 +21,10 @@ module PlayByPlay
         turnover
       ].freeze
 
+      attr_accessor :opponent
+      attr_accessor :player
       attr_accessor :seconds
+      attr_accessor :teammate
 
       attr_reader :and_one
       attr_reader :assisted
@@ -76,9 +79,12 @@ module PlayByPlay
         @clear_path = clear_path
         @flagrant = flagrant
         @intentional = intentional
+        @opponent = opponent
         @point_value = point_value || 2
+        @player = player
         @seconds = seconds
         @team = team
+        @teammate = teammate
         @type = type
 
         validate!
@@ -188,6 +194,35 @@ module PlayByPlay
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
+        raise(ArgumentError, "teammate required for #{type} in #{key}") if assisted? && teammate.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if steal? && player.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if turnover? && player.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if jump_ball? && player.nil?
+
+        raise(ArgumentError, "opponent required for #{type} in #{key}") if steal? && opponent.nil?
+
+        if foul? && !player
+          raise(ArgumentError, "player required for #{type} in #{key}")
+        end
+
+        if foul? && !technical_foul? && !player
+          raise(ArgumentError, "player required for #{type} in #{key}")
+        end
+
+        if jump_ball? && !teammate
+          raise(ArgumentError, "teammate required for #{type} in #{key}")
+        end
+
+        if jump_ball? && !opponent
+          raise(ArgumentError, "opponent required for #{type} in #{key}")
+        end
+
+        if seconds.nil?
+          raise(ArgumentError, "seconds cannot be nil")
+        end
+
+        %w[ opponent player teammate ].each { |attribute| validate_player_attribute(attribute) }
       end
     end
   end

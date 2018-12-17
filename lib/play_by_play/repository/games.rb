@@ -33,6 +33,8 @@ module PlayByPlay
       def save(game)
         return false if exists?(game.nba_id)
 
+        save_players game
+
         game.home = repository.teams.first_or_create(game.home)
         game.visitor = repository.teams.first_or_create(game.visitor)
 
@@ -49,6 +51,12 @@ module PlayByPlay
         repository.rows.save game.rows
 
         game.id
+      end
+
+      def save_players(game)
+        game.players.each do |player|
+          repository.players.save player
+        end
       end
 
       def find(id)
@@ -81,7 +89,20 @@ module PlayByPlay
 
       def plays(game_id)
         @db[:possessions]
-          .select(:and_one, :assisted, :away_from_play, :clear_path, :flagrant, :intentional, :point_value, :play_team, :play_type)
+          .select(
+            :and_one,
+            :assisted,
+            :away_from_play,
+            :clear_path,
+            :flagrant,
+            :intentional,
+            :opponent_id,
+            :point_value,
+            :play_team,
+            :play_type,
+            :player_id,
+            :teammate_id
+          )
           .where(game_id: game_id)
           .exclude(play_type: nil)
           .exclude(play_type: "")
@@ -94,6 +115,11 @@ module PlayByPlay
             else
               attributes[:team] = nil
             end
+
+            # TODO improve this speed
+            attributes[:opponent] = repository.players.find(attributes[:opponent_id])
+            attributes[:player] = repository.players.find(attributes[:player_id])
+            attributes[:teammate] = repository.players.find(attributes[:teammate_id])
 
             Persistent::Play.new(type, attributes)
           end

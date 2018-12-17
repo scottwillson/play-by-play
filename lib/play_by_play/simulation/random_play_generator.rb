@@ -10,6 +10,31 @@ module PlayByPlay
         @play_probability_distribution = Sample::PlayProbabilityDistribution.new(repository)
       end
 
+      def add_player(play)
+        case play.first
+        when :fg, :fg_miss
+          attributes = play[1] || {}
+          if attributes[:assisted]
+            attributes = attributes.merge(teammate: rand(5))
+          end
+          [ play.first, attributes.merge(player: rand(5)) ]
+        when :ft, :ft_miss, :offensive_foul, :rebound, :turnover
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(player: rand(5)) ]
+        when :jump_ball
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(opponent: rand(5), player: rand(5), teammate: rand(5)) ]
+        when :personal_foul, :shooting_foul
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(opponent: rand(5), player: rand(5)) ]
+        when :steal
+          attributes = play[1] || {}
+          [ play.first, attributes.merge(opponent: rand(5), player: rand(5)) ]
+        else
+          play
+        end
+      end
+
       # +random_number+ argument (0.0 - 1.0) for testing
       def new_play(possession, random_number = rand)
         probabilities = @play_probability_distribution.for(possession)
@@ -22,7 +47,7 @@ module PlayByPlay
 
         probabilities.each do |play_probability|
           if r < previous_probability + play_probability.probability
-            return play_probability.play
+            return add_player(play_probability.play)
           end
           previous_probability += play_probability.probability
         end
