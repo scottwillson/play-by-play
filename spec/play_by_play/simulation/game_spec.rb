@@ -11,6 +11,7 @@ module PlayByPlay
       describe ".play!" do
         it "plays a game" do
           repository = Mock::Repository.new
+          repository.populate!
           random_play_generator = RandomPlayGenerator.new(repository)
           random_seconds_generator = RandomSecondsGenerator.new(repository)
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))

@@ -6,7 +6,7 @@ module PlayByPlay
   module Persistent
     RSpec.describe Game do
       describe "#home=" do
-        it "sets @home and @home_id" do
+        it "sets @home and @home_id", database: true do
           repository = Repository.new
           repository.reset!
 

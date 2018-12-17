@@ -89,6 +89,12 @@ module PlayByPlay
         end
       end
 
+      it "parses game end correctly" do
+        file = Game.new_game("0021400001", "ORL", "NOP")
+        row = Row.new(file, %w[ pctimestring ], [ "0:00" ])
+        expect(row.seconds_remaining).to eq(0)
+      end
+
       describe ".play_team" do
         context "defense technical foul" do
           it "is :defense" do
@@ -97,6 +103,20 @@ module PlayByPlay
             row.possession = Model::Possession.new(team: :home)
             expect(row.play_team).to eq(:defense)
           end
+        end
+      end
+
+      describe ".player_attributes" do
+        it "aggregates player columns" do
+          game = Game.new_game("0021400001", "ORL", "NOP")
+          row = Row.new(game, %w[ person1type player1_id player1_name ], [ 4, 203_076, "Anthony Davis" ])
+          expect(row.player_attributes).to eq(
+            [
+              [ 4, 203_076, "Anthony Davis" ],
+              [ nil, nil, nil ],
+              [ nil, nil, nil ]
+            ]
+          )
         end
       end
     end

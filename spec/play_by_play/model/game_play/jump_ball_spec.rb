@@ -10,7 +10,10 @@ module PlayByPlay
         context "first jump ball" do
           it "assigns team" do
             possession = Possession.new
-            next_possession = GamePlay.play!(possession, [ :jump_ball, team: :home ])
+            next_possession = GamePlay.play!(
+              possession,
+              [ :jump_ball, team: :home, opponent: 0, player: 0, teammate: 1 ]
+            )
             expect(next_possession.ball_in_play?).to eq(true)
             expect(next_possession.team).to eq(:home)
             expect(next_possession.offense).to eq(:home)
@@ -22,7 +25,10 @@ module PlayByPlay
         context "later jump ball" do
           it "assigns team" do
             possession = Possession.new(opening_tip: :visitor)
-            next_possession = GamePlay.play!(possession, [ :jump_ball, team: :home ])
+            next_possession = GamePlay.play!(
+              possession,
+              [ :jump_ball, team: :home, opponent: 0, player: 0, teammate: 1 ]
+            )
             expect(next_possession.ball_in_play?).to eq(true)
             expect(next_possession.team).to eq(:home)
             expect(next_possession.offense).to eq(:home)

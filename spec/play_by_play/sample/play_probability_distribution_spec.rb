@@ -13,15 +13,15 @@ module PlayByPlay
         it "returns instances of PlayProbability", database: true do
           sample_game = Game.new_game("001", "GSW", "POR")
 
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:jump_ball, team: :visitor)
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense) # home (visitor on offense)
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # home
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true) # visitor
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg_miss) # home
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:rebound, team: :defense) # visitor
-          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:jump_ball, team: :visitor, teammate: 0, opponent: 0, player: 1)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense, player: 0, opponent: 0) # home (visitor on offense)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:personal_foul, team: :defense, player: 0, opponent: 0) # home (visitor on offense)
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true, player: 1, teammate: 0) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true, player: 1, teammate: 0) # home
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, assisted: true, player: 1, teammate: 0) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg_miss, player: 1) # home
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:rebound, team: :defense, player: 1) # visitor
+          Persistent::GamePlay.add_play sample_game, Model::Play.new(:fg, point_value: 3, player: 1) # visitor
 
           repository = Repository.new
           repository.reset!

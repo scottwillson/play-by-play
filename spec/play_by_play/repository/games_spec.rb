@@ -18,12 +18,20 @@ module PlayByPlay
     end
 
     describe ".save_possessions" do
-      it "saves possessions with current score margin" do
+      it "saves possessions with current score margin", database: true do
         repository = Repository.new
         repository.reset!
 
         home = Persistent::Team.new(abbreviation: "SEA")
+        13.times do |index|
+          home.players << Persistent::Player.new(name: "Home Player #{index}")
+        end
+
         visitor = Persistent::Team.new(abbreviation: "POR")
+        13.times do |index|
+          visitor.players << Persistent::Player.new(name: "Visitor Player #{index}")
+        end
+
         repository.teams.save home
         repository.teams.save visitor
 
@@ -32,8 +40,10 @@ module PlayByPlay
         game = Persistent::Game.new(home: home, visitor: visitor, day: day)
         repository.seasons.save season
 
-        random_play_generator = Simulation::RandomPlayGenerator.new(Mock::Repository.new)
-        random_seconds_generator = Simulation::RandomSecondsGenerator.new(Mock::Repository.new)
+        mock_repository = Mock::Repository.new
+        mock_repository.populate!
+        random_play_generator = Simulation::RandomPlayGenerator.new(mock_repository)
+        random_seconds_generator = Simulation::RandomSecondsGenerator.new(mock_repository)
         game = Simulation::Game.play!(game, random_play_generator, random_seconds_generator)
 
         repository.games.save_possessions game

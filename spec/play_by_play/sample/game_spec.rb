@@ -67,6 +67,12 @@ module PlayByPlay
 
           expect(repository.games.possessions(game.id).size).to eq(426)
           expect(repository.games.plays(game.id).size).to eq(425)
+
+          play = plays.first
+          expect(play.type).to eq(:jump_ball)
+          expect(play).to be_kind_of(Persistent::Play)
+          expect(play.player.name).to eq("Jrue Holiday")
+          expect(play.player.nba_id).to eq(201_950)
         end
       end
 
@@ -80,6 +86,8 @@ module PlayByPlay
           expect(game.possession.errors?).to eq(false)
           expect(game.error_eventnum).to be_nil
           expect(game.id).to be_nil
+          expect(game.home.players.size).to eq(12)
+          expect(game.visitor.players.size).to eq(11)
 
           expect(game.plays[0].possession.opening_tip).to eq(nil)
           expect(game.plays[0].possession.period).to eq(1)
@@ -119,6 +127,7 @@ module PlayByPlay
           expect(play.possession.team).to eq(:visitor)
           expect(play.possession.offense).to eq(:visitor)
           expect(play.possession_key => play.key).to eq(team: [ :fg ])
+          expect(play.possession.play.player.nba_id).to eq(202696)
 
           play = Game.find_play_by_eventnum!(game, 67)
           expect(play.possession.visitor.points).to eq(15)
@@ -168,6 +177,8 @@ module PlayByPlay
           expect(play.possession.home.period_personal_fouls).to eq(0)
           expect(play.possession.visitor.period_personal_fouls).to eq(0)
           expect(play.possession_key => play.key).to eq(team: [ :shooting_foul ])
+          expect(play.possession.play.opponent.nba_id).to eq(203932)
+          expect(play.possession.play.player.nba_id).to eq(202690)
 
           play = Game.find_play_by_eventnum!(game, 180)
           expect(play.possession.home.period_personal_fouls).to eq(0)
@@ -184,10 +195,12 @@ module PlayByPlay
           play = Game.find_play_by_eventnum!(game, 218)
           expect(play.possession.home.period_personal_fouls).to eq(1)
           expect(play.possession_key => play.key).to eq(team: [ :fg, and_one: true, assisted: true ])
+          expect(play.possession.play.teammate.nba_id).to eq(203901)
 
           play = Game.find_play_by_eventnum!(game, 346)
           expect(play.possession_key => play.key).to eq(team: [ :fg, point_value: 3, assisted: true ])
-
+          expect(play.possession.play.teammate.nba_id).to eq(203901)
+          
           play = Game.find_play_by_eventnum!(game, 556)
           expect(play.possession.home.period_personal_fouls).to eq(2)
 

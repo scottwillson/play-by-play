@@ -115,4 +115,13 @@
 * player-team associations need to be more varied (rosters vary by day/year/game)
 * Rename to BallDontLie
 * Swap PlayProbability initialize arguments
-* Weight opponent events less (steals, misses)
+* Weight opponent events less (steals, misses). I.e., consider agency
+  * player
+  * opponent
+  * randomness
+  * environment
+    * home/away
+    * days of rest
+  * game situation
+    * score
+    * time remaining

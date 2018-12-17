@@ -6,7 +6,11 @@ module PlayByPlay
       include Model::Duplication
       extend Forwardable
 
-      def_delegators :@model, :key
+      def_delegators :@model,
+        :key,
+        :period_personal_fouls,
+        :personal_foul_in_last_two_minutes,
+        :points
 
       attr_accessor :id
 

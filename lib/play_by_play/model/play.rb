@@ -36,6 +36,10 @@ module PlayByPlay
       attr_reader :team
       attr_reader :type
 
+      def self.block?(type)
+        type == :block
+      end
+
       def self.foul?(type)
         %i[ offensive_foul personal_foul shooting_foul technical_foul ].include?(type)
       end
@@ -107,6 +111,10 @@ module PlayByPlay
 
       def away_from_play?
         away_from_play
+      end
+
+      def block?
+        Play.block? type
       end
 
       def clear_path?
@@ -191,18 +199,20 @@ module PlayByPlay
       def validate_player_attribute(attribute)
         value = send(attribute)
         if value && (value < 0 || value > 12)
-          raise(ArgumentError, "#{attribute}: must be player between 0-12, but was: #{value}")
+          raise(ArgumentError, "#{attribute}: must be player between 0-12, but is: #{value}")
         end
       end
 
       def validate!
         raise(ArgumentError, "Unknown Play type '#{type}'. Expected: #{TYPES.join(', ')}.") unless TYPES.include?(type)
         raise(ArgumentError, "teammate required for #{type} in #{key}") if assisted? && teammate.nil?
+        raise(ArgumentError, "player required for #{type} in #{key}") if block? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if shot? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if steal? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if turnover? && player.nil?
         raise(ArgumentError, "player required for #{type} in #{key}") if jump_ball? && player.nil?
 
+        raise(ArgumentError, "opponent required for #{type} in #{key}") if block? && opponent.nil?
         raise(ArgumentError, "opponent required for #{type} in #{key}") if steal? && opponent.nil?
 
         if foul? && !player
@@ -223,6 +233,17 @@ module PlayByPlay
 
         if seconds.nil?
           raise(ArgumentError, "seconds cannot be nil")
+        end
+
+        raise(ArgumentError, "opponent not allowed for #{type} in #{key}") if shot? && opponent
+        raise(ArgumentError, "teammate not allowed for #{type} in #{key}") if steal? && teammate
+        raise(ArgumentError, "teammate not allowed for #{type} in #{key}") if turnover? && teammate
+        raise(ArgumentError, "opponent not allowed for #{type} in #{key}") if turnover? && opponent
+        raise(ArgumentError, "teammate not allowed for #{type} in #{key}") if foul? && teammate
+        raise(ArgumentError, "teammate not allowed for #{type} in #{key}") if block? && teammate
+
+        if player && player == teammate
+          raise(ArgumentError, "player and teammate must be different but are both #{player} for #{type} in #{key}")
         end
 
         %w[ opponent player teammate ].each { |attribute| validate_player_attribute(attribute) }

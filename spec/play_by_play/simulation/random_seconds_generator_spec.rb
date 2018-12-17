@@ -15,12 +15,12 @@ module PlayByPlay
           repository.reset!
 
           game = Sample::Game.new_game("001", "GSW", "POR")
-          play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, seconds: 2)
+          play = Persistent::Play.new(:jump_ball, team: :home, possession: game.possessions.first, seconds: 2, teammate: 1, player: 0, opponent: 0)
           repository.plays.save play
 
           game = Persistent::Game.new(home: Persistent::Team.new(id: 0, abbreviation: "POR"), visitor: Persistent::Team.new(id: 1, abbreviation: "GSW"))
           possession = game.possession
-          possession.play = Persistent::Play.new(:jump_ball, team: :home)
+          possession.play = Persistent::Play.new(:jump_ball, team: :homet, teammate: 1, player: 0, opponent: 0)
 
           generator = RandomSecondsGenerator.new(repository)
           seconds = generator.seconds(possession, [:jump_ball, team: :home])
@@ -37,7 +37,7 @@ module PlayByPlay
             generator = RandomSecondsGenerator.new(repository)
 
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :home)
+            game.possession.play = Persistent::Play.new(:jump_ball, team: :homet, teammate: 1, player: 0, opponent: 0)
             expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0)).to eq(3)
             expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0.5)).to eq(3)
             expect(generator.seconds(game.possession, [:jump_ball, team: :home], 0.999999)).to eq(3)
@@ -48,7 +48,7 @@ module PlayByPlay
           it "raises an exception" do
             repository.reset!
             game = Persistent::Game.new(home: Persistent::Team.new(id: 0), visitor: Persistent::Team.new(id: 1))
-            game.possession.play = Persistent::Play.new(:jump_ball, team: :visitor)
+            game.possession.play = Persistent::Play.new(:jump_ball, team: :visitort, teammate: 1, player: 0, opponent: 0)
             expect { RandomSecondsGenerator.new(repository).seconds(game.possession, [:jump_ball, team: :home], 0.5) }.to raise_error(ArgumentError)
           end
         end
