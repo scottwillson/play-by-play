@@ -7,9 +7,15 @@ module PlayByPlay
     RSpec.describe PlayProbability do
       describe ".new" do
         it "creates a PlayProbability" do
-          play = PlayProbability.new(0.25, :ft)
-          expect(play.probability).to eq(0.25)
-          expect(play.play).to eq(:ft)
+          play_probability = PlayProbability.new(0.25, :ft)
+          expect(play_probability.probability).to eq(0.25)
+          expect(play_probability.play).to eq([ :ft ])
+        end
+
+        it "creates a PlayProbability with complex play" do
+          play_probability = PlayProbability.new(0.1, :fg, point_value: 3, and_one: true, assisted: true)
+          expect(play_probability.probability).to eq(0.1)
+          expect(play_probability.play).to eq([ :fg, point_value: 3, and_one: true, assisted: true ])
         end
       end
     end

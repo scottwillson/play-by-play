@@ -4,7 +4,7 @@ module PlayByPlay
       attr_reader :play
       attr_reader :probability
 
-      def initialize(probability, play)
+      def initialize(probability, *play)
         @play = play
         @probability = probability
         validate!
