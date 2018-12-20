@@ -9,8 +9,8 @@ bundle
 
 ( cd web && npm install && npm run dist:dev )
 
-bin/recreate_dbs
+bundle exec bin/recreate_dbs
 
-rake repository:recreate
-rspec
-rake
+bundle exec rake repository:recreate
+bundle exec rspec
+bundle exec rake
