@@ -1,4 +1,5 @@
 require "play_by_play/persistent/play"
+require "play_by_play/persistent/team"
 
 module PlayByPlay
   module Mock
